@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "sourceMap": true,
+    "module": "commonjs",
+    "importHelpers": true,
+    "allowJs": true,
+    "outDir": "../../dist/server-root",
+    "rootDir": "..",
+    "lib": ["esnext"],
+    "moduleResolution": "node",
+    "types": ["node"]
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["__tests__"]
+}

@@ -1,0 +1,9 @@
+{
+  "presets": [["@babel/env", { "modules": false }], "@babel/react", "@babel/typescript"],
+  "plugins": [
+    "@babel/proposal-numeric-separator",
+    "@babel/plugin-transform-runtime",
+    "@babel/proposal-class-properties",
+    "@babel/proposal-object-rest-spread"
+  ]
+}
