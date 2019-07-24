@@ -18,14 +18,7 @@ const styles = (theme: Theme) => createStyles({});
 export const GlobeContainer = withStyles(styles)(
   class extends React.Component {
     public render() {
-      return (
-        <Card>
-          <CardHeader />
-          <CardContent>
-            <Globe />
-          </CardContent>
-        </Card>
-      );
+      return <Globe />;
     }
   },
 );

@@ -18,7 +18,7 @@ export class Globe3D {
 
   constructor() {
     const textureLoader = new TextureLoader();
-    const sphereTexture = textureLoader.load('/assets/World-Map.png');
+    const sphereTexture = textureLoader.load('/assets/map4-01.png');
     this.sphereGeometry = new SphereGeometry(2, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,

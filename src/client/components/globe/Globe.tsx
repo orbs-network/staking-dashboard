@@ -9,7 +9,17 @@
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import * as React from 'react';
-import { AmbientLight, Clock, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from 'three';
+import {
+  AmbientLight,
+  Clock,
+  DirectionalLight,
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  Scene,
+  Vector2,
+  WebGLRenderer,
+} from 'three';
 import { Globe3D } from './Globe3D';
 
 const raycaster = new Raycaster();
@@ -51,8 +61,8 @@ export const Globe = withStyles(styles)(
       this.camera.position.z = 40;
 
       // ADD RENDERER
-      this.renderer = new WebGLRenderer({ antialias: true });
-      this.renderer.setClearColor('#000000');
+      this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
+      this.renderer.setClearColor(0x000000, 0);
       this.renderer.setSize(width, height);
       this.renderer.setPixelRatio(window.devicePixelRatio);
 
@@ -82,13 +92,15 @@ export const Globe = withStyles(styles)(
       return (
         <div
           id='mount'
-          style={{ width: '100%', height: '800px' }}
+          style={{ width: '100%', height: '900px', position: 'relative' }}
           onMouseMove={e => this.onDocumentMouseMove(e)}
           onClick={e => this.onClick()}
           ref={mount => {
             this.mount = mount;
           }}
-        />
+        >
+          <img src='assets/noise.jpg' style={{width: '100%', position: 'absolute'}} />
+        </div>
       );
     }
 
