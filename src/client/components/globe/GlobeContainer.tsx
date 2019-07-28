@@ -6,9 +6,6 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import * as React from 'react';
 import { Globe } from './Globe';
@@ -18,7 +15,32 @@ const styles = (theme: Theme) => createStyles({});
 export const GlobeContainer = withStyles(styles)(
   class extends React.Component {
     public render() {
-      return <Globe />;
+      return (
+        <div style={{ margin: '0 auto' }}>
+          <div
+            style={{
+              width: '100%',
+              maxWidth: 1600,
+              backgroundColor: 'black',
+              margin: '0 auto',
+              backgroundImage: 'url(assets/noise.jpg)',
+              backgroundSize: '100%',
+            }}
+          >
+            <div style={{ maxWidth: 1380, margin: '0 auto', display: 'flex' }}>
+              <div id='left' style={{ minWidth: 210 }}>
+                <img src={'assets/left.jpg'}/>
+              </div>
+              <div id='center' style={{ flexGrow: 1 }}>
+                <Globe/>
+              </div>
+              <div id='right' style={{ minWidth: 350 }}>
+                <img src={'assets/right.jpg'}/>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
     }
   },
 );

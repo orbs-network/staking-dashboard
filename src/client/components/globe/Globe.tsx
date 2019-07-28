@@ -63,7 +63,7 @@ export const Globe = withStyles(styles)(
       // ADD RENDERER
       this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
       this.renderer.setClearColor(0x000000, 0);
-      this.renderer.setSize(width, height);
+      this.renderer.setSize(width, height, false);
       this.renderer.setPixelRatio(window.devicePixelRatio);
 
       // Add effects
@@ -80,6 +80,7 @@ export const Globe = withStyles(styles)(
       this.globe3D = new Globe3D();
       this.scene.add(this.globe3D.build());
 
+      this.resizeRendererToDisplaySize(true);
       this.startAnimation();
     }
 
@@ -92,15 +93,11 @@ export const Globe = withStyles(styles)(
       return (
         <div
           id='mount'
-          style={{ width: '100%', height: '900px', position: 'relative' }}
+          style={{ width: '100%', height: '200px' }}
           onMouseMove={e => this.onDocumentMouseMove(e)}
           onClick={e => this.onClick()}
-          ref={mount => {
-            this.mount = mount;
-          }}
-        >
-          <img src='assets/noise.jpg' style={{width: '100%', position: 'absolute'}} />
-        </div>
+          ref={mount => (this.mount = mount)}
+        />
       );
     }
 
@@ -140,9 +137,23 @@ export const Globe = withStyles(styles)(
       }
     }
 
+    private resizeRendererToDisplaySize(forceResize: boolean = false) {
+      const canvas = this.renderer.domElement;
+      const width = canvas.clientWidth;
+      if (canvas.width !== width || forceResize) {
+        this.renderer.setSize(width, width, false);
+        this.composer.setSize();
+        canvas.removeAttribute('style');
+        this.camera.aspect = 1;
+        this.camera.updateProjectionMatrix();
+      }
+    }
+
     private animate() {
       // this.globe3D.animate();
       this.handleHover();
+      this.resizeRendererToDisplaySize();
+
       this.composer.render(this.clock.getDelta());
       // this.renderer.render(this.scene, this.camera);
       this.frameId = requestAnimationFrame(() => this.animate());
