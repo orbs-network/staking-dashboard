@@ -8,6 +8,6 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { GlobeContainer } from './components/globe/GlobeContainer';
+import { App } from './App';
 
-ReactDOM.render(<GlobeContainer />, document.getElementById('app'));
+ReactDOM.render(<App />, document.getElementById('app'));

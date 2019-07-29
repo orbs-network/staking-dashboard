@@ -7,8 +7,13 @@
  */
 
 import * as React from 'react';
-import { Home } from './components/Home';
+import { BrowserRouter } from 'react-router-dom';
+import { GlobeContainer } from './components/globe/GlobeContainer';
 
-export const App = () => {
-  return <Home />;
-};
+const appVersion = (window as any).appVersion;
+
+export const App = () => (
+  <BrowserRouter>
+    <GlobeContainer />
+  </BrowserRouter>
+);

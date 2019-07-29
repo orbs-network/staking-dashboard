@@ -6,14 +6,11 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import { createStyles, Theme, withStyles } from '@material-ui/core/styles';
 import * as React from 'react';
+import { LeftPanel } from '../LeftPanel';
 import { Globe } from './Globe';
 
-const styles = (theme: Theme) => createStyles({});
-
-export const GlobeContainer = withStyles(styles)(
-  class extends React.Component {
+export class GlobeContainer extends React.Component {
     public render() {
       return (
         <div style={{ margin: '0 auto' }}>
@@ -28,19 +25,19 @@ export const GlobeContainer = withStyles(styles)(
             }}
           >
             <div style={{ maxWidth: 1380, margin: '0 auto', display: 'flex' }}>
-              <div id='left' style={{ minWidth: 210 }}>
-                <img src={'assets/left.jpg'}/>
+              <div id='left' style={{ minWidth: 210, position: 'relative' }}>
+                <LeftPanel />
+                <img src={'assets/left.jpg'} style={{ position: 'absolute', top: 0, opacity: 0.7 }} />
               </div>
               <div id='center' style={{ flexGrow: 1 }}>
-                <Globe/>
+                <Globe />
               </div>
               <div id='right' style={{ minWidth: 350 }}>
-                <img src={'assets/right.jpg'}/>
+                <img src={'assets/right.jpg'} />
               </div>
             </div>
           </div>
         </div>
       );
     }
-  },
-);
+  };
