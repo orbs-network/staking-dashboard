@@ -7,9 +7,13 @@
  */
 
 import * as React from 'react';
-import { Section } from './Section';
 import styled from 'styled-components';
-import { Typography } from './Typography';
+import { RewardsDistributedSection } from './sections/RewardsDistributedSection';
+import { TotalTokensSection } from './sections/TotalTokensSection';
+import { SimulatorCTA } from './SimulatorCTA';
+import { TopGuardiansSection } from './sections/TopGuardiansSection';
+import { ClockSection } from './sections/ClockSection';
+import { HSeparator } from './sections/HSeparator';
 
 const Root = styled.div`
   margin-top: 40px;
@@ -18,13 +22,14 @@ const Root = styled.div`
 export const LeftPanel: React.FunctionComponent = () => {
   return (
     <Root>
-      <Section title='Total token holders' helpText='this is a help text'>
-        <Typography variant='large'>6,000</Typography>
-      </Section>
-      <Section title='Rewards distrebuted' helpText='this is a help text'>
-        <Typography variant='large'>$68,788</Typography>
-      </Section>
-      <Section title='Top 3 guardians' />
+      <TotalTokensSection />
+      <HSeparator />
+      <RewardsDistributedSection />
+      <HSeparator />
+      <SimulatorCTA />
+      <ClockSection />
+      <HSeparator />
+      <TopGuardiansSection />
     </Root>
   );
 };

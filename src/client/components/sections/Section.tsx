@@ -7,34 +7,29 @@
  */
 
 import * as React from 'react';
-import { HelpIcon } from './HelpIcon';
-import { Typography } from './Typography';
 import styled from 'styled-components';
+import { SectionTitle } from './SectionTitle';
 
 const Root = styled.div`
-  text-transform: uppercase;
-  color: #ededed;
-  height: 20px;
-  padding-left: 2px;
-  padding-right: 2px;
-  display: flex;
+  padding-top: 12px;
 `;
 
-const Title = styled(Typography)`
-  padding-right: 4px;
-  align-self: flex-end;
+const ChildrenContainer = styled.div`
+  padding-top: 14px;
+  padding-bottom: 14px;
 `;
 
 export interface IProps {
-  title: string;
+  className?: string;
+  title?: string;
   helpText?: string;
 }
 
-export const SectionTitle: React.FunctionComponent<IProps> = ({ title, helpText }) => {
+export const Section: React.FunctionComponent<IProps> = ({ className, children, title, helpText }) => {
   return (
-    <Root>
-      <Title variant='small'>{title}</Title>
-      {helpText && <HelpIcon helpText={helpText} />}
+    <Root className={className}>
+      {title ? <SectionTitle title={title} helpText={helpText} /> : null}
+      <ChildrenContainer>{children}</ChildrenContainer>
     </Root>
   );
 };

@@ -9,6 +9,7 @@
 import * as React from 'react';
 import { LeftPanel } from '../LeftPanel';
 import { Globe } from './Globe';
+import { RightPanel } from '../RightPanel';
 
 export class GlobeContainer extends React.Component {
     public render() {
@@ -25,15 +26,16 @@ export class GlobeContainer extends React.Component {
             }}
           >
             <div style={{ maxWidth: 1380, margin: '0 auto', display: 'flex' }}>
-              <div id='left' style={{ minWidth: 210, position: 'relative' }}>
+              <div id='left' style={{ width: 210, position: 'relative' }}>
                 <LeftPanel />
-                <img src={'assets/left.jpg'} style={{ position: 'absolute', top: 0, opacity: 0.7 }} />
+                <img src={'assets/left.jpg'} style={{ position: 'absolute', visibility: 'hidden', top: 0, left: 220 }} />
               </div>
               <div id='center' style={{ flexGrow: 1 }}>
                 <Globe />
               </div>
-              <div id='right' style={{ minWidth: 350 }}>
-                <img src={'assets/right.jpg'} />
+              <div id='right' style={{ width: 350 }}>
+                <RightPanel />
+                <img src={'assets/right.jpg'} style={{ position: 'absolute', visibility: 'hidden', top: -27, right: 540}} />
               </div>
             </div>
           </div>

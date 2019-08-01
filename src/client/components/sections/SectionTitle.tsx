@@ -7,37 +7,33 @@
  */
 
 import * as React from 'react';
+import { HelpIcon } from './HelpIcon';
+import { Typography } from '../base/Typography';
 import styled from 'styled-components';
-import { Typography } from './Typography';
 
 const Root = styled.div`
-  width: 13px;
-  height: 13px;
-  border-radius: 10px;
-  border-width: 0.5px;
-  border-style: solid;
-  justify-content: center;
-  border-color: white;
+  height: 20px;
+  padding-left: 2px;
+  padding-right: 2px;
   display: flex;
 `;
 
-const QuestionMark = styled(Typography)`
-  align-self: center;
-  content: '?';
-`;
-
-const TooltipContent = styled.div`
-  display: none;
+const Title = styled(Typography)`
+  text-transform: uppercase;
+  padding-right: 4px;
+  align-self: flex-end;
 `;
 
 export interface IProps {
-  helpText: string;
+  title: string;
+  helpText?: string;
 }
-export const HelpIcon: React.FunctionComponent<IProps> = ({ helpText }) => {
+
+export const SectionTitle: React.FunctionComponent<IProps> = ({ title, helpText }) => {
   return (
     <Root>
-      <QuestionMark variant='tiny' />
-      <TooltipContent>{helpText}</TooltipContent>
+      <Title variant='medium'>{title}</Title>
+      {helpText && <HelpIcon helpText={helpText} />}
     </Root>
   );
 };

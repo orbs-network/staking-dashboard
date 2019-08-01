@@ -8,28 +8,18 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { SectionTitle } from './SectionTitle';
+import { CTAButton } from './base/CTAButton';
 
 const Root = styled.div`
-  border-bottom: 1px solid #ededed;
-  padding-top: 12px;
+  padding: 28px 0;
+  display: flex;
+  justify-content: center;
 `;
 
-const ChildrenContainer = styled.div`
-  padding-top: 14px;
-  padding-bottom: 14px;
-`;
-
-export interface IProps {
-  title: string;
-  helpText?: string;
-}
-
-export const Section: React.FunctionComponent<IProps> = ({ children, title, helpText }) => {
+export const SimulatorCTA: React.FunctionComponent = ({ children }) => {
   return (
     <Root>
-      {title ? <SectionTitle title={title} helpText={helpText} /> : null}
-      <ChildrenContainer>{children}</ChildrenContainer>
+      <CTAButton>Rewards Simulator</CTAButton>
     </Root>
   );
 };
