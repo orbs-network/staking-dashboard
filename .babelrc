@@ -3,7 +3,8 @@
   "plugins": [
     "@babel/proposal-numeric-separator",
     "@babel/plugin-transform-runtime",
-    "@babel/proposal-class-properties",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
     "@babel/proposal-object-rest-spread",
     "babel-plugin-styled-components",
   ]
