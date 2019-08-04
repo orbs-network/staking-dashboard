@@ -7,13 +7,23 @@
  */
 
 import * as React from 'react';
+import { Provider } from 'mobx-react';
 import { BrowserRouter } from 'react-router-dom';
 import { GlobeContainer } from './components/globe/GlobeContainer';
+import { SocialStore } from './store/SocialStore';
 
 const appVersion = (window as any).appVersion;
 
+const socialStore = new SocialStore();
+socialStore.init();
+const stores = {
+  socialStore
+};
+
 export const App = () => (
   <BrowserRouter>
-    <GlobeContainer />
+    <Provider {...stores}>
+      <GlobeContainer />
+    </Provider>
   </BrowserRouter>
 );

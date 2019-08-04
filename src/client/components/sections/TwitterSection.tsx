@@ -8,6 +8,8 @@
 
 import * as React from 'react';
 import { SocialSection } from './SocialSection';
+import { inject } from 'mobx-react';
+import { SocialStore } from '../../store/SocialStore';
 
 const icon = (
   <svg xmlns='http://www.w3.org/2000/svg' width='22' height='18' viewBox='0 0 22 18'>
@@ -19,12 +21,16 @@ const icon = (
   </svg>
 );
 
-export const TwitterSection: React.FunctionComponent = () => {
+interface IProps {
+  socialStore?: SocialStore;
+}
+
+export const TwitterSection = inject('socialStore')(({ socialStore }: IProps) => {
   return (
     <SocialSection
       icon={icon}
       title='Latest Tweets'
-      text='#SUMMIT2019 #LIVECRYPTO #KEYWORD #TALKINGABOUTIT #GITHUB #SOCIALIMPACT #GUARDIANS'
+      text={socialStore.latestTweet}
     />
   );
-};
+});
