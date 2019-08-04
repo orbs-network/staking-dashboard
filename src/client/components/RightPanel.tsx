@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { OrbsInCirculationSection } from './sections/OrbsInCirculationSection';
 import { BlockchainGraphSection } from './sections/BlockchainGraphSection';
 import { TokenPriceSection } from './sections/TokenPriceSection';
-import { TokenVolumeSection } from './sections/TokenVolumeSection';
+import { Token24HVolumeSection } from './sections/Token24HVolumeSection';
 import { theme } from './base/Theme';
 import { HSeparator } from './sections/HSeparator';
 import { VSeparator } from './sections/VSeparator';
@@ -34,7 +34,7 @@ const TokenPriceContainer = styled(TokenPriceSection)`
   flex-grow: 1;
 `;
 
-const TokenVolumeContainer = styled(TokenVolumeSection)`
+const TokenVolumeContainer = styled(Token24HVolumeSection)`
   flex-grow: 1;
   padding-left: 20px;
 `;

@@ -17,10 +17,10 @@ export interface IProps {
   tokenStore?: TokenStore;
 }
 
-export const TokenVolumeSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
-  const bigPrice = tokenStore.marketCap;
+export const Token24HVolumeSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
+  const bigPrice = tokenStore.token24HVolume;
   return (
-    <Section title='24H Market Cap' className={className}>
+    <Section title='24H Volume' className={className}>
       <Typography variant='huge'>${bigPrice}</Typography>
     </Section>
   );
