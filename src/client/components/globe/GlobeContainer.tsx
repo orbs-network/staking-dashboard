@@ -21,7 +21,7 @@ export class GlobeContainer extends React.Component {
               maxWidth: 1600,
               backgroundColor: 'black',
               margin: '0 auto',
-              backgroundImage: 'url(assets/noise.jpg)',
+              // backgroundImage: 'url(assets/noise.jpg)',
               backgroundSize: '100%',
             }}
           >

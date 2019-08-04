@@ -6,11 +6,10 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import { Power2, TweenMax } from 'gsap';
 import { BackSide, FrontSide, Mesh, MeshBasicMaterial, MeshLambertMaterial, Object3D, SphereGeometry, TextureLoader } from 'three';
 
 export class Globe3D {
-  private globe: Object3D;
+  public globe: Object3D;
   private sphereGeometry: SphereGeometry;
   private sphereMaterial: any;
   private sphereMaterialBack: any;
@@ -18,8 +17,8 @@ export class Globe3D {
 
   constructor() {
     const textureLoader = new TextureLoader();
-    const sphereTexture = textureLoader.load('/assets/map4-01.png');
-    this.sphereGeometry = new SphereGeometry(2, 32, 32);
+    const sphereTexture = textureLoader.load('/assets/mapall-01.png');
+    this.sphereGeometry = new SphereGeometry(10, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,
       map: sphereTexture,
@@ -52,14 +51,6 @@ export class Globe3D {
   public handleHover(object: Object3D): void {}
 
   public handleHoverOut(object: Object3D): void {}
-
-  public animate(): any {
-    this.globe.rotation.y += 0.003;
-  }
-
-  public moveToNextPoint(): void {
-    TweenMax.to(this.globe.rotation, 0.75, { y: Math.random() * Math.PI * 2, x: Math.random() * 0.2 * Math.PI * 2, ease: Power2.easeInOut });
-  }
 
   private createGlobe(): Object3D {
     const sphereMesh = new Mesh(this.sphereGeometry, this.sphereMaterial);

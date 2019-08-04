@@ -10,12 +10,15 @@ import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocess
 import * as React from 'react';
 import { AmbientLight, Clock, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from 'three';
 import { Globe3D } from './Globe3D';
+import { Power2, TweenMax } from 'gsap';
+import { generateStarField } from './StarField';
 
 const raycaster = new Raycaster();
 
 export class Globe extends React.Component {
   private clock: Clock = new Clock();
   private globe3D: Globe3D;
+  private starField: Object3D;
   private scene: Scene;
   private mount: HTMLDivElement;
   private camera: PerspectiveCamera;
@@ -42,7 +45,7 @@ export class Globe extends React.Component {
     this.scene.add(directionalLight);
 
     // ADD CAMERA
-    this.camera = new PerspectiveCamera(10, width / height, 0.1, 1000);
+    this.camera = new PerspectiveCamera(50, width / height, 0.1, 1000);
     this.camera.position.x = 0;
     this.camera.position.z = 40;
 
@@ -62,9 +65,13 @@ export class Globe extends React.Component {
 
     this.mount.appendChild(this.renderer.domElement);
 
-    // ADD the globe
+    // Add the globe
     this.globe3D = new Globe3D();
     this.scene.add(this.globe3D.build());
+
+    // Add the starfield
+    this.starField = generateStarField(80, 70);
+    this.scene.add(this.starField);
 
     this.resizeRendererToDisplaySize(true);
     this.startAnimation();
@@ -88,7 +95,10 @@ export class Globe extends React.Component {
   }
 
   private onClick(): void {
-    this.globe3D.moveToNextPoint();
+    const y = Math.random() * Math.PI * 2;
+    const x = Math.random() * 0.2 * Math.PI * 2;
+    TweenMax.to(this.globe3D.globe.rotation, 0.75, { x, y, ease: Power2.easeInOut });
+    TweenMax.to(this.starField.rotation, 0.75, { x, y, ease: Power2.easeInOut });
   }
 
   private onDocumentMouseMove(e: React.MouseEvent): void {
