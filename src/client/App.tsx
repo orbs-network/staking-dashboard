@@ -11,14 +11,19 @@ import { Provider } from 'mobx-react';
 import { BrowserRouter } from 'react-router-dom';
 import { GlobeContainer } from './components/globe/GlobeContainer';
 import { SocialStore } from './store/SocialStore';
+import { TokenStore } from './store/TokenStore';
 
 const appVersion = (window as any).appVersion;
 
 const socialStore = new SocialStore();
-socialStore.init();
+const tokenStore = new TokenStore();
 const stores = {
-  socialStore
+  socialStore,
+  tokenStore
 };
+
+socialStore.init();
+tokenStore.init();
 
 export const App = () => (
   <BrowserRouter>

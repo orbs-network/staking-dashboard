@@ -9,11 +9,17 @@
 import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
+import { inject } from 'mobx-react';
+import { TokenStore } from '../../store/TokenStore';
 
-export const OrbsInCirculationSection: React.FunctionComponent = () => {
+interface IProps {
+  tokenStore?: TokenStore;
+}
+
+export const OrbsInCirculationSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
     <Section title='Orbs In Circulation' helpText='this is a help text'>
-      <Typography variant='huge'>1,700,000,000</Typography>
+      <Typography variant='huge'>{tokenStore.orbsInCirculation.toLocaleString()}</Typography>
     </Section>
   );
-};
+});

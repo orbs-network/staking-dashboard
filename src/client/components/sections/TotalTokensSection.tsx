@@ -9,11 +9,17 @@
 import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
+import { inject } from 'mobx-react';
+import { TokenStore } from '../../store/TokenStore';
 
-export const TotalTokensSection: React.FunctionComponent = () => {
+interface IProps {
+  tokenStore?: TokenStore;
+}
+
+export const TotalTokensSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
     <Section title='Total token holders' helpText='this is a help text'>
-      <Typography variant='huge'>6,000</Typography>
+      <Typography variant='huge'>{tokenStore.totalHolders.toLocaleString()}</Typography>
     </Section>
   );
-};
+});

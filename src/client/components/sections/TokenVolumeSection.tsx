@@ -9,15 +9,19 @@
 import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
+import { inject } from 'mobx-react';
+import { TokenStore } from '../../store/TokenStore';
 
 export interface IProps {
   className?: string;
+  tokenStore?: TokenStore;
 }
 
-export const TokenVolumeSection: React.FunctionComponent<IProps> = ({ className }) => {
+export const TokenVolumeSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
+  const bigPrice = tokenStore.marketCap;
   return (
     <Section title='24H Market Cap' className={className}>
-      <Typography variant='huge'>$40M</Typography>
+      <Typography variant='huge'>${bigPrice}</Typography>
     </Section>
   );
-};
+});

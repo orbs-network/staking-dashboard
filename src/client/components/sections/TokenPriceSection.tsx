@@ -9,15 +9,18 @@
 import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
+import { inject } from 'mobx-react';
+import { TokenStore } from '../../store/TokenStore';
 
 export interface IProps {
   className?: string;
+  tokenStore?: TokenStore;
 }
 
-export const TokenPriceSection: React.FunctionComponent<IProps> = ({ className }) => {
+export const TokenPriceSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
   return (
-    <Section title='Token Price' className={className} noBottomBorder={true}>
-      <Typography variant='huge'>$0.0242</Typography>
+    <Section title='Token Price' className={className}>
+      <Typography variant='huge'>${tokenStore.tokenPrice}</Typography>
     </Section>
   );
-};
+});
