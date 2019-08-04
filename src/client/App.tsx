@@ -12,18 +12,22 @@ import { BrowserRouter } from 'react-router-dom';
 import { GlobeContainer } from './components/globe/GlobeContainer';
 import { SocialStore } from './store/SocialStore';
 import { TokenStore } from './store/TokenStore';
+import { POSStore } from './store/POSStore';
 
 const appVersion = (window as any).appVersion;
 
 const socialStore = new SocialStore();
 const tokenStore = new TokenStore();
+const posStore = new POSStore();
 const stores = {
   socialStore,
-  tokenStore
+  tokenStore,
+  posStore
 };
 
 socialStore.init();
 tokenStore.init();
+posStore.init();
 
 export const App = () => (
   <BrowserRouter>

@@ -10,6 +10,8 @@ import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
 import styled from 'styled-components';
+import { inject } from 'mobx-react';
+import { POSStore } from '../../store/POSStore';
 
 const ListContainer = styled.ul`
   padding: 0;
@@ -19,20 +21,18 @@ const ListItem = styled.li`
   padding-bottom: 10px;
 `;
 
-export const TopGuardiansSection: React.FunctionComponent = () => {
+interface IProps {
+  posStore?: POSStore;
+}
+
+export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => {
   return (
-    <Section title='Top 3 guardians' helpText='this is a help text'>
+    <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='this is a help text'>
       <ListContainer>
-        <ListItem>
-          <Typography variant='small' dark>MR.SHOWOFFTOKEN</Typography>
-        </ListItem>
-        <ListItem>
-          <Typography variant='small' dark>SLOWMOSHE</Typography>
-        </ListItem>
-        <ListItem>
-          <Typography variant='small' dark>DONTTELLMYMAMA</Typography>
-        </ListItem>
+        {posStore.topGuardians.map(g => <ListItem>
+          <Typography variant='small' dark>{g}</Typography>
+        </ListItem>)}
       </ListContainer>
     </Section>
   );
-};
+});

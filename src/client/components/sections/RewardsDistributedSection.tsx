@@ -9,11 +9,17 @@
 import * as React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
+import { inject } from 'mobx-react';
+import { POSStore } from '../../store/POSStore';
 
-export const RewardsDistributedSection: React.FunctionComponent = () => {
+interface IProps {
+  posStore?: POSStore;
+}
+
+export const RewardsDistributedSection = inject('posStore')(({ posStore }: IProps) => {
   return (
     <Section title='Rewards distributed' helpText='this is a help text'>
-      <Typography variant='huge'>$68,788</Typography>
+      <Typography variant='huge'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
     </Section>
   );
-};
+});
