@@ -7,17 +7,11 @@
  */
 
 import * as React from 'react';
-import styled from 'styled-components';
 import { Section } from './Section';
-
-const Graph = styled.div`
-  height: 187px;
-`;
-
 export const BlockchainGraphSection: React.FunctionComponent = () => {
   return (
     <Section title='Total blocks created' helpText='this is a help text'>
-      <Graph />
+      <img src={'assets/chain.jpg'} />
     </Section>
   );
 };

@@ -8,17 +8,15 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { OrbsInCirculationSection } from './sections/OrbsInCirculationSection';
 import { BlockchainGraphSection } from './sections/BlockchainGraphSection';
-import { TokenPriceSection } from './sections/TokenPriceSection';
-import { Token24HVolumeSection } from './sections/Token24HVolumeSection';
-import { theme } from './base/Theme';
-import { HSeparator } from './sections/HSeparator';
-import { VSeparator } from './sections/VSeparator';
-import { SocialSection } from './sections/SocialSection';
-import { TwitterSection } from './sections/TwitterSection';
 import { GithubSection } from './sections/GithubSection';
+import { HSeparator } from './sections/HSeparator';
 import { NewsSection } from './sections/NewsSection';
+import { OrbsInCirculationSection } from './sections/OrbsInCirculationSection';
+import { Token24HVolumeSection } from './sections/Token24HVolumeSection';
+import { TokenPriceSection } from './sections/TokenPriceSection';
+import { TwitterSection } from './sections/TwitterSection';
+import { VSeparator } from './sections/VSeparator';
 
 const Root = styled.div``;
 
