@@ -9,8 +9,9 @@
 import * as React from 'react';
 import { Section } from './Section';
 export const BlockchainGraphSection: React.FunctionComponent = () => {
+  const title = <>{'Total blocks created: '}<strong>1,234,567</strong></>;
   return (
-    <Section title='Total blocks created' helpText='this is a help text'>
+    <Section title={title}>
       <img src={'assets/chain.jpg'} />
     </Section>
   );

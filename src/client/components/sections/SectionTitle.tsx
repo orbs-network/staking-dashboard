@@ -25,7 +25,7 @@ const Title = styled(Typography)`
 `;
 
 export interface IProps {
-  title: string;
+  title: React.ReactNode;
   helpText?: string;
 }
 

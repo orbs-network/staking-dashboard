@@ -21,7 +21,7 @@ const ChildrenContainer = styled.div`
 
 export interface IProps {
   className?: string;
-  title?: string;
+  title?: React.ReactNode;
   helpText?: string;
 }
 
