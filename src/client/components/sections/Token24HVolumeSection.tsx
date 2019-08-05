@@ -11,6 +11,7 @@ import { Typography } from '../base/Typography';
 import { Section } from './Section';
 import { inject } from 'mobx-react';
 import { TokenStore } from '../../store/TokenStore';
+import { formatLargeNumber } from '../../utils/LargeNumbersFormatter';
 
 export interface IProps {
   className?: string;
@@ -21,7 +22,7 @@ export const Token24HVolumeSection = inject('tokenStore')(({ tokenStore, classNa
   const bigPrice = tokenStore.token24HVolume;
   return (
     <Section title='24H Volume' className={className}>
-      <Typography variant='huge'>${bigPrice}</Typography>
+      <Typography variant='huge'>${formatLargeNumber(bigPrice)}</Typography>
     </Section>
   );
 });
