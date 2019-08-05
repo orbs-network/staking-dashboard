@@ -16,35 +16,35 @@ describe('capper', () => {
   });
 
   it('should format a number larger than 999 to K', () => {
-    expect(formatLargeNumber(1_000)).toEqual(`1k`);
-    expect(formatLargeNumber(5_000)).toEqual(`5k`);
-    expect(formatLargeNumber(9_000)).toEqual(`9k`);
-    expect(formatLargeNumber(10_000)).toEqual(`10k`);
-    expect(formatLargeNumber(152_000)).toEqual(`152k`);
+    expect(formatLargeNumber(1_000)).toEqual(`1K`);
+    expect(formatLargeNumber(5_000)).toEqual(`5K`);
+    expect(formatLargeNumber(9_000)).toEqual(`9K`);
+    expect(formatLargeNumber(10_000)).toEqual(`10K`);
+    expect(formatLargeNumber(152_000)).toEqual(`152K`);
   });
 
   it('should floor a given K number', () => {
-    expect(formatLargeNumber(1_999)).toEqual(`1k`);
-    expect(formatLargeNumber(5_999)).toEqual(`5k`);
-    expect(formatLargeNumber(9_999)).toEqual(`9k`);
-    expect(formatLargeNumber(10_999)).toEqual(`10k`);
-    expect(formatLargeNumber(152_999)).toEqual(`152k`);
-    expect(formatLargeNumber(999_999)).toEqual(`999k`);
+    expect(formatLargeNumber(1_999)).toEqual(`1K`);
+    expect(formatLargeNumber(5_999)).toEqual(`5K`);
+    expect(formatLargeNumber(9_999)).toEqual(`9K`);
+    expect(formatLargeNumber(10_999)).toEqual(`10K`);
+    expect(formatLargeNumber(152_999)).toEqual(`152K`);
+    expect(formatLargeNumber(999_999)).toEqual(`999K`);
   });
 
   it('should format a number larger than 999,999 to M', () => {
-    expect(formatLargeNumber(1_000_000)).toEqual(`1m`);
-    expect(formatLargeNumber(5_000_000)).toEqual(`5m`);
-    expect(formatLargeNumber(9_000_000)).toEqual(`9m`);
-    expect(formatLargeNumber(10_000_000)).toEqual(`10m`);
-    expect(formatLargeNumber(152_000_000)).toEqual(`152m`);
+    expect(formatLargeNumber(1_000_000)).toEqual(`1M`);
+    expect(formatLargeNumber(5_000_000)).toEqual(`5M`);
+    expect(formatLargeNumber(9_000_000)).toEqual(`9M`);
+    expect(formatLargeNumber(10_000_000)).toEqual(`10M`);
+    expect(formatLargeNumber(152_000_000)).toEqual(`152M`);
   });
 
   it('should floor a given M number', () => {
-    expect(formatLargeNumber(1_999_999)).toEqual(`1m`);
-    expect(formatLargeNumber(5_999_999)).toEqual(`5m`);
-    expect(formatLargeNumber(9_999_999)).toEqual(`9m`);
-    expect(formatLargeNumber(10_999_999)).toEqual(`10m`);
-    expect(formatLargeNumber(152_999_999)).toEqual(`152m`);
+    expect(formatLargeNumber(1_999_999)).toEqual(`1M`);
+    expect(formatLargeNumber(5_999_999)).toEqual(`5M`);
+    expect(formatLargeNumber(9_999_999)).toEqual(`9M`);
+    expect(formatLargeNumber(10_999_999)).toEqual(`10M`);
+    expect(formatLargeNumber(152_999_999)).toEqual(`152M`);
   });
 });
