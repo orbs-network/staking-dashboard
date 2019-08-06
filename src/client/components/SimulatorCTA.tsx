@@ -9,9 +9,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { CTAButton } from './base/CTAButton';
+import { theme } from './base/Theme';
 
 const Root = styled.div`
-  padding: 28px 0;
+  padding: ${theme.sizes.SIZE_LARGE_3} 0;
   display: flex;
   justify-content: center;
 `;

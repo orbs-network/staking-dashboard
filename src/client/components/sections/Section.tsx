@@ -9,14 +9,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { SectionTitle } from './SectionTitle';
+import { theme } from '../base/Theme';
 
 const Root = styled.div`
-  padding-top: 12px;
+  padding-top: ${theme.sizes.SIZE_SMALL_1};
 `;
 
 const ChildrenContainer = styled.div`
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: ${theme.sizes.SIZE_SMALL_1};
+  padding-bottom: ${theme.sizes.SIZE_SMALL_1};
 `;
 
 export interface IProps {

@@ -9,13 +9,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from './Button';
+import { Typography } from './Typography';
+import { theme } from './Theme';
 
 const Root = styled(Button)`
   text-transform: uppercase;
   border-width: 3px;
-  padding: 14px 15px;
+  padding: ${theme.sizes.SIZE_BASIC} ${theme.sizes.SIZE_LARGE_1};
 `;
 
 export const CTAButton: React.FunctionComponent = ({ children }) => {
-  return <Root>{children}</Root>;
+  return (
+    <Root>
+      <Typography variant='large'>{children}</Typography>
+    </Root>
+  );
 };

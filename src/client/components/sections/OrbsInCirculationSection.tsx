@@ -19,7 +19,7 @@ interface IProps {
 export const OrbsInCirculationSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
     <Section title='Orbs In Circulation' helpText='this is a help text'>
-      <Typography variant='huge'>{tokenStore.orbsInCirculation.toLocaleString()}</Typography>
+      <Typography variant='xx-large'>{tokenStore.orbsInCirculation.toLocaleString()}</Typography>
     </Section>
   );
 });

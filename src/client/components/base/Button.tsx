@@ -12,7 +12,7 @@ import { theme } from './Theme';
 import { Typography } from './Typography';
 
 const Root = styled.button`
-  border-radius: 4px;
+  border-radius: ${theme.sizes.SIZE_SMALL_6};
   border-color: ${theme.secondaryColor};
   background-color: ${theme.buttonColor};
 `;
@@ -24,7 +24,7 @@ export interface IProps {
 export const Button: React.FunctionComponent<IProps> = ({ className, children }) => {
   return (
     <Root className={className}>
-      <Typography variant='medium'>{children}</Typography>
+      <Typography variant='small'>{children}</Typography>
     </Root>
   );
 };

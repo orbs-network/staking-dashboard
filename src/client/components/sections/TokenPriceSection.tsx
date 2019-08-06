@@ -20,7 +20,7 @@ export interface IProps {
 export const TokenPriceSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
   return (
     <Section title='Token Price' className={className}>
-      <Typography variant='huge'>${tokenStore.tokenPrice}</Typography>
+      <Typography variant='xx-large'>${tokenStore.tokenPrice}</Typography>
     </Section>
   );
 });

@@ -10,17 +10,16 @@ import * as React from 'react';
 import { HelpIcon } from './HelpIcon';
 import { Typography } from '../base/Typography';
 import styled from 'styled-components';
+import { theme } from '../base/Theme';
 
 const Root = styled.div`
-  height: 20px;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-top: ${theme.sizes.SIZE_SMALL_5};
   display: flex;
 `;
 
 const Title = styled(Typography)`
   text-transform: uppercase;
-  padding-right: 4px;
+  padding-right: ${theme.sizes.SIZE_SMALL_6};
   align-self: flex-end;
 `;
 
@@ -32,7 +31,7 @@ export interface IProps {
 export const SectionTitle: React.FunctionComponent<IProps> = ({ title, helpText }) => {
   return (
     <Root>
-      <Title variant='medium'>{title}</Title>
+      <Title variant='small'>{title}</Title>
       {helpText && <HelpIcon helpText={helpText} />}
     </Root>
   );

@@ -17,6 +17,7 @@ import { Token24HVolumeSection } from './sections/Token24HVolumeSection';
 import { TokenPriceSection } from './sections/TokenPriceSection';
 import { TwitterSection } from './sections/TwitterSection';
 import { VSeparator } from './sections/VSeparator';
+import { theme } from './base/Theme';
 
 const Root = styled.div``;
 
@@ -24,8 +25,8 @@ const TwoBoxContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  padding-top: 14px;
-  padding-bottom: 14px;
+  padding-top: ${theme.sizes.SIZE_SMALL_1};
+  padding-bottom: ${theme.sizes.SIZE_SMALL_1};
 `;
 
 const TokenPriceContainer = styled(TokenPriceSection)`
@@ -34,7 +35,7 @@ const TokenPriceContainer = styled(TokenPriceSection)`
 
 const TokenVolumeContainer = styled(Token24HVolumeSection)`
   flex-grow: 1;
-  padding-left: 20px;
+  padding-left: ${theme.sizes.SIZE_LARGE_1};
 `;
 
 export const RightPanel: React.FunctionComponent = () => {

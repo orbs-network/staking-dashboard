@@ -37,7 +37,7 @@ export interface IProps {
 export const HelpIcon: React.FunctionComponent<IProps> = ({ helpText }) => {
   return (
     <Root>
-      <QuestionMark variant='small'>?</QuestionMark>
+      <QuestionMark variant='x-small'>?</QuestionMark>
       <TooltipContent>{helpText}</TooltipContent>
     </Root>
   );

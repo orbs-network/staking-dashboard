@@ -9,14 +9,15 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Typography } from '../base/Typography';
+import { theme } from '../base/Theme';
 
 const Root = styled.div`
   display: flex;
   height: 210px;
   justify-content: center;
   align-items: center;
-  padding-top: 10px;
-  padding-bottom: 40px;
+  padding-top: ${theme.sizes.SIZE_SMALL_2};
+  padding-bottom: ${theme.sizes.SIZE_LARGE_4};
 `;
 
 const DigitBox = styled.span`
@@ -27,40 +28,40 @@ const DigitBox = styled.span`
 `;
 
 const SeperatorBox = styled(DigitBox)`
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: ${theme.sizes.SIZE_SMALL_3};
+  padding-right: ${theme.sizes.SIZE_SMALL_3};
 `;
 
 export const ClockSection: React.FunctionComponent = () => {
   return (
     <Root>
       <DigitBox>
-        <Typography variant='large'>15</Typography>
-        <Typography variant='tiny' dark>
+        <Typography variant='x-large'>15</Typography>
+        <Typography variant='xxx-small' dark>
           Hours
         </Typography>
       </DigitBox>
       <SeperatorBox>
-        <Typography variant='large'>:</Typography>
-        <Typography variant='tiny' dark>
+        <Typography variant='x-large'>:</Typography>
+        <Typography variant='xxx-small' dark>
           &nbsp;
         </Typography>
       </SeperatorBox>
       <DigitBox>
-        <Typography variant='large'>45</Typography>
-        <Typography variant='tiny' dark>
+        <Typography variant='x-large'>45</Typography>
+        <Typography variant='xxx-small' dark>
           Minutes
         </Typography>
       </DigitBox>
       <SeperatorBox>
-        <Typography variant='large'>:</Typography>
-        <Typography variant='tiny' dark>
+        <Typography variant='x-large'>:</Typography>
+        <Typography variant='xxx-small' dark>
           &nbsp;
         </Typography>
       </SeperatorBox>
       <DigitBox>
-        <Typography variant='large'>15</Typography>
-        <Typography variant='tiny' dark>
+        <Typography variant='x-large'>15</Typography>
+        <Typography variant='xxx-small' dark>
           Seconds
         </Typography>
       </DigitBox>

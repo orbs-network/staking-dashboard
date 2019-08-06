@@ -19,7 +19,7 @@ interface IProps {
 export const RewardsDistributedSection = inject('posStore')(({ posStore }: IProps) => {
   return (
     <Section title='Rewards distributed' helpText='this is a help text'>
-      <Typography variant='huge'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
+      <Typography variant='xx-large'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
     </Section>
   );
 });

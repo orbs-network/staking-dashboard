@@ -10,42 +10,72 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { theme } from './Theme';
 
-const Base = styled.p`
-  color: ${props => props.dark ? theme.darkTextColor : theme.lightTextColor};
+const Base = styled.span`
+  color: ${props => (props.dark ? theme.darkTextColor : theme.lightTextColor)};
   font-weight: lighter;
   display: inline-block;
   margin: 0;
 `;
 
-const Tiny = styled(Base)`
-  font-size: 6px;
-  letter-spacing: 0.7px;
+function fontSizeToLetterSpacing(fontSize: string): string {
+  const emAsNumber = parseFloat(fontSize.replace(/[a-z]/gi, ''));
+  const letterSpacing = emAsNumber * 0.116; // as a rule letter-spacing is alway 11.6% of the font-size.
+  const roundedLetterSpacing = Math.round(letterSpacing * 1_000) / 1_000;
+  return `${roundedLetterSpacing.toString()}em`;
+}
+
+// 6px
+const XXXSmall = styled(Base)`
+  font-size: ${theme.sizes.SIZE_SMALL_4};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_SMALL_4)};
 `;
 
+// 8px
+const XXSmall = styled(Base)`
+  font-size: ${theme.sizes.SIZE_SMALL_3};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_SMALL_3)};
+`;
+
+// 10px
+const XSmall = styled(Base)`
+  font-size: ${theme.sizes.SIZE_SMALL_2};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_SMALL_2)};
+`;
+
+// 12px
 const Small = styled(Base)`
-  font-size: 10px;
-  letter-spacing: 1.16px;
+  font-size: ${theme.sizes.SIZE_SMALL_1};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_SMALL_1)};
 `;
 
+// 16px
 const Medium = styled(Base)`
-  font-size: 12px;
-  letter-spacing: 1.39px;
+  font-size: ${theme.sizes.SIZE_BASIC};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_BASIC)};
 `;
 
+// 20px
 const Large = styled(Base)`
-  font-size: 24px;
-  letter-spacing: 2.38px;
+  font-size: ${theme.sizes.SIZE_LARGE_1};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_LARGE_1)};
 `;
 
-const Huge = styled(Base)`
-  font-size: 32px;
-  letter-spacing: 3.71px;
+// 25px
+const XLarge = styled(Base)`
+  font-size: ${theme.sizes.SIZE_LARGE_2};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_LARGE_2)};
+`;
+
+// 31px
+const XXLarge = styled(Base)`
+  font-size: ${theme.sizes.SIZE_LARGE_3};
+  letter-spacing: ${fontSizeToLetterSpacing(theme.sizes.SIZE_LARGE_3)};
 `;
 
 export interface IProps {
   className?: string;
   dark?: boolean;
-  variant?: 'tiny' | 'small' | 'medium' | 'large' | 'huge';
+  variant?: 'xxx-small' | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
 }
 
 export const Typography: React.FunctionComponent<IProps> = ({
@@ -55,20 +85,61 @@ export const Typography: React.FunctionComponent<IProps> = ({
   children,
 }) => {
   switch (variant) {
-    case 'tiny':
-      return <Tiny className={className} dark={dark}>{children}</Tiny>;
+    case 'xxx-small':
+      return (
+        <XXXSmall className={className} dark={dark}>
+          {children}
+        </XXXSmall>
+      );
+
+    case 'xx-small':
+      return (
+        <XXSmall className={className} dark={dark}>
+          {children}
+        </XXSmall>
+      );
+
+    case 'x-small':
+      return (
+        <XSmall className={className} dark={dark}>
+          {children}
+        </XSmall>
+      );
 
     case 'small':
-      return <Small className={className} dark={dark}>{children}</Small>;
+      return (
+        <Small className={className} dark={dark}>
+          {children}
+        </Small>
+      );
 
     case 'medium':
-      return <Medium className={className} dark={dark}>{children}</Medium>;
+      return (
+        <Medium className={className} dark={dark}>
+          {children}
+        </Medium>
+      );
 
     case 'large':
-      return <Large className={className} dark={dark}>{children}</Large>;
+      return (
+        <Large className={className} dark={dark}>
+          {children}
+        </Large>
+      );
 
-    case 'huge':
-      return <Huge className={className} dark={dark}>{children}</Huge>;
+    case 'x-large':
+      return (
+        <XLarge className={className} dark={dark}>
+          {children}
+        </XLarge>
+      );
+
+    case 'xx-large':
+      return (
+        <XXLarge className={className} dark={dark}>
+          {children}
+        </XXLarge>
+      );
 
     default:
       break;

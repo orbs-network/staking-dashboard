@@ -9,22 +9,23 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Typography } from '../base/Typography';
+import { theme } from '../base/Theme';
 
 const Root = styled.div`
-  padding-top: 22px;
+  padding-top: ${theme.sizes.SIZE_LARGE_2};
 `;
 
 const Title = styled(Typography)`
-  padding-left: 10px;
+  padding-left: ${theme.sizes.SIZE_SMALL_2};
   text-transform: uppercase;
 `;
 
 const TitleContainer = styled.div``;
 
 const TextContainer = styled(Typography)`
-  padding-top: 14px;
-  padding-bottom: 14px;
-  line-height: 26px;
+  padding-top: ${theme.sizes.SIZE_SMALL_1};
+  padding-bottom: ${theme.sizes.SIZE_SMALL_1};
+  line-height: ${theme.sizes.SIZE_LARGE_2};
 `;
 
 export interface IProps {
@@ -38,11 +39,11 @@ export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, te
     <Root>
       <TitleContainer>
         {icon}
-        <Title dark variant='small'>
+        <Title dark variant='x-small'>
           {title}
         </Title>
       </TitleContainer>
-      <TextContainer>{text}</TextContainer>
+      <TextContainer variant='small'>{text}</TextContainer>
     </Root>
   );
 };

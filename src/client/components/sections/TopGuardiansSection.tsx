@@ -12,13 +12,14 @@ import { Section } from './Section';
 import styled from 'styled-components';
 import { inject } from 'mobx-react';
 import { POSStore } from '../../store/POSStore';
+import { theme } from '../base/Theme';
 
 const ListContainer = styled.ul`
   padding: 0;
   margin: 0;
 `;
 const ListItem = styled.li`
-  padding-bottom: 10px;
+  padding-bottom: ${theme.sizes.SIZE_SMALL_2};
 `;
 
 interface IProps {
@@ -30,7 +31,7 @@ export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => 
     <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='this is a help text'>
       <ListContainer>
         {posStore.topGuardians.map(g => <ListItem key={g}>
-          <Typography variant='small' dark>{g}</Typography>
+          <Typography variant='x-small' dark>{g}</Typography>
         </ListItem>)}
       </ListContainer>
     </Section>
