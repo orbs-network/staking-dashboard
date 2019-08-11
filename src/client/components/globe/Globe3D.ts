@@ -15,10 +15,10 @@ export class Globe3D {
   private sphereMaterialBack: any;
   private bigSphereMaterial: any;
 
-  constructor() {
+  constructor(globeRadius: number) {
     const textureLoader = new TextureLoader();
     const sphereTexture = textureLoader.load('/assets/mapall-01.png');
-    this.sphereGeometry = new SphereGeometry(10, 32, 32);
+    this.sphereGeometry = new SphereGeometry(globeRadius, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,
       map: sphereTexture,

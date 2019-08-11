@@ -6,19 +6,39 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { Power2, TweenMax, TimelineLite } from 'gsap';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import * as React from 'react';
-import { AmbientLight, Clock, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from 'three';
+import {
+  AmbientLight,
+  Clock,
+  DirectionalLight,
+  Object3D,
+  PerspectiveCamera,
+  Raycaster,
+  Scene,
+  Vector2,
+  WebGLRenderer,
+} from 'three';
+import { Dot3D } from './Dot3D';
+import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
-import { Power2, TweenMax } from 'gsap';
 import { generateStarField } from './StarField';
 
 const raycaster = new Raycaster();
+const CAMERA_POS = 30;
+const ANIMATION_SPEED = 0.8;
 
-export class Globe extends React.Component {
+interface IState {
+  rotationX: number;
+  rotationY: number;
+}
+export class Globe extends React.Component<{}, IState> {
   private clock: Clock = new Clock();
   private globe3D: Globe3D;
   private starField: Object3D;
+  private activeDot: Dot3D;
+  private dotsContainer: DotsContainer3D;
   private scene: Scene;
   private mount: HTMLDivElement;
   private camera: PerspectiveCamera;
@@ -28,6 +48,10 @@ export class Globe extends React.Component {
   private mouse: Vector2 = new Vector2();
   private hoverdObject: Object3D;
 
+  constructor(props) {
+    super(props);
+    this.state = { rotationX: 0, rotationY: 0 };
+  }
   public componentDidMount() {
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
@@ -46,8 +70,7 @@ export class Globe extends React.Component {
 
     // ADD CAMERA
     this.camera = new PerspectiveCamera(50, width / height, 0.1, 1000);
-    this.camera.position.x = 0;
-    this.camera.position.z = 40;
+    this.camera.position.z = CAMERA_POS;
 
     // ADD RENDERER
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
@@ -66,8 +89,12 @@ export class Globe extends React.Component {
     this.mount.appendChild(this.renderer.domElement);
 
     // Add the globe
-    this.globe3D = new Globe3D();
+    this.globe3D = new Globe3D(10);
     this.scene.add(this.globe3D.build());
+
+    // Add the dots
+    this.dotsContainer = new DotsContainer3D(10, 25);
+    this.scene.add(this.dotsContainer);
 
     // Add the starfield
     this.starField = generateStarField(80, 70);
@@ -83,22 +110,71 @@ export class Globe extends React.Component {
   }
 
   public render() {
+    if (this.activeDot) {
+      this.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
+    }
     return (
-      <div
-        id='mount'
-        style={{ width: '100%', height: '200px' }}
-        onMouseMove={e => this.onDocumentMouseMove(e)}
-        onClick={e => this.onClick()}
-        ref={mount => (this.mount = mount)}
-      />
+      <>
+        <div
+          id='mount'
+          style={{ width: '100%', height: '200px' }}
+          onMouseMove={e => this.onDocumentMouseMove(e)}
+          onClick={e => this.onClick()}
+          ref={mount => (this.mount = mount)}
+        />
+        <div style={{ position: 'absolute', left: 200, top: 900 }}>
+          <label style={{ color: 'white', display: 'block' }}>X: {this.state.rotationX}</label>
+          <input
+            type='range'
+            id='rotationX'
+            value={this.state.rotationX * 100}
+            min={0}
+            max={Math.PI * 2 * 100}
+            onChange={e => this.setState({ rotationX: parseInt(e.currentTarget.value, 10) / 100 })}
+          />
+          <label style={{ color: 'white', display: 'block' }}>Y: {this.state.rotationY}</label>
+          <input
+            type='range'
+            id='rotationY'
+            value={this.state.rotationY * 100}
+            min={0}
+            max={Math.PI * 2 * 100}
+            onChange={e => this.setState({ rotationY: parseInt(e.currentTarget.value, 10) / 100 })}
+          />
+        </div>
+      </>
     );
   }
 
   private onClick(): void {
-    const y = Math.random() * Math.PI * 2;
-    const x = Math.random() * 0.2 * Math.PI * 2;
-    TweenMax.to(this.globe3D.globe.rotation, 0.75, { x, y, ease: Power2.easeInOut });
-    TweenMax.to(this.starField.rotation, 0.75, { x, y, ease: Power2.easeInOut });
+    if (this.activeDot) {
+      this.activeDot.unblink();
+    }
+    this.activeDot = this.dotsContainer.getDotRandom(this.activeDot);
+    this.activeDot.blink();
+    const timeLine = new TimelineLite();
+    timeLine.timeScale(ANIMATION_SPEED);
+    timeLine.add(
+      TweenMax.to(this.camera.position, 0.5, {
+        z: CAMERA_POS * 1.5,
+        ease: Power2.easeIn,
+      }),
+    );
+    timeLine.add(
+      TweenMax.to(this.camera.position, 0.5, {
+        z: CAMERA_POS,
+        ease: Power2.easeOut,
+      }),
+    );
+    timeLine.add(
+      TweenMax.to(this.scene.rotation, 1, {
+        x: -this.activeDot.rotation.x,
+        y: -this.activeDot.rotation.y,
+        z: 0,
+        ease: Power2.easeInOut,
+      }),
+      0,
+    );
   }
 
   private onDocumentMouseMove(e: React.MouseEvent): void {
