@@ -10,6 +10,7 @@ import { Object3D } from 'three';
 import { Dot3D } from './Dot3D';
 
 export class DotsContainer3D extends Object3D {
+  private activeDotIdx: number = 0;
   private dotsList: Dot3D[] = [];
 
   constructor(globeRadius: number, count: number) {
@@ -23,11 +24,11 @@ export class DotsContainer3D extends Object3D {
     }
   }
 
-  public getDotRandom(ignoreDot: Dot3D): Dot3D {
-    const result = this.dotsList[Math.floor(Math.random() * this.dotsList.length)];
-    if (ignoreDot === result) {
-      return this.getDotRandom(ignoreDot);
-    }
-    return result;
+  public get activeDot(): Dot3D {
+    return this.dotsList[this.activeDotIdx];
+  }
+
+  public nextActiveDot(): void {
+    this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 }

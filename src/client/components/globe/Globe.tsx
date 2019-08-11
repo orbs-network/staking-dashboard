@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import { Power2, TweenMax, TimelineLite } from 'gsap';
+import { Power2, TimelineLite, TweenMax } from 'gsap';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import * as React from 'react';
 import {
@@ -20,7 +20,6 @@ import {
   Vector2,
   WebGLRenderer,
 } from 'three';
-import { Dot3D } from './Dot3D';
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
@@ -37,7 +36,6 @@ export class Globe extends React.Component<{}, IState> {
   private clock: Clock = new Clock();
   private globe3D: Globe3D;
   private starField: Object3D;
-  private activeDot: Dot3D;
   private dotsContainer: DotsContainer3D;
   private scene: Scene;
   private mount: HTMLDivElement;
@@ -52,10 +50,8 @@ export class Globe extends React.Component<{}, IState> {
     super(props);
     this.state = { rotationX: 0, rotationY: 0 };
   }
-  public componentDidMount() {
-    const width = this.mount.clientWidth;
-    const height = this.mount.clientHeight;
 
+  public componentWillMount() {
     // ADD SCENE
     this.scene = new Scene();
 
@@ -69,13 +65,12 @@ export class Globe extends React.Component<{}, IState> {
     this.scene.add(directionalLight);
 
     // ADD CAMERA
-    this.camera = new PerspectiveCamera(50, width / height, 0.1, 1000);
+    this.camera = new PerspectiveCamera(50, 0.5, 0.1, 1000);
     this.camera.position.z = CAMERA_POS;
 
     // ADD RENDERER
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setSize(width, height, false);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     // Add effects
@@ -85,8 +80,6 @@ export class Globe extends React.Component<{}, IState> {
 
     this.composer.addPass(new RenderPass(this.scene, this.camera));
     this.composer.addPass(effectPass);
-
-    this.mount.appendChild(this.renderer.domElement);
 
     // Add the globe
     this.globe3D = new Globe3D(10);
@@ -99,6 +92,16 @@ export class Globe extends React.Component<{}, IState> {
     // Add the starfield
     this.starField = generateStarField(80, 70);
     this.scene.add(this.starField);
+  }
+
+  public componentDidMount() {
+    const width = this.mount.clientWidth;
+    const height = this.mount.clientHeight;
+
+    this.camera.aspect = width / height;
+    this.renderer.setSize(width, height, false);
+
+    this.mount.appendChild(this.renderer.domElement);
 
     this.resizeRendererToDisplaySize(true);
     this.startAnimation();
@@ -110,9 +113,8 @@ export class Globe extends React.Component<{}, IState> {
   }
 
   public render() {
-    if (this.activeDot) {
-      this.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
-    }
+    this.dotsContainer.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
+
     return (
       <>
         <div
@@ -147,11 +149,10 @@ export class Globe extends React.Component<{}, IState> {
   }
 
   private onClick(): void {
-    if (this.activeDot) {
-      this.activeDot.unblink();
-    }
-    this.activeDot = this.dotsContainer.getDotRandom(this.activeDot);
-    this.activeDot.blink();
+    this.dotsContainer.activeDot.unblink();
+    this.dotsContainer.nextActiveDot();
+    this.dotsContainer.activeDot.blink();
+
     const timeLine = new TimelineLite();
     timeLine.timeScale(ANIMATION_SPEED);
     timeLine.add(
@@ -168,8 +169,8 @@ export class Globe extends React.Component<{}, IState> {
     );
     timeLine.add(
       TweenMax.to(this.scene.rotation, 1, {
-        x: -this.activeDot.rotation.x,
-        y: -this.activeDot.rotation.y,
+        x: -this.dotsContainer.activeDot.rotation.x,
+        y: -this.dotsContainer.activeDot.rotation.y,
         z: 0,
         ease: Power2.easeInOut,
       }),
