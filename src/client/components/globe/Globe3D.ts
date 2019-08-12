@@ -13,11 +13,11 @@ export class Globe3D {
   private sphereGeometry: SphereGeometry;
   private sphereMaterial: any;
   private sphereMaterialBack: any;
-  private bigSphereMaterial: any;
+  private innerSphereMaterial: any;
 
   constructor(globeRadius: number) {
     const textureLoader = new TextureLoader();
-    const sphereTexture = textureLoader.load('/assets/mapall-01.png');
+    const sphereTexture = textureLoader.load('/assets/map3-01.png');
     this.sphereGeometry = new SphereGeometry(globeRadius, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,
@@ -32,12 +32,11 @@ export class Globe3D {
       opacity: 0.4,
       side: BackSide,
     });
-    this.bigSphereMaterial = new MeshBasicMaterial({
-      color: 0xffffff,
-      wireframe: true,
-      opacity: 0.04,
-      transparent: true,
-      side: FrontSide,
+    this.innerSphereMaterial = new MeshBasicMaterial({
+      color: 0x080808,
+      wireframe: false,
+      opacity: 1,
+      transparent: false,
     });
     // this.sphereMaterial = createFresnelShaderMaterial();
     // this.sphereMaterialBack = createFresnelShaderMaterial();
@@ -55,15 +54,15 @@ export class Globe3D {
   private createGlobe(): Object3D {
     const sphereMesh = new Mesh(this.sphereGeometry, this.sphereMaterial);
     const sphereMeshBack = new Mesh(this.sphereGeometry, this.sphereMaterialBack);
-    // const bigSphereMesh = new Mesh(this.sphereGeometry, this.bigSphereMaterial);
+    const innerSphereMesh = new Mesh(this.sphereGeometry, this.innerSphereMaterial);
 
     sphereMesh.renderOrder = 2;
-    // bigSphereMesh.scale.set(1.3, 1.3, 1.3);
+    innerSphereMesh.scale.set(0.99, 0.99, 0.99);
 
     const globe = new Object3D();
     globe.add(sphereMeshBack);
     globe.add(sphereMesh);
-    // globe.add(bigSphereMesh);
+    globe.add(innerSphereMesh);
     return globe;
   }
 }

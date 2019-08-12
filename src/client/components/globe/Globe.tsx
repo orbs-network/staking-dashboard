@@ -25,7 +25,7 @@ import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
 
 const raycaster = new Raycaster();
-const CAMERA_POS = 30;
+const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
 
 interface IState {
