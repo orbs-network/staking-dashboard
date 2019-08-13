@@ -18,6 +18,7 @@ import { TokenPriceSection } from './sections/TokenPriceSection';
 import { TwitterSection } from './sections/TwitterSection';
 import { VSeparator } from './sections/VSeparator';
 import { theme } from './base/Theme';
+import { Blockchain } from './blockchain/Blockchain';
 
 const Root = styled.div``;
 
@@ -41,6 +42,7 @@ const TokenVolumeContainer = styled(Token24HVolumeSection)`
 export const RightPanel: React.FunctionComponent = () => {
   return (
     <Root>
+      <Blockchain/>
       <BlockchainGraphSection />
       <HSeparator />
       <OrbsInCirculationSection />

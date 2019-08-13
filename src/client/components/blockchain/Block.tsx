@@ -8,18 +8,14 @@
 
 import * as React from 'react';
 import styled from 'styled-components';
-import { theme } from '../base/Theme';
-import { Clock } from '../clock/Clock';
 
 const Root = styled.div`
-  margin-top: ${theme.sizes.SIZE_SMALL_2};
-  margin-bottom: ${theme.sizes.SIZE_LARGE_4};
+  border: 1px solid white;
+  position: absolute;
 `;
 
-export const ClockSection: React.FunctionComponent = () => {
-  return (
-    <Root>
-      <Clock/>
-    </Root>
-  );
-};
+export class Block extends React.Component {
+  public render() {
+    return <Root />;
+  }
+}

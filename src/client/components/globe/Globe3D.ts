@@ -6,7 +6,20 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import { BackSide, FrontSide, Mesh, MeshBasicMaterial, MeshLambertMaterial, Object3D, SphereGeometry, TextureLoader } from 'three';
+import {
+  BackSide,
+  FrontSide,
+  Mesh,
+  MeshBasicMaterial,
+  MeshLambertMaterial,
+  Object3D,
+  SphereGeometry,
+  TextureLoader,
+  SpriteMaterial,
+  ImageUtils,
+  AdditiveBlending,
+  Sprite,
+} from 'three';
 
 export class Globe3D {
   public globe: Object3D;
@@ -15,9 +28,9 @@ export class Globe3D {
   private sphereMaterialBack: any;
   private innerSphereMaterial: any;
 
-  constructor(globeRadius: number) {
+  constructor(private globeRadius: number) {
     const textureLoader = new TextureLoader();
-    const sphereTexture = textureLoader.load('/assets/map3-01.png');
+    const sphereTexture = textureLoader.load('/assets/maptry5.png');
     this.sphereGeometry = new SphereGeometry(globeRadius, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,
@@ -51,6 +64,19 @@ export class Globe3D {
 
   public handleHoverOut(object: Object3D): void {}
 
+  private createGlow(radius: number): Sprite {
+    const spriteMaterial = new SpriteMaterial({
+      map: ImageUtils.loadTexture('assets/glow.png'),
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.4,
+      blending: AdditiveBlending,
+    });
+    const sprite = new Sprite(spriteMaterial);
+    sprite.scale.set(radius * 5, radius * 5, 1.0);
+    return sprite;
+  }
+
   private createGlobe(): Object3D {
     const sphereMesh = new Mesh(this.sphereGeometry, this.sphereMaterial);
     const sphereMeshBack = new Mesh(this.sphereGeometry, this.sphereMaterialBack);
@@ -59,10 +85,13 @@ export class Globe3D {
     sphereMesh.renderOrder = 2;
     innerSphereMesh.scale.set(0.99, 0.99, 0.99);
 
+    const glow = this.createGlow(this.globeRadius);
+
     const globe = new Object3D();
     globe.add(sphereMeshBack);
     globe.add(sphereMesh);
     globe.add(innerSphereMesh);
+    globe.add(glow);
     return globe;
   }
 }

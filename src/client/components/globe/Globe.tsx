@@ -75,7 +75,7 @@ export class Globe extends React.Component<{}, IState> {
 
     // Add effects
     this.composer = new EffectComposer(this.renderer);
-    const effectPass = new EffectPass(this.camera, new BloomEffect(6.0));
+    const effectPass = new EffectPass(this.camera, new BloomEffect(6));
     effectPass.renderToScreen = true;
 
     this.composer.addPass(new RenderPass(this.scene, this.camera));
@@ -91,7 +91,7 @@ export class Globe extends React.Component<{}, IState> {
 
     // Add the starfield
     this.starField = generateStarField(80, 70);
-    this.scene.add(this.starField);
+    // this.scene.add(this.starField);
   }
 
   public componentDidMount() {
@@ -157,14 +157,14 @@ export class Globe extends React.Component<{}, IState> {
     timeLine.timeScale(ANIMATION_SPEED);
     timeLine.add(
       TweenMax.to(this.camera.position, 0.5, {
-        z: CAMERA_POS * 1.5,
-        ease: Power2.easeIn,
+        z: CAMERA_POS * 1.25,
+        ease: Power2.easeInOut,
       }),
     );
     timeLine.add(
       TweenMax.to(this.camera.position, 0.5, {
         z: CAMERA_POS,
-        ease: Power2.easeOut,
+        ease: Power2.easeInOut,
       }),
     );
     timeLine.add(
