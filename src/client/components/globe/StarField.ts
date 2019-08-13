@@ -12,7 +12,7 @@ function getStarPos(innerRadius: number, outterRadius: number) {
   return pos;
 }
 
-export function generateStarField(innerRadius: number, outterRadius: number, count: number = 10_000): Points {
+export function generateStarField(innerRadius: number, outterRadius: number): Points {
   const sgeometry = new Geometry();
 
   const loader = new TextureLoader();
@@ -21,7 +21,7 @@ export function generateStarField(innerRadius: number, outterRadius: number, cou
 
   const colors = [0xffffff, 0x498eff, 0x2c7af9, 0x4183f4, 0xffffff, 0xf44b42];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < 3_000; i++) {
     const vertex = getStarPos(innerRadius, outterRadius);
     sgeometry.vertices.push(vertex);
     sgeometry.colors.push(new Color(colors[Math.floor(Math.random() * colors.length)]).multiplyScalar(Math.random()));
@@ -31,8 +31,7 @@ export function generateStarField(innerRadius: number, outterRadius: number, cou
     sgeometry,
     new PointsMaterial({
       map,
-      size: 1,
-      depthTest: false,
+      size: 2,
       transparent: true,
       blending: AdditiveBlending,
       opacity: 2,

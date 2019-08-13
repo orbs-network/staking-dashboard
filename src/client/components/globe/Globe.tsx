@@ -90,8 +90,8 @@ export class Globe extends React.Component<{}, IState> {
     this.scene.add(this.dotsContainer);
 
     // Add the starfield
-    this.starField = generateStarField(80, 70);
-    // this.scene.add(this.starField);
+    this.starField = generateStarField(130, 200);
+    this.scene.add(this.starField);
   }
 
   public componentDidMount() {

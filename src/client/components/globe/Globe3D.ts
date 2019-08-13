@@ -50,6 +50,7 @@ export class Globe3D {
       wireframe: false,
       opacity: 1,
       transparent: false,
+      side: FrontSide,
     });
     // this.sphereMaterial = createFresnelShaderMaterial();
     // this.sphereMaterialBack = createFresnelShaderMaterial();
@@ -90,8 +91,8 @@ export class Globe3D {
     const globe = new Object3D();
     globe.add(sphereMeshBack);
     globe.add(sphereMesh);
-    globe.add(innerSphereMesh);
-    globe.add(glow);
+    // globe.add(innerSphereMesh);
+    // globe.add(glow);
     return globe;
   }
 }
