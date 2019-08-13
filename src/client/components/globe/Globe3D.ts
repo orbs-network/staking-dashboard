@@ -69,11 +69,11 @@ export class Globe3D {
       map: ImageUtils.loadTexture('assets/glow.png'),
       color: 0xffffff,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.1,
       blending: AdditiveBlending,
     });
     const sprite = new Sprite(spriteMaterial);
-    sprite.scale.set(radius * 5, radius * 5, 1.0);
+    sprite.scale.set(radius * 4, radius * 4, 1.0);
     return sprite;
   }
 
