@@ -9,17 +9,7 @@
 import { Power2, TimelineLite, TweenMax } from 'gsap';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import * as React from 'react';
-import {
-  AmbientLight,
-  Clock,
-  DirectionalLight,
-  Object3D,
-  PerspectiveCamera,
-  Raycaster,
-  Scene,
-  Vector2,
-  WebGLRenderer,
-} from 'three';
+import { AmbientLight, Clock, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from 'three';
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
@@ -125,8 +115,8 @@ export class Globe extends React.Component<{}, IState> {
   }
 
   public render() {
-    this.dotsContainer.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
-
+    // this.dotsContainer.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
+    // this.scene.rotation.set(-this.state.rotationX, -this.state.rotationY, 0);
     return (
       <>
         <div
