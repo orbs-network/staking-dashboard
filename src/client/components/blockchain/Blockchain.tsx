@@ -16,6 +16,17 @@ const Root = styled.div`
 
 export class Blockchain extends React.Component {
   private blockRefs = [];
+  private timerId;
+
+  public componentWillMount() {
+    this.timerId = setInterval(() => this.animateNewBlock(), 3_000);
+  }
+
+  public componentWillUnmount() {
+    if (this.timerId) {
+      clearInterval(this.timerId);
+    }
+  }
 
   public render() {
     return (
