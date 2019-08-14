@@ -20,9 +20,9 @@ export class Dot3D extends Object3D {
 
   public blink(): void {
     this.blinkTween = TweenMax.to(this.dotMesh.scale, 0.75, {
-      x: 2,
-      y: 2,
-      z: 2,
+      x: 2.5,
+      y: 2.5,
+      z: 2.5,
       yoyo: true,
       repeat: -1,
     });

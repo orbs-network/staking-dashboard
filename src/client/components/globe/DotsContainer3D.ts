@@ -36,15 +36,15 @@ const staticDots = [
   },
   { // USA (CA)
     xRotation: 5.64,
-    yRotation: 6.39,
-  },
-  { // Korea
-    xRotation: 5.6,
-    yRotation: 3.38,
+    yRotation: 5.39,
   },
   { // Cayman Islands
     xRotation: 5.93,
     yRotation: 5.99,
+  },
+  { // Korea
+    xRotation: 5.6,
+    yRotation: 3.38,
   },
   { // Macau
     xRotation: 5.88,
@@ -107,7 +107,7 @@ export class DotsContainer3D extends Object3D {
   }
 
   private addDot(xRotation: number, yRotation: number): void {
-    const dot = new Dot3D(this.globeRadius, 0.2, xRotation, yRotation);
+    const dot = new Dot3D(this.globeRadius, 0.15, xRotation, yRotation);
     this.add(dot);
     this.dotsList.push(dot);
 }

@@ -46,23 +46,23 @@ export class Globe extends React.Component<{}, IState> {
     this.scene = new Scene();
 
     // Add light
-    const light = new AmbientLight(0xffffff, 1);
+    const light = new AmbientLight(0xffffff, 0.7);
     this.scene.add(light);
 
     // another light
-    const leftLight = new DirectionalLight(0xffffff, 1);
+    const leftLight = new DirectionalLight(0xffffff, 0.8);
     leftLight.position.set(-1, 0, 0);
     this.scene.add(leftLight);
 
-    const rightLight = new DirectionalLight(0xffffff, 1);
+    const rightLight = new DirectionalLight(0xffffff, 0.8);
     rightLight.position.set(1, 0, 0);
     this.scene.add(rightLight);
 
-    const topLight = new DirectionalLight(0xffffff, 1);
+    const topLight = new DirectionalLight(0xffffff, 0.8);
     topLight.position.set(0, 1, 0);
     this.scene.add(topLight);
 
-    const bottomLight = new DirectionalLight(0xffffff, 1);
+    const bottomLight = new DirectionalLight(0xffffff, 0.8);
     bottomLight.position.set(0, -1, 0);
     this.scene.add(bottomLight);
 
