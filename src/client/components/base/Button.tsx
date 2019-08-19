@@ -15,6 +15,12 @@ const Root = styled.button`
   border-radius: ${theme.sizes.SIZE_SMALL_6};
   border-color: ${theme.secondaryColor};
   background-color: ${theme.buttonColor};
+  color: inherit;
+
+  &:hover {
+    background-color: ${theme.secondaryColor};
+    color: black;
+  }
 `;
 
 export interface IProps {

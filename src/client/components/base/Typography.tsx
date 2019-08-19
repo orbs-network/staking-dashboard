@@ -11,7 +11,6 @@ import styled from 'styled-components';
 import { theme } from './Theme';
 
 const Base = styled.span`
-  color: ${props => (props.dark ? theme.darkTextColor : theme.lightTextColor)};
   font-weight: lighter;
   display: inline-block;
   margin: 0;
@@ -74,69 +73,67 @@ const XXLarge = styled(Base)`
 
 export interface IProps {
   className?: string;
-  dark?: boolean;
   variant?: 'xxx-small' | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
 }
 
 export const Typography: React.FunctionComponent<IProps> = ({
   variant = 'medium',
-  dark = false,
   className,
   children,
 }) => {
   switch (variant) {
     case 'xxx-small':
       return (
-        <XXXSmall className={className} dark={dark}>
+        <XXXSmall className={className}>
           {children}
         </XXXSmall>
       );
 
     case 'xx-small':
       return (
-        <XXSmall className={className} dark={dark}>
+        <XXSmall className={className}>
           {children}
         </XXSmall>
       );
 
     case 'x-small':
       return (
-        <XSmall className={className} dark={dark}>
+        <XSmall className={className}>
           {children}
         </XSmall>
       );
 
     case 'small':
       return (
-        <Small className={className} dark={dark}>
+        <Small className={className}>
           {children}
         </Small>
       );
 
     case 'medium':
       return (
-        <Medium className={className} dark={dark}>
+        <Medium className={className}>
           {children}
         </Medium>
       );
 
     case 'large':
       return (
-        <Large className={className} dark={dark}>
+        <Large className={className}>
           {children}
         </Large>
       );
 
     case 'x-large':
       return (
-        <XLarge className={className} dark={dark}>
+        <XLarge className={className}>
           {children}
         </XLarge>
       );
 
     case 'xx-large':
       return (
-        <XXLarge className={className} dark={dark}>
+        <XXLarge className={className}>
           {children}
         </XXLarge>
       );

@@ -9,7 +9,7 @@
 import * as React from 'react';
 import { Provider } from 'mobx-react';
 import { BrowserRouter } from 'react-router-dom';
-import { GlobeContainer } from './components/globe/GlobeContainer';
+import { Main } from './components/Main';
 import { SocialStore } from './store/SocialStore';
 import { TokenStore } from './store/TokenStore';
 import { POSStore } from './store/POSStore';
@@ -32,7 +32,7 @@ posStore.init();
 export const App = () => (
   <BrowserRouter>
     <Provider {...stores}>
-      <GlobeContainer />
+      <Main />
     </Provider>
   </BrowserRouter>
 );

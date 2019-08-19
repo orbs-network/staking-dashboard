@@ -24,6 +24,10 @@ const DigitBox = styled.span`
   align-items: center;
 `;
 
+const SmallDigit = styled(Typography)`
+  color: ${theme.darkTextColor};
+`;
+
 const SeperatorBox = styled(DigitBox)`
   padding-left: ${theme.sizes.SIZE_SMALL_5};
   padding-right: ${theme.sizes.SIZE_SMALL_5};
@@ -35,40 +39,30 @@ interface IProps {
   seconds: number;
 }
 
-const toTwoDigits = (num: number): string => num > 10 ? num.toString() : '0' + num.toString();
+const toTwoDigits = (num: number): string => (num >= 10 ? num.toString() : '0' + num.toString());
 
 export const DigitalClock: React.FunctionComponent<IProps> = ({ hours, minutes, seconds }) => {
   return (
     <Root>
       <DigitBox>
         <Typography variant='x-large'>{toTwoDigits(hours)}</Typography>
-        <Typography variant='xxx-small' dark>
-          Hours
-        </Typography>
+        <SmallDigit variant='xxx-small'>Hours</SmallDigit>
       </DigitBox>
       <SeperatorBox>
         <Typography variant='x-large'>:</Typography>
-        <Typography variant='xxx-small' dark>
-          &nbsp;
-        </Typography>
+        <SmallDigit variant='xxx-small'>&nbsp;</SmallDigit>
       </SeperatorBox>
       <DigitBox>
         <Typography variant='x-large'>{toTwoDigits(minutes)}</Typography>
-        <Typography variant='xxx-small' dark>
-          Minutes
-        </Typography>
+        <SmallDigit variant='xxx-small'>Minutes</SmallDigit>
       </DigitBox>
       <SeperatorBox>
         <Typography variant='x-large'>:</Typography>
-        <Typography variant='xxx-small' dark>
-          &nbsp;
-        </Typography>
+        <SmallDigit variant='xxx-small'>&nbsp;</SmallDigit>
       </SeperatorBox>
       <DigitBox>
         <Typography variant='x-large'>{toTwoDigits(seconds)}</Typography>
-        <Typography variant='xxx-small' dark>
-          Seconds
-        </Typography>
+        <SmallDigit variant='xxx-small'>Seconds</SmallDigit>
       </DigitBox>
     </Root>
   );

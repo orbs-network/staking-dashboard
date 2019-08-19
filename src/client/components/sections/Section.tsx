@@ -10,6 +10,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { SectionTitle } from './SectionTitle';
 import { theme } from '../base/Theme';
+import * as PopperJS from 'popper.js';
 
 const Root = styled.div`
   padding-top: ${theme.sizes.SIZE_SMALL_1};
@@ -24,12 +25,13 @@ export interface IProps {
   className?: string;
   title?: React.ReactNode;
   helpText?: string;
+  helpPlacement?: PopperJS.Placement;
 }
 
-export const Section: React.FunctionComponent<IProps> = ({ className, children, title, helpText }) => {
+export const Section: React.FunctionComponent<IProps> = ({ className, children, title, helpText, helpPlacement }) => {
   return (
     <Root className={className}>
-      {title ? <SectionTitle title={title} helpText={helpText} /> : null}
+      {title ? <SectionTitle title={title} helpText={helpText} helpPlacement={helpPlacement} /> : null}
       <ChildrenContainer>{children}</ChildrenContainer>
     </Root>
   );

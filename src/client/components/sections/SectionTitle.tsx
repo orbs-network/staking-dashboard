@@ -11,6 +11,7 @@ import { HelpIcon } from './HelpIcon';
 import { Typography } from '../base/Typography';
 import styled from 'styled-components';
 import { theme } from '../base/Theme';
+import * as PopperJS from 'popper.js';
 
 const Root = styled.div`
   padding-top: ${theme.sizes.SIZE_SMALL_5};
@@ -26,13 +27,14 @@ const Title = styled(Typography)`
 export interface IProps {
   title: React.ReactNode;
   helpText?: string;
+  helpPlacement?: PopperJS.Placement;
 }
 
-export const SectionTitle: React.FunctionComponent<IProps> = ({ title, helpText }) => {
+export const SectionTitle: React.FunctionComponent<IProps> = ({ title, helpText, helpPlacement }) => {
   return (
     <Root>
       <Title variant='small'>{title}</Title>
-      {helpText && <HelpIcon helpText={helpText} />}
+      {helpText && <HelpIcon helpText={helpText} helpPlacement={helpPlacement} />}
     </Root>
   );
 };

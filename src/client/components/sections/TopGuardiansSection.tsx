@@ -15,8 +15,10 @@ import { POSStore } from '../../store/POSStore';
 import { theme } from '../base/Theme';
 
 const ListContainer = styled.ul`
+  color: ${theme.darkTextColor};
   padding: 0;
   margin: 0;
+  list-style: none;
 `;
 const ListItem = styled.li`
   padding-bottom: ${theme.sizes.SIZE_SMALL_2};
@@ -30,9 +32,11 @@ export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => 
   return (
     <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='this is a help text'>
       <ListContainer>
-        {posStore.topGuardians.map(g => <ListItem key={g}>
-          <Typography variant='x-small' dark>{g}</Typography>
-        </ListItem>)}
+        {posStore.topGuardians.map(g => (
+          <ListItem key={g}>
+            <Typography variant='x-small'>{g}</Typography>
+          </ListItem>
+        ))}
       </ListContainer>
     </Section>
   );

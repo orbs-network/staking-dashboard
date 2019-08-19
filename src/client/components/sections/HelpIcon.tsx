@@ -10,6 +10,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { Tooltip } from '../base/Tooltip';
 import { Typography } from '../base/Typography';
+import * as PopperJS from 'popper.js';
 
 const Icon = styled.div`
   width: 13px;
@@ -37,19 +38,7 @@ const QuestionMark = (
 
 export interface IProps {
   helpText: string;
-  helpPlacement:
-    | 'top-start'
-    | 'top'
-    | 'top-end'
-    | 'left-start'
-    | 'left'
-    | 'left-end'
-    | 'bottom-start'
-    | 'bottom'
-    | 'bottom-end'
-    | 'right-start'
-    | 'right'
-    | 'right-end';
+  helpPlacement?: PopperJS.Placement;
 }
 
 export const HelpIcon: React.FunctionComponent<IProps> = ({ helpText, helpPlacement }) => {
