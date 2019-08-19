@@ -70,7 +70,7 @@ export class Globe3D {
       map: ImageUtils.loadTexture('assets/glow.png'),
       color: 0xffffff,
       transparent: true,
-      opacity: 0.1,
+      opacity: 0.3,
       blending: AdditiveBlending,
     });
     const sprite = new Sprite(spriteMaterial);
@@ -84,7 +84,7 @@ export class Globe3D {
     const innerSphereMesh = new Mesh(this.sphereGeometry, this.innerSphereMaterial);
 
     sphereMesh.renderOrder = 2;
-    innerSphereMesh.scale.set(0.99, 0.99, 0.99);
+    // innerSphereMesh.scale.set(0.99, 0.99, 0.99);
 
     const glow = this.createGlow(this.globeRadius);
 
