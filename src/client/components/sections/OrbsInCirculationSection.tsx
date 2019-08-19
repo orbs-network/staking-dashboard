@@ -18,7 +18,7 @@ interface IProps {
 
 export const OrbsInCirculationSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
-    <Section title='Orbs In Circulation' helpText='this is a help text'>
+    <Section title='Orbs In Circulation' helpPlacement='top' helpText='Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'>
       <Typography variant='xx-large'>{tokenStore.orbsInCirculation.toLocaleString()}</Typography>
     </Section>
   );

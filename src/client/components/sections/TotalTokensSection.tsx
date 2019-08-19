@@ -6,11 +6,11 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { inject } from 'mobx-react';
 import * as React from 'react';
+import { TokenStore } from '../../store/TokenStore';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { TokenStore } from '../../store/TokenStore';
 
 interface IProps {
   tokenStore?: TokenStore;
@@ -18,7 +18,7 @@ interface IProps {
 
 export const TotalTokensSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
-    <Section title='Total token holders' helpText='this is a help text'>
+    <Section title='Total token holders' helpText='Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged'>
       <Typography variant='xx-large'>{tokenStore.totalHolders.toLocaleString()}</Typography>
     </Section>
   );
