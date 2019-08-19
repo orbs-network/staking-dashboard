@@ -37,10 +37,24 @@ const QuestionMark = (
 
 export interface IProps {
   helpText: string;
+  helpPlacement:
+    | 'top-start'
+    | 'top'
+    | 'top-end'
+    | 'left-start'
+    | 'left'
+    | 'left-end'
+    | 'bottom-start'
+    | 'bottom'
+    | 'bottom-end'
+    | 'right-start'
+    | 'right'
+    | 'right-end';
 }
-export const HelpIcon: React.FunctionComponent<IProps> = ({ helpText }) => {
+
+export const HelpIcon: React.FunctionComponent<IProps> = ({ helpText, helpPlacement }) => {
   return (
-    <Tooltip tooltip={<Typography variant='small'>{helpText}</Typography>} placement={'left'} trigger='click'>
+    <Tooltip tooltip={<Typography variant='small'>{helpText}</Typography>} placement={helpPlacement}>
       {QuestionMark}
     </Tooltip>
   );
