@@ -69,6 +69,7 @@
     "pg": "^7.8.0",
     "postprocessing": "^6.6.0",
     "query-string": "^6.5.0",
+    "react-popper-tooltip": "^2.8.3",
     "react-spring": "^8.0.18",
     "react-syntax-highlighter": "^10.2.1",
     "react-timeago": "^4.4.0",

@@ -1,6 +1,3 @@
-const primaryColor = '#ededed';
-const secondaryColor = '#6ec6d8';
-
 const TYPE_SCALE = 1.25; // https://type-scale.com/
 
 function scaleUp(level: number): number {
@@ -35,9 +32,16 @@ const sizes = {
   SIZE_SMALL_6: `${scaleDown(6)}em`,  // 0.262em  4.19px
 };
 
+const primaryColor = '#ededed';
+const secondaryColor = '#6ec6d8';
+const tooltipBorderColor = '#3d3d3d';
+const tooltipBackgroundColor = 'black';
+
 export const theme = {
   primaryColor,
   secondaryColor,
+  tooltipBorderColor,
+  tooltipBackgroundColor,
   buttonColor: '#030616',
   lightTextColor: primaryColor,
   darkTextColor: '#8a8a8a',
