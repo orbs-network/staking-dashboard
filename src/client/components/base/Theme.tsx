@@ -36,10 +36,14 @@ const primaryColor = '#ededed';
 const secondaryColor = '#6ec6d8';
 const tooltipBorderColor = '#3d3d3d';
 const tooltipBackgroundColor = 'black';
+const buttonHoverColor = secondaryColor;
+const buttonDownColor = '#4696a7';
 
 export const theme = {
   primaryColor,
   secondaryColor,
+  buttonHoverColor,
+  buttonDownColor,
   tooltipBorderColor,
   tooltipBackgroundColor,
   buttonColor: '#030616',

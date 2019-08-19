@@ -18,8 +18,17 @@ const Root = styled.button`
   color: inherit;
 
   &:hover {
-    background-color: ${theme.secondaryColor};
+    background-color: ${theme.buttonHoverColor};
     color: black;
+  }
+
+  &:active {
+    background-color: ${theme.buttonDownColor};
+    color: black;
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
