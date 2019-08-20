@@ -16,6 +16,7 @@ import { theme } from './base/Theme';
 const GlobalStyle = createGlobalStyle`
   body {
     color: ${theme.lightTextColor};
+    font-size: 16px;
   }
 `;
 
@@ -39,7 +40,7 @@ const Inner = styled.div`
 `;
 
 const Left = styled.div`
-  width: 210px;
+  width: 14em;
   position: relative;
 `;
 
@@ -48,7 +49,7 @@ const Center = styled.div`
 `;
 
 const Right = styled.div`
-  width: 350px;
+  width: 18em;
 `;
 
 export const Main: React.FunctionComponent = () => (

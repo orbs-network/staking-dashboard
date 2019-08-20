@@ -12,6 +12,7 @@ import { theme } from '../base/Theme';
 import { Typography } from '../base/Typography';
 
 const Root = styled.div`
+  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;

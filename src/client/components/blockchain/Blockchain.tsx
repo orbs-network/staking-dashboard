@@ -37,7 +37,6 @@ export class Blockchain extends React.Component {
           xmlnsXlink='http://www.w3.org/1999/xlink'
           viewBox='0 0 300 200'
           width='100%'
-          height='200'
         >
           <defs>
             <line id='vline' x1='0' x2='0' y1='0' y2='300' stroke='#161616' strokeDasharray='2,2' strokeWidth='1.5' />

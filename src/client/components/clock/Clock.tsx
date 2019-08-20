@@ -11,17 +11,14 @@ import styled from 'styled-components';
 import { DigitalClock } from './DigitalClock';
 
 const Root = styled.div`
-  position: relative;
   display: flex;
-  height: 210px;
+  width: 100%;
   justify-content: center;
   align-items: center;
 `;
 
 const ClockCircleContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
+  width: 100%;
 `;
 
 const clockSVG = (deg: number) => {
@@ -29,8 +26,7 @@ const clockSVG = (deg: number) => {
   return (
     <svg
       xmlns='http://www.w3.org/2000/svg'
-      width='210'
-      height='210'
+      width='100%'
       viewBox='0 0 211 211'
       style={{ transformOrigin: 'center', transform }}
     >

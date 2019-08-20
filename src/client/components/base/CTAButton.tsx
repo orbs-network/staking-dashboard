@@ -20,7 +20,7 @@ const Root = styled(Button)`
 
 export const CTAButton: React.FunctionComponent = ({ children }) => {
   return (
-    <Root>
+    <Root fullWidth>
       <Typography variant='large'>{children}</Typography>
     </Root>
   );

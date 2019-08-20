@@ -6,25 +6,14 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import * as PopperJS from 'popper.js';
 import * as React from 'react';
-import styled from 'styled-components';
 import { Tooltip } from '../base/Tooltip';
 import { Typography } from '../base/Typography';
-import * as PopperJS from 'popper.js';
-
-const Icon = styled.div`
-  width: 13px;
-  height: 13px;
-  border-radius: 10px;
-  border-width: 0.5px;
-  border-style: solid;
-  justify-content: center;
-  border-color: white;
-  display: flex;
-`;
+import { theme } from '../base/Theme';
 
 const QuestionMark = (
-  <svg width='15' height='15' viewBox='0 0 15 15'>
+  <svg width={theme.sizes.SIZE_BASIC} viewBox='0 0 15 15'>
     <g fill='none' fillRule='evenodd' transform='translate(1 1)'>
       <circle cx='6.5' cy='6.5' r='6.5' stroke='#FFF' strokeWidth='.5' />
       <path

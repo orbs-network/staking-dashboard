@@ -10,9 +10,10 @@ import * as React from 'react';
 import { SocialSection } from './SocialSection';
 import { inject } from 'mobx-react';
 import { SocialStore } from '../../store/SocialStore';
+import { theme } from '../base/Theme';
 
 const icon = (
-  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='23' viewBox='0 0 24 23'>
+  <svg width={theme.sizes.SIZE_LARGE_2} viewBox='0 0 24 23'>
     <path
       fill='#FFF'
       fillRule='nonzero'

@@ -11,11 +11,13 @@ import styled from 'styled-components';
 import { theme } from './Theme';
 import { Typography } from './Typography';
 
-const Root = styled.button`
+const Root = styled.button<ICSSProps>`
+  font-size: ${theme.sizes.SIZE_SMALL_1};
   border-radius: ${theme.sizes.SIZE_SMALL_6};
   border-color: ${theme.secondaryColor};
   background-color: ${theme.buttonColor};
   color: inherit;
+  width: ${props => (props.fullWidth ? '100%' : 'unset')};
 
   &:hover {
     background-color: ${theme.buttonHoverColor};
@@ -32,13 +34,17 @@ const Root = styled.button`
   }
 `;
 
-export interface IProps {
+export interface ICSSProps {
+  fullWidth?: boolean;
+}
+
+export interface IProps extends ICSSProps {
   className?: string;
 }
 
-export const Button: React.FunctionComponent<IProps> = ({ className, children }) => {
+export const Button: React.FunctionComponent<IProps> = ({ className, fullWidth, children }) => {
   return (
-    <Root className={className}>
+    <Root className={className} fullWidth={fullWidth}>
       <Typography variant='small'>{children}</Typography>
     </Root>
   );
