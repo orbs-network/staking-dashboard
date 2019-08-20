@@ -19,7 +19,7 @@ import { TokenPriceSection } from './sections/TokenPriceSection';
 import { TwitterSection } from './sections/TwitterSection';
 import { VSeparator } from './sections/VSeparator';
 
-const Root = styled.div``;
+const Root = styled.aside``;
 
 const TwoBoxContainer = styled.div`
   width: 100%;

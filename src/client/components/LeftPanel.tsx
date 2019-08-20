@@ -16,7 +16,7 @@ import { ClockSection } from './sections/ClockSection';
 import { HSeparator } from './sections/HSeparator';
 import { theme } from './base/Theme';
 
-const Root = styled.div`
+const Root = styled.aside`
   margin-top: ${theme.sizes.SIZE_LARGE_4};
 `;
 

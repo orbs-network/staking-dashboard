@@ -7,40 +7,58 @@
  */
 
 import * as React from 'react';
-import { LeftPanel } from './LeftPanel';
 import { Globe } from './globe/Globe';
-import { RightPanel } from './RightPanel';
 import styled, { createGlobalStyle } from 'styled-components';
 import { theme } from './base/Theme';
+import { LeftPanel } from './LeftPanel';
+import { RightPanel } from './RightPanel';
 
 const GlobalStyle = createGlobalStyle`
   body {
     color: ${theme.lightTextColor};
-    font-size: 16px;
+
+    @media (min-width: 1920px) {
+      font-size: 1.3em;
+    }
+
+    @media (max-width: 1920px) {
+      font-size: 1.1em;
+    }
+
+    @media (max-width: 1600px) {
+      font-size: 1em;
+    }
+
+    @media (max-width: 1366px) {
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 1200px) {
+      font-size: 0.8em;
+    }
+
+    @media (max-width: 1024px) {
+      font-size: 0.7em;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.6em;
+    }
   }
 `;
 
-const Root = styled.div`
-  color: ${theme.lightTextColor};
+const Root = styled.main`
+  max-width: 1920px;
   margin: 0 auto;
 `;
 
 const Container = styled.div`
-  width: 100%;
-  max-width: 1600px;
-  background-color: black;
-  margin: 0 auto;
-  background-size: 100%;
-`;
-
-const Inner = styled.div`
-  max-width: 1380px;
-  margin: 0 auto;
+  margin: 0 1em;
   display: flex;
 `;
 
 const Left = styled.div`
-  width: 14em;
+  width: 16em;
   position: relative;
 `;
 
@@ -49,24 +67,22 @@ const Center = styled.div`
 `;
 
 const Right = styled.div`
-  width: 18em;
+  width: 20em;
 `;
 
 export const Main: React.FunctionComponent = () => (
   <Root>
     <GlobalStyle />
     <Container>
-      <Inner>
-        <Left>
-          <LeftPanel />
-        </Left>
-        <Center>
-          <Globe />
-        </Center>
-        <Right>
-          <RightPanel />
-        </Right>
-      </Inner>
+      <Left>
+        <LeftPanel />
+      </Left>
+      <Center>
+        <Globe />
+      </Center>
+      <Right>
+        <RightPanel />
+      </Right>
     </Container>
   </Root>
 );
