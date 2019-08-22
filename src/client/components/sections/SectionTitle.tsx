@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { HelpIcon } from './HelpIcon';
 import { Typography } from '../base/Typography';
 import styled from 'styled-components';

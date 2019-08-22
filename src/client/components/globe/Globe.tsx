@@ -8,7 +8,7 @@
 
 import { Power2, TimelineLite, TweenMax } from 'gsap';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
-import * as React from 'react';
+import React from 'react';
 import { AmbientLight, Clock, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer } from 'three';
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';

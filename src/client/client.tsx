@@ -6,8 +6,8 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { App } from './App';
 
 ReactDOM.render(<App />, document.getElementById('app'));

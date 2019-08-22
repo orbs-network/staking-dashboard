@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { Globe } from './globe/Globe';
 import styled, { createGlobalStyle } from 'styled-components';
 import { theme } from './base/Theme';
@@ -78,7 +78,7 @@ export const Main: React.FunctionComponent = () => (
         <LeftPanel />
       </Left>
       <Center>
-        <Globe />
+        {/* <Globe /> */}
       </Center>
       <Right>
         <RightPanel />

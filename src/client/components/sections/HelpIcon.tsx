@@ -7,7 +7,7 @@
  */
 
 import * as PopperJS from 'popper.js';
-import * as React from 'react';
+import React from 'react';
 import { Tooltip } from '../base/Tooltip';
 import { Typography } from '../base/Typography';
 import { theme } from '../base/Theme';

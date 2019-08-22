@@ -29,9 +29,9 @@ const clockSVG = () => {
         cy='105.5'
         r='84.5'
         fill='none'
-        fill-rule='evenodd'
+        fillRule='evenodd'
         stroke='#DDD'
-        stroke-width='.5'
+        strokeWidth='.5'
       />
       <g fill='none' fillRule='evenodd' stroke='#FFF' strokeWidth='.25'>
         <path

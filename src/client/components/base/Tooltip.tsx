@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import TooltipTrigger from 'react-popper-tooltip';
 import { ChildrenArg, TooltipArg } from 'react-popper-tooltip/dist/types';
 import styled from 'styled-components';

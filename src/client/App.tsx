@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'mobx-react';
 import { BrowserRouter } from 'react-router-dom';
 import { Main } from './components/Main';

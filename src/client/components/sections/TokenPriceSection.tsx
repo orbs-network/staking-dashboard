@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
 import { inject } from 'mobx-react';

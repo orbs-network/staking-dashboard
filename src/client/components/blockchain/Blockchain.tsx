@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { TweenMax, TimelineLite, Power2, Elastic, Bounce, Back } from 'gsap';
 
@@ -18,7 +18,7 @@ export class Blockchain extends React.Component {
   private blockRefs = [];
   private timerId;
 
-  public componentWillMount() {
+  public componentDidMount() {
     this.timerId = setInterval(() => this.animateNewBlock(), 3_000);
   }
 

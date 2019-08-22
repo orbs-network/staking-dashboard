@@ -8,7 +8,7 @@
 
 import { render } from '@testing-library/react';
 import { Provider } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 import { POSStore } from '../store/POSStore';
 import { SocialStore } from '../store/SocialStore';
 import { TokenStore } from '../store/TokenStore';

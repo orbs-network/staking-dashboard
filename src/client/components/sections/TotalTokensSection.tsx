@@ -7,7 +7,7 @@
  */
 
 import { inject } from 'mobx-react';
-import * as React from 'react';
+import React from 'react';
 import { TokenStore } from '../../store/TokenStore';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';

@@ -6,7 +6,7 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { theme } from '../base/Theme';
 import { Clock } from '../clock/Clock';
