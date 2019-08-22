@@ -33,6 +33,21 @@ export class AppDriver {
     return this;
   }
 
+  public withOrbsInCirculation(orbsInCirculation: number): this {
+    this.tokenStore.orbsInCirculation = orbsInCirculation;
+    return this;
+  }
+
+  public withTokenPrice(tokenPrice: number): this {
+    this.tokenStore.tokenPrice = tokenPrice;
+    return this;
+  }
+
+  public withTotalHolders(totalHolders: number): this {
+    this.tokenStore.totalHolders = totalHolders;
+    return this;
+  }
+
   public render(component) {
     const stores = {
       socialStore: this.socialStore,
