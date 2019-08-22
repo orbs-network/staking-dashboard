@@ -12,6 +12,7 @@ import React from 'react';
 import { POSStore } from '../store/POSStore';
 import { SocialStore } from '../store/SocialStore';
 import { TokenStore } from '../store/TokenStore';
+import { Main } from '../components/Main';
 
 export class AppDriver {
   private socialStore: SocialStore;
@@ -48,13 +49,17 @@ export class AppDriver {
     return this;
   }
 
-  public render(component) {
+  public render() {
     const stores = {
       socialStore: this.socialStore,
       tokenStore: this.tokenStore,
       posStore: this.posStore,
     };
 
-    return render(<Provider {...stores}>{component}</Provider>);
+    return render(
+      <Provider {...stores}>
+        <Main disableCanvas={true} />
+      </Provider>,
+    );
   }
 }
