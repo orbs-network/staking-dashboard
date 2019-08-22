@@ -7,35 +7,14 @@
  */
 
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
-import { Provider } from 'mobx-react';
 import * as React from 'react';
 import { Token24HVolumeSection } from '../components/sections/Token24HVolumeSection';
-import { POSStore } from '../store/POSStore';
-import { SocialStore } from '../store/SocialStore';
-import { TokenStore } from '../store/TokenStore';
+import { AppDriver } from './AppDriver';
 
 describe('<Token24HVolumeSection/>', () => {
-
-  function createWrapper(children) {
-    const socialStore = new SocialStore();
-    const tokenStore = new TokenStore();
-    const posStore = new POSStore();
-    const stores = {
-      socialStore,
-      tokenStore,
-      posStore,
-    };
-
-    socialStore.init();
-    tokenStore.init();
-    posStore.init();
-
-    return <Provider {...stores}>{children}</Provider>;
-  }
-
   it('should display the 24H volume from the Token store', () => {
-    const {getByTestId} = render(createWrapper(<Token24HVolumeSection />));
-    expect(getByTestId('24h-volume')).toHaveTextContent('$40M');
+    const appDriver = new AppDriver();
+    const { getByTestId } = appDriver.with24HVolume(35_000_000).render(<Token24HVolumeSection />);
+    expect(getByTestId('24h-volume')).toHaveTextContent('$35M');
   });
 });
