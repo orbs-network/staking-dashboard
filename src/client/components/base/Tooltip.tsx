@@ -13,7 +13,7 @@ export interface IBasicTooltipTriggerProps {
 
 const Container = styled.div`
   background-color: ${theme.tooltipBackgroundColor};
-  border-radius: 12px;
+  border-radius: ${theme.sizes.SIZE_SMALL_1};
   border: 1px solid ${theme.tooltipBorderColor};
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
   display: flex;
