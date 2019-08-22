@@ -17,9 +17,21 @@ describe('Token Data in the app', () => {
     expect(getByTestId('24h-volume')).toHaveTextContent('$35M');
   });
 
-  it('should display the "OrbsInCirculation" from the Token store', () => {
+  it('should display the "Orbs In Circulation" from the Token store', () => {
     const appDriver = new AppDriver();
-    const { getByTestId } = appDriver.withOrbsInCirculation(1_700_000_000).render();
-    expect(getByTestId('orbs-in-circulation')).toHaveTextContent('1,700,000,000');
+    const { getByTestId } = appDriver.withOrbsInCirculation(1_234_567_890).render();
+    expect(getByTestId('orbs-in-circulation')).toHaveTextContent('1,234,567,890');
+  });
+
+  it('should display the "Token Price" from the Token store', () => {
+    const appDriver = new AppDriver();
+    const { getByTestId } = appDriver.withTokenPrice(0.0242).render();
+    expect(getByTestId('token-price')).toHaveTextContent('$0.0242');
+  });
+
+  it('should display the "Total Holders" from the Token store', () => {
+    const appDriver = new AppDriver();
+    const { getByTestId } = appDriver.withTotalHolders(1_234).render();
+    expect(getByTestId('total-token-holders')).toHaveTextContent('1,234');
   });
 });
