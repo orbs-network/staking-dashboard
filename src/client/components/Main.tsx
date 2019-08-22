@@ -18,31 +18,31 @@ const GlobalStyle = createGlobalStyle`
     color: ${theme.lightTextColor};
 
     @media (min-width: 1920px) {
-      font-size: 1.3em;
+      font-size: 20px;
     }
 
     @media (max-width: 1920px) {
-      font-size: 1.1em;
+      font-size: 18px;
     }
 
     @media (max-width: 1600px) {
-      font-size: 1em;
+      font-size: 16px;
     }
 
     @media (max-width: 1366px) {
-      font-size: 0.9em;
+      font-size: 14px;
     }
 
     @media (max-width: 1200px) {
-      font-size: 0.8em;
+      font-size: 12px;
     }
 
     @media (max-width: 1024px) {
-      font-size: 0.7em;
+      font-size: 10px;
     }
 
     @media (max-width: 768px) {
-      font-size: 0.6em;
+      font-size: 8px;
     }
   }
 `;
