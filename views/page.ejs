@@ -13,6 +13,9 @@
         <% if (process.env.DISABLE_ANIMATIONS === 'true') { %>       
             var disableAnimations = true;
         <% } %>
+        <% if (process.env.DISABLE_CANVAS === 'true') { %>       
+            var disableCanvas = true;
+        <% } %>
     </script>
     <style>
         body {

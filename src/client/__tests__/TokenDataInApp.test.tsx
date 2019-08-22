@@ -7,14 +7,21 @@
  */
 
 import '@testing-library/jest-dom/extend-expect';
-import * as React from 'react';
-import { Token24HVolumeSection } from '../components/sections/Token24HVolumeSection';
+import React from 'react';
+import { Main } from '../components/Main';
 import { AppDriver } from './AppDriver';
 
-describe('<Token24HVolumeSection/>', () => {
+describe('Token Data in the app', () => {
+
   it('should display the 24H volume from the Token store', () => {
     const appDriver = new AppDriver();
-    const { getByTestId } = appDriver.with24HVolume(35_000_000).render(<Token24HVolumeSection />);
+    const { getByTestId } = appDriver.with24HVolume(35_000_000).render(<Main disableCanvas={true} />);
     expect(getByTestId('24h-volume')).toHaveTextContent('$35M');
+  });
+
+  it('should display the "OrbsInCirculation" from the Token store', () => {
+    const appDriver = new AppDriver();
+    const { getByTestId } = appDriver.withOrbsInCirculation(1_700_000_000).render(<Main disableCanvas={true} />);
+    expect(getByTestId('orbs-in-circulation')).toHaveTextContent('1,700,000,000');
   });
 });

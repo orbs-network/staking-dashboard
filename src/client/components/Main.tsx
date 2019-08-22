@@ -70,19 +70,22 @@ const Right = styled.div`
   width: 20em;
 `;
 
-export const Main: React.FunctionComponent = () => (
-  <Root>
-    <GlobalStyle />
-    <Container>
-      <Left>
-        <LeftPanel />
-      </Left>
-      <Center>
-        {/* <Globe /> */}
-      </Center>
-      <Right>
-        <RightPanel />
-      </Right>
-    </Container>
-  </Root>
-);
+interface IProps {
+  disableCanvas: boolean;
+}
+export const Main: React.FunctionComponent<IProps> = ({disableCanvas}) => {
+  return (
+    <Root>
+      <GlobalStyle />
+      <Container>
+        <Left>
+          <LeftPanel />
+        </Left>
+        <Center>{!disableCanvas && <Globe />}</Center>
+        <Right>
+          <RightPanel />
+        </Right>
+      </Container>
+    </Root>
+  );
+};

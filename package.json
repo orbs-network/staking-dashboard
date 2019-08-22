@@ -11,7 +11,7 @@
     "test": "npm run test-server && npm run test-client",
     "type-check": "tsc -p ./src/client/tsconfig.json",
     "test-server": "jest --config ./src/server/__tests__/jest.config.js",
-    "test-client": "jest --config ./src/client/__tests__/jest.config.js",
+    "test-client": "cross-env DISABLE_CANVAS=true jest --config ./src/client/__tests__/jest.config.js",
     "test-e2e": "cross-env DISABLE_ANIMATIONS=true jest --config ./e2e/jest-e2e.config.js",
     "clean": "rimraf dist",
     "postinstall": "npm run build",

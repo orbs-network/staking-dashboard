@@ -6,13 +6,14 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import React from 'react';
 import { Provider } from 'mobx-react';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import { DISABLE_CANVAS } from './config';
 import { Main } from './components/Main';
+import { POSStore } from './store/POSStore';
 import { SocialStore } from './store/SocialStore';
 import { TokenStore } from './store/TokenStore';
-import { POSStore } from './store/POSStore';
 
 const appVersion = (window as any).appVersion;
 
@@ -22,7 +23,7 @@ const posStore = new POSStore();
 const stores = {
   socialStore,
   tokenStore,
-  posStore
+  posStore,
 };
 
 socialStore.init();
@@ -32,7 +33,7 @@ posStore.init();
 export const App = () => (
   <BrowserRouter>
     <Provider {...stores}>
-      <Main />
+      <Main disableCanvas={DISABLE_CANVAS} />
     </Provider>
   </BrowserRouter>
 );
