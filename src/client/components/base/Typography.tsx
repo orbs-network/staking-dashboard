@@ -73,67 +73,69 @@ const XXLarge = styled(Base)`
 
 export interface IProps {
   className?: string;
+  dataTestId?: string;
   variant?: 'xxx-small' | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
 }
 
 export const Typography: React.FunctionComponent<IProps> = ({
   variant = 'medium',
+  dataTestId,
   className,
   children,
 }) => {
   switch (variant) {
     case 'xxx-small':
       return (
-        <XXXSmall className={className}>
+        <XXXSmall className={className} data-testid={dataTestId}>
           {children}
         </XXXSmall>
       );
 
     case 'xx-small':
       return (
-        <XXSmall className={className}>
+        <XXSmall className={className} data-testid={dataTestId}>
           {children}
         </XXSmall>
       );
 
     case 'x-small':
       return (
-        <XSmall className={className}>
+        <XSmall className={className} data-testid={dataTestId}>
           {children}
         </XSmall>
       );
 
     case 'small':
       return (
-        <Small className={className}>
+        <Small className={className} data-testid={dataTestId}>
           {children}
         </Small>
       );
 
     case 'medium':
       return (
-        <Medium className={className}>
+        <Medium className={className} data-testid={dataTestId}>
           {children}
         </Medium>
       );
 
     case 'large':
       return (
-        <Large className={className}>
+        <Large className={className} data-testid={dataTestId}>
           {children}
         </Large>
       );
 
     case 'x-large':
       return (
-        <XLarge className={className}>
+        <XLarge className={className} data-testid={dataTestId}>
           {children}
         </XLarge>
       );
 
     case 'xx-large':
       return (
-        <XXLarge className={className}>
+        <XXLarge className={className} data-testid={dataTestId}>
           {children}
         </XXLarge>
       );

@@ -22,7 +22,7 @@ export const Token24HVolumeSection = inject('tokenStore')(({ tokenStore, classNa
   const bigPrice = tokenStore.token24HVolume;
   return (
     <Section title='24H Volume' className={className}>
-      <Typography variant='xx-large'>${formatLargeNumber(bigPrice)}</Typography>
+      <Typography variant='xx-large' dataTestId='24h-volume'>${formatLargeNumber(bigPrice)}</Typography>
     </Section>
   );
 });

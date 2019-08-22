@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import * as React from 'react';
 import TooltipTrigger from 'react-popper-tooltip';
 import { ChildrenArg, TooltipArg } from 'react-popper-tooltip/dist/types';
 import styled from 'styled-components';
@@ -162,7 +162,7 @@ const TooltipContainer = (tooltip: React.ReactNode) => ({
   );
 };
 
-export const Tooltip = memo(({ tooltip, children, ...props }: IBasicTooltipTriggerProps) => (
+export const Tooltip = React.memo(({ tooltip, children, ...props }: IBasicTooltipTriggerProps) => (
   <TooltipTrigger {...props} tooltip={TooltipContainer(tooltip)}>
     {Trigger(children)}
   </TooltipTrigger>
