@@ -21,15 +21,18 @@ const ClockCircleContainer = styled.div`
   width: 100%;
 `;
 
-const clockSVG = (deg: number) => {
-  const transform = `rotate(${deg}deg)`;
+const clockSVG = () => {
   return (
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      width='100%'
-      viewBox='0 0 211 211'
-      style={{ transformOrigin: 'center', transform }}
-    >
+    <svg xmlns='http://www.w3.org/2000/svg' width='100%' viewBox='0 0 211 211'>
+      <circle
+        cx='105.5'
+        cy='105.5'
+        r='84.5'
+        fill='none'
+        fill-rule='evenodd'
+        stroke='#DDD'
+        stroke-width='.5'
+      />
       <g fill='none' fillRule='evenodd' stroke='#FFF' strokeWidth='.25'>
         <path
           fill='#EEE'
@@ -70,10 +73,9 @@ export const Clock: React.FunctionComponent = () => {
     return { hours, minutes, seconds };
   }
 
-  const deg = timeDiff.seconds * 5;
   return (
     <Root>
-      <ClockCircleContainer>{clockSVG(deg)}</ClockCircleContainer>
+      <ClockCircleContainer>{clockSVG()}</ClockCircleContainer>
       <DigitalClock hours={timeDiff.hours} minutes={timeDiff.minutes} seconds={timeDiff.seconds} />
     </Root>
   );
