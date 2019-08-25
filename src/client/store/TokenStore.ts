@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { ITokenStore } from '../../shared/IStore';
 
 export class TokenStore {
   @observable public orbsInCirculation: number = 0;
@@ -6,14 +7,12 @@ export class TokenStore {
   @observable public token24HVolume: number = 0;
   @observable public totalHolders: number = 0;
 
-  public async init(): Promise<void> {
-    await this.loadStore();
+  constructor(initialData: ITokenStore) {
+    this.orbsInCirculation = initialData.orbsInCirculation;
+    this.tokenPrice = initialData.tokenPrice;
+    this.token24HVolume = initialData.token24HVolume;
+    this.totalHolders = initialData.totalHolders;
   }
 
-  @action private async loadStore(): Promise<void> {
-    this.orbsInCirculation = 1_700_000_000;
-    this.tokenPrice = 0.0241;
-    this.token24HVolume = 40_000_000;
-    this.totalHolders = 6_000;
-  }
+  public async init(): Promise<void> {}
 }

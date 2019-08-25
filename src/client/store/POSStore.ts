@@ -1,26 +1,24 @@
 import { observable, action } from 'mobx';
+import { IPOSInitialData } from '../../shared/IStore';
 
 export class POSStore {
-  @observable public blockHeight: number = 0;
-  @observable public rewardsDistributed: number = 0;
-  @observable public nextVotingTime: number = 0;
-  @observable public topGuardians: string[] = [];
+  @observable public blockHeight: number;
+  @observable public rewardsDistributed: number;
+  @observable public nextVotingTime: number;
+  @observable public topGuardians: string[];
+
+  constructor(initialData: IPOSInitialData) {
+    this.blockHeight = initialData.blockHeight;
+    this.rewardsDistributed = initialData.rewardsDistributed;
+    this.nextVotingTime = initialData.nextVotingTime;
+    this.topGuardians = initialData.topGuardians;
+  }
 
   public async init(): Promise<void> {
-    await this.loadStore();
     this.fakeBlockHeight();
   }
 
   private fakeBlockHeight() {
     setInterval(() => this.blockHeight++, 3_000);
-  }
-
-  @action private async loadStore(): Promise<void> {
-    this.blockHeight = 1_234_567;
-    this.rewardsDistributed = 68_789;
-    this.nextVotingTime = Date.now() + (15 * 60 * 60 * 1_000) + (45 * 60 * 1_000) + 15 * 1_000;
-    this.topGuardians.push('MR.SHOWOFFTOKEN');
-    this.topGuardians.push('SLOWMOSHE');
-    this.topGuardians.push('DONTTELLMYMAMA');
   }
 }

@@ -14,12 +14,15 @@ import { Main } from './components/Main';
 import { POSStore } from './store/POSStore';
 import { SocialStore } from './store/SocialStore';
 import { TokenStore } from './store/TokenStore';
+import { IStoreInitialData } from '../shared/IStore';
 
 const appVersion = (window as any).appVersion;
+const initialStore: IStoreInitialData = (window as any).initialStore;
 
-const socialStore = new SocialStore();
-const tokenStore = new TokenStore();
-const posStore = new POSStore();
+const socialStore = new SocialStore(initialStore.socialStore);
+const tokenStore = new TokenStore(initialStore.tokenStore);
+const posStore = new POSStore(initialStore.posStore);
+
 const stores = {
   socialStore,
   tokenStore,
