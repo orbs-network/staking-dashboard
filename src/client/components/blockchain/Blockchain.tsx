@@ -7,7 +7,7 @@
  */
 
 import { Back, TimelineLite, TweenMax } from 'gsap';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Root = styled.div`
@@ -18,69 +18,67 @@ interface IProps {
   blockHeight: number;
 }
 
-export class Blockchain extends React.Component<IProps> {
-  private blockRefs = [];
-
-  public componentWillReceiveProps(nextProps: IProps) {
-    if (nextProps.blockHeight !== this.props.blockHeight) {
-      this.animateNewBlock();
-    }
+export const Blockchain: React.FunctionComponent<IProps> = ({ blockHeight }) => {
+  const blockRefs = [];
+  for (let i = 0; i < 15; i++) {
+    blockRefs.push(useRef(null));
   }
-  
-  public render() {
-    return (
-      <Root>
-        <svg
-          onClick={() => this.animateNewBlock()}
-          xmlns='http://www.w3.org/2000/svg'
-          xmlnsXlink='http://www.w3.org/1999/xlink'
-          viewBox='0 0 300 200'
-          width='100%'
-        >
-          <defs>
-            <line id='vline' x1='0' x2='0' y1='0' y2='300' stroke='#161616' strokeDasharray='2,2' strokeWidth='1.5' />
-          </defs>
-          <rect width='300' height='200' fill='#000' />
-          {this.renderVLines()}
-          {this.renderBlocks()}
-        </svg>
-      </Root>
-    );
-  }
+  useEffect(animateNewBlock);
 
-  private animateNewBlock() {
-    this.resetBlocks();
+  return (
+    <Root>
+      <svg
+        onClick={animateNewBlock}
+        xmlns='http://www.w3.org/2000/svg'
+        xmlnsXlink='http://www.w3.org/1999/xlink'
+        viewBox='0 0 300 200'
+        width='100%'
+      >
+        <defs>
+          <line id='vline' x1='0' x2='0' y1='0' y2='300' stroke='#161616' strokeDasharray='2,2' strokeWidth='1.5' />
+        </defs>
+        <rect width='300' height='200' fill='#000' />
+        {renderVLines()}
+        {renderBlocks()}
+      </svg>
+    </Root>
+  );
+
+  function animateNewBlock() {
+    resetBlocks();
     const timeLine = new TimelineLite();
-    const lastBlockX1 = this.blockRefs[14].getAttribute('x1');
-    const lastBlockX2 = this.blockRefs[14].getAttribute('x2');
-    const lastBlockY1 = this.blockRefs[14].getAttribute('y1');
-    const lastBlockY2 = this.blockRefs[14].getAttribute('y2');
+    const lastBlockX1 = blockRefs[14].current.getAttribute('x1');
+    const lastBlockX2 = blockRefs[14].current.getAttribute('x2');
+    const lastBlockY1 = blockRefs[14].current.getAttribute('y1');
+    const lastBlockY2 = blockRefs[14].current.getAttribute('y2');
     timeLine.timeScale(1);
-    timeLine.add(TweenMax.to(this.blockRefs[0], 0.25, { attr: { 'stroke-opacity': 0 }, ease: Back.easeOut }), 0);
+    timeLine.add(TweenMax.to(blockRefs[0].current, 0.25, { attr: { 'stroke-opacity': 0 }, ease: Back.easeOut }), 0);
     for (let i = 1; i < 15; i++) {
-      const prevBlockRef = this.blockRefs[i - 1];
-      const x1 = prevBlockRef.getAttribute('x1');
-      const x2 = prevBlockRef.getAttribute('x2');
-      const y1 = prevBlockRef.getAttribute('y1');
-      const y2 = prevBlockRef.getAttribute('y2');
-      timeLine.add(TweenMax.to(this.blockRefs[i], 0.5, { attr: { x1, x2, y1, y2 }, ease: Back.easeOut }), 0.04 * i);
+      const prevBlockRef = blockRefs[i - 1];
+      const x1 = prevBlockRef.current.getAttribute('x1');
+      const x2 = prevBlockRef.current.getAttribute('x2');
+      const y1 = prevBlockRef.current.getAttribute('y1');
+      const y2 = prevBlockRef.current.getAttribute('y2');
+      timeLine.add(TweenMax.to(blockRefs[i].current, 0.5, { attr: { x1, x2, y1, y2 }, ease: Back.easeOut }), 0.04 * i);
     }
     timeLine.add(
-      TweenMax.to(this.blockRefs[0], 0, {
+      TweenMax.to(blockRefs[0].current, 0, {
         attr: { x1: lastBlockX1, x2: lastBlockX2, y1: lastBlockY1, y2: lastBlockY2 },
         ease: Back.easeOut,
       }),
     );
     timeLine.add(
-      TweenMax.to(this.blockRefs[0], 0.5, {
+      TweenMax.to(blockRefs[0].current, 0.5, {
         attr: { 'stroke-opacity': 1, 'stroke-width': 8, stroke: '#5e5a73' },
         ease: Back.easeOut,
       }),
     );
-    timeLine.add(TweenMax.to(this.blockRefs[0], 0.5, { attr: { 'stroke-width': 4, stroke: '#383644'  }, ease: Back.easeOut }));
+    timeLine.add(
+      TweenMax.to(blockRefs[0].current, 0.5, { attr: { 'stroke-width': 4, stroke: '#383644' }, ease: Back.easeOut }),
+    );
   }
 
-  private renderVLines() {
+  function renderVLines() {
     const result = [];
     for (let i = 0; i < 8; i++) {
       result.push(<use key={i} x={i * 44} y='0' xlinkHref='#vline' />);
@@ -88,19 +86,19 @@ export class Blockchain extends React.Component<IProps> {
     return result;
   }
 
-  private resetBlocks() {
+  function resetBlocks() {
     for (let i = 0; i < 15; i++) {
       const x = i * 22;
       const y = Math.sin(i) * 30 + 70;
-      const blockRef = this.blockRefs[i];
-      blockRef.setAttribute('x1', x);
-      blockRef.setAttribute('x2', x);
-      blockRef.setAttribute('y1', y);
-      blockRef.setAttribute('y2', y + 40);
+      const blockRef = blockRefs[i];
+      blockRef.current.setAttribute('x1', x);
+      blockRef.current.setAttribute('x2', x);
+      blockRef.current.setAttribute('y1', y);
+      blockRef.current.setAttribute('y2', y + 40);
     }
   }
 
-  private renderBlocks() {
+  function renderBlocks() {
     const result = [];
     for (let i = 0; i < 15; i++) {
       const x = i * 22;
@@ -116,10 +114,10 @@ export class Blockchain extends React.Component<IProps> {
           stroke='#383644'
           strokeWidth='4'
           strokeLinecap='round'
-          ref={ref => (this.blockRefs[i] = ref)}
+          ref={blockRefs[i]}
         />,
       );
     }
     return result;
   }
-}
+};
