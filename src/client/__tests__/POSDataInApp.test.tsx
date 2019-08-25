@@ -27,7 +27,10 @@ describe('POS Data in the app', () => {
 
   it('should display the "BlockHeight" from the Token store', () => {
     const appDriver = new AppDriver();
-    const { getByTestId } = appDriver.withBlockHeight(1_234_568).render();
+    appDriver.withBlockHeight(1_234_000);
+    const { getByTestId } = appDriver.render();
+    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
+    appDriver.withBlockHeight(1_234_568);
     expect(getByTestId('total-blocks')).toHaveTextContent('1,234,568');
   });
 
