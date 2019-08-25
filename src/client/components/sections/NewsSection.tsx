@@ -27,5 +27,5 @@ interface IProps {
 }
 
 export const NewsSection = inject('socialStore')(({ socialStore }: IProps) => {
-  return <SocialSection icon={icon} title='Recent Update' text={socialStore.recentUpdate} />;
+  return <SocialSection dataTestId='recent-update' icon={icon} title='Recent Update' text={socialStore.recentUpdate} />;
 });

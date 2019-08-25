@@ -27,11 +27,5 @@ interface IProps {
 }
 
 export const TwitterSection = inject('socialStore')(({ socialStore }: IProps) => {
-  return (
-    <SocialSection
-      icon={icon}
-      title='Latest Tweets'
-      text={socialStore.latestTweet}
-    />
-  );
+  return <SocialSection dataTestId='latest-tweet' icon={icon} title='Latest Tweets' text={socialStore.latestTweet} />;
 });

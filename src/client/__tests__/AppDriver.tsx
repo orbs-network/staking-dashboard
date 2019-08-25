@@ -29,6 +29,23 @@ export class AppDriver {
     this.posStore.init();
   }
 
+  // SOCIAL data
+  public withRecentUpdate(value: string): this {
+    this.socialStore.recentUpdate = value;
+    return this;
+  }
+
+  public withLatestTweet(value: string): this {
+    this.socialStore.latestTweet = value;
+    return this;
+  }
+
+  public withLatestCommit(value: string): this {
+    this.socialStore.latestCommit = value;
+    return this;
+  }
+
+  // TOKEN data
   public with24HVolume(volume: number): this {
     this.tokenStore.token24HVolume = volume;
     return this;

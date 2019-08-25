@@ -34,16 +34,17 @@ export interface IProps {
   icon: React.ReactNode;
   title: string;
   text: string;
+  dataTestId?: string;
 }
 
-export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, text }) => {
+export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, text, dataTestId }) => {
   return (
     <Root>
       <TitleContainer>
         {icon}
         <Title variant='x-small'>{title}</Title>
       </TitleContainer>
-      <TextContainer variant='small'>{text}</TextContainer>
+      <TextContainer dataTestId={dataTestId} variant='small'>{text}</TextContainer>
     </Root>
   );
 };
