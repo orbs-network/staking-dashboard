@@ -30,6 +30,11 @@ export class AppDriver {
   }
 
   // POS data
+  public withBlockHeight(value: number): this {
+    this.posStore.blockHeight = value;
+    return this;
+  }
+
   public withNextVotingTime(value: number): this {
     this.posStore.nextVotingTime = value;
     return this;

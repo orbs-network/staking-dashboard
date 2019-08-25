@@ -10,7 +10,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { theme } from '../base/Theme';
 import { Clock } from '../clock/Clock';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { POSStore } from '../../store/POSStore';
 
 const Root = styled.div`
@@ -22,10 +22,12 @@ interface IProps {
   posStore?: POSStore;
 }
 
-export const ClockSection = inject('posStore')(({ posStore }: IProps) => {
-  return (
-    <Root>
-      <Clock targetTime={posStore.nextVotingTime} />
-    </Root>
-  );
-});
+export const ClockSection = inject('posStore')(
+  observer(({ posStore }: IProps) => {
+    return (
+      <Root>
+        <Clock targetTime={posStore.nextVotingTime} />
+      </Root>
+    );
+  }),
+);

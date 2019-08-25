@@ -50,7 +50,7 @@ export const Clock: React.FunctionComponent<IProps> = ({ targetTime }) => {
   const [timeDiff, setTimeDiff] = useState(calcTimeDiff);
 
   useEffect(() => {
-    const timerID = setInterval(() => setTimeDiff(calcTimeDiff()), 1000);
+    const timerID = setInterval(() => setTimeDiff(calcTimeDiff()), 500);
 
     return function cleanup() {
       clearInterval(timerID);

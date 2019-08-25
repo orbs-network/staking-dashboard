@@ -7,18 +7,27 @@
  */
 
 import React from 'react';
-import { Section } from './Section';
+import { POSStore } from '../../store/POSStore';
 import { Blockchain } from '../blockchain/Blockchain';
-export const BlockchainGraphSection: React.FunctionComponent = () => {
-  const title = (
-    <>
-      {'Total blocks created: '}
-      <strong>1,234,567</strong>
-    </>
-  );
-  return (
-    <Section title={title}>
-      <Blockchain />
-    </Section>
-  );
-};
+import { inject, observer } from 'mobx-react';
+import { Section } from './Section';
+
+interface IProps {
+  posStore: POSStore;
+}
+
+export const BlockchainGraphSection = inject('posStore')(
+  observer(({ posStore }: IProps) => {
+    const title = (
+      <>
+        {'Total blocks created: '}
+        <strong data-testid='total-blocks'>{posStore.blockHeight.toLocaleString()}</strong>
+      </>
+    );
+    return (
+      <Section title={title}>
+        <Blockchain blockHeight={posStore.blockHeight} />
+      </Section>
+    );
+  }),
+);

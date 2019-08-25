@@ -6,28 +6,27 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { Back, TimelineLite, TweenMax } from 'gsap';
 import React from 'react';
 import styled from 'styled-components';
-import { TweenMax, TimelineLite, Power2, Elastic, Bounce, Back } from 'gsap';
 
 const Root = styled.div`
   position: relative;
 `;
 
-export class Blockchain extends React.Component {
+interface IProps {
+  blockHeight: number;
+}
+
+export class Blockchain extends React.Component<IProps> {
   private blockRefs = [];
-  private timerId;
 
-  public componentDidMount() {
-    this.timerId = setInterval(() => this.animateNewBlock(), 3_000);
-  }
-
-  public componentWillUnmount() {
-    if (this.timerId) {
-      clearInterval(this.timerId);
+  public componentWillReceiveProps(nextProps: IProps) {
+    if (nextProps.blockHeight !== this.props.blockHeight) {
+      this.animateNewBlock();
     }
   }
-
+  
   public render() {
     return (
       <Root>

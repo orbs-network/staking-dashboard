@@ -25,6 +25,12 @@ describe('POS Data in the app', () => {
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
   });
 
+  it('should display the "BlockHeight" from the Token store', () => {
+    const appDriver = new AppDriver();
+    const { getByTestId } = appDriver.withBlockHeight(1_234_568).render();
+    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,568');
+  });
+
   it('should display the "Rewards Clock" from the Token store', () => {
     const appDriver = new AppDriver();
     jest.spyOn(Date, 'now').mockImplementation(() => 1566724665192); // In order to prevent flackyness
