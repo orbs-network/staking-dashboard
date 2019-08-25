@@ -29,6 +29,22 @@ export class AppDriver {
     this.posStore.init();
   }
 
+  // POS data
+  public withNextVotingTime(value: number): this {
+    this.posStore.nextVotingTime = value;
+    return this;
+  }
+
+  public withTopGuardians(value: string[]): this {
+    this.posStore.topGuardians = value;
+    return this;
+  }
+
+  public withRewardsDistributed(value: number): this {
+    this.posStore.rewardsDistributed = value;
+    return this;
+  }
+
   // SOCIAL data
   public withRecentUpdate(value: string): this {
     this.socialStore.recentUpdate = value;

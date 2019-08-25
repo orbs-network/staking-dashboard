@@ -10,16 +10,22 @@ import React from 'react';
 import styled from 'styled-components';
 import { theme } from '../base/Theme';
 import { Clock } from '../clock/Clock';
+import { inject } from 'mobx-react';
+import { POSStore } from '../../store/POSStore';
 
 const Root = styled.div`
   margin-top: ${theme.sizes.SIZE_SMALL_2};
   margin-bottom: ${theme.sizes.SIZE_LARGE_4};
 `;
 
-export const ClockSection: React.FunctionComponent = () => {
+interface IProps {
+  posStore?: POSStore;
+}
+
+export const ClockSection = inject('posStore')(({ posStore }: IProps) => {
   return (
     <Root>
-      <Clock/>
+      <Clock targetTime={posStore.nextVotingTime} />
     </Root>
   );
-};
+});

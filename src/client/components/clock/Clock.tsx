@@ -24,15 +24,7 @@ const ClockCircleContainer = styled.div`
 const clockSVG = () => {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width='100%' viewBox='0 0 211 211'>
-      <circle
-        cx='105.5'
-        cy='105.5'
-        r='84.5'
-        fill='none'
-        fillRule='evenodd'
-        stroke='#DDD'
-        strokeWidth='.5'
-      />
+      <circle cx='105.5' cy='105.5' r='84.5' fill='none' fillRule='evenodd' stroke='#DDD' strokeWidth='.5' />
       <g fill='none' fillRule='evenodd' stroke='#FFF' strokeWidth='.25'>
         <path
           fill='#EEE'
@@ -50,9 +42,11 @@ const clockSVG = () => {
 const SECOND = 1_000;
 const MINUTE = SECOND * 60;
 const HOUR = MINUTE * 60;
-const targetTime = Date.now() + HOUR * 14 + MINUTE * 45 + SECOND * 3;
 
-export const Clock: React.FunctionComponent = () => {
+interface IProps {
+  targetTime: number;
+}
+export const Clock: React.FunctionComponent<IProps> = ({ targetTime }) => {
   const [timeDiff, setTimeDiff] = useState(calcTimeDiff);
 
   useEffect(() => {

@@ -32,9 +32,9 @@ export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => 
   return (
     <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='this is a help text'>
       <ListContainer>
-        {posStore.topGuardians.map(g => (
+        {posStore.topGuardians.map((g, idx) => (
           <ListItem key={g}>
-            <Typography variant='x-small'>{g}</Typography>
+            <Typography variant='x-small' dataTestId={`guardian-${idx}`}>{g}</Typography>
           </ListItem>
         ))}
       </ListContainer>
