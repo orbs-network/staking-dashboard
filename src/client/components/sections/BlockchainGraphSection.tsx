@@ -13,7 +13,7 @@ import { inject, observer } from 'mobx-react';
 import { Section } from './Section';
 
 interface IProps {
-  posStore: POSStore;
+  posStore?: POSStore;
 }
 
 export const BlockchainGraphSection = inject('posStore')(

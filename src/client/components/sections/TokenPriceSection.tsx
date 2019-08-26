@@ -17,10 +17,12 @@ export interface IProps {
   tokenStore?: TokenStore;
 }
 
+const formatPrice = price => Math.round(price * 10_000) / 10_000;
+
 export const TokenPriceSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
   return (
     <Section title='Token Price' className={className}>
-      <Typography variant='xx-large' dataTestId='token-price'>${tokenStore.tokenPrice}</Typography>
+      <Typography variant='xx-large' dataTestId='token-price'>${formatPrice(tokenStore.tokenPrice)}</Typography>
     </Section>
   );
 });
