@@ -10,15 +10,16 @@ import nock from 'nock';
 import {
   ETHPLORER_URL,
   GET_TOKEN_INFO_PATH,
+  ORBS_TOKEN_ADDRESS,
   API_KEY,
   EthplorerAdapter,
-} from '../../server/realtime-token/ethplorerAdapter';
+} from '../../server/realtime-data/ethplorerAdapter';
 import { EventEmitter } from 'events';
 import { sleep } from '../utils/time-utils';
 
 function interceptAPI(response) {
   nock(ETHPLORER_URL)
-    .get(`/${GET_TOKEN_INFO_PATH}?apiKey=${API_KEY}`)
+    .get(`/${GET_TOKEN_INFO_PATH}/${ORBS_TOKEN_ADDRESS}?apiKey=${API_KEY}`)
     .reply(200, response);
 }
 

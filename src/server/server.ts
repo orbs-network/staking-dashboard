@@ -13,6 +13,8 @@ import * as config from './config';
 import { forceHttps } from './middlewares/ForceHttps';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
+import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
+import { RealTimeDataProvider } from './realtime-data/realtimeDataProvider';
 
 export function initServer(logger: winston.Logger) {
   const app = express();
@@ -21,10 +23,14 @@ export function initServer(logger: winston.Logger) {
     app.use(forceHttps);
   }
 
+  const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
+  const realtimeDataProvider: RealTimeDataProvider = new RealTimeDataProvider(ethplorerAdapter);
+  ethplorerAdapter.init();
+
   app.set('view engine', 'ejs');
   app.use('/assets', express.static(path.join(process.cwd(), 'assets')));
   app.use(staticsRouter());
-  app.use(pagesRouter());
+  app.use(pagesRouter(realtimeDataProvider));
 
   const server = app.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
