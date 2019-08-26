@@ -2,10 +2,10 @@ import { observable, action } from 'mobx';
 import { ITokenStore } from '../../shared/IStore';
 
 export class TokenStore {
-  @observable public orbsInCirculation: number = 0;
-  @observable public tokenPrice: number = 0;
-  @observable public token24HVolume: number = 0;
-  @observable public totalHolders: number = 0;
+  @observable public orbsInCirculation: number;
+  @observable public tokenPrice: number;
+  @observable public token24HVolume: number;
+  @observable public totalHolders: number;
 
   constructor(initialData: ITokenStore) {
     this.orbsInCirculation = initialData.orbsInCirculation;
