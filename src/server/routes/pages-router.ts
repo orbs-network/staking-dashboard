@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as config from '../config';
 import { getManifest } from './manifest-manager';
 import { IStoreInitialData } from '../../shared/IStore';
-import { RealTimeDataProvider } from '../realtime-data/realtimeDataProvider';
+import { RealtimeDataProvider } from '../realtime-data/realtimeDataProvider';
 
 function getStoreInitialData(): IStoreInitialData {
   return {
@@ -26,7 +26,7 @@ function getStoreInitialData(): IStoreInitialData {
   };
 }
 
-export function pagesRouter(realTimeDataProvider: RealTimeDataProvider) {
+export function pagesRouter(realTimeDataProvider: RealtimeDataProvider) {
   const router = Router({ mergeParams: true });
 
   router.use('/**', async (_, res) => {

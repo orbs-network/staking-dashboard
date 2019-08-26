@@ -1,7 +1,7 @@
 import { EthplorerAdapter } from './ethplorerAdapter';
 import { IStoreInitialData } from '../../shared/IStore';
 
-export class RealTimeDataProvider {
+export class RealtimeDataProvider {
   constructor(private ethplorer: EthplorerAdapter) {}
 
   public getStoreInitialData(): IStoreInitialData {

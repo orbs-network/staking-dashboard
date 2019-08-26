@@ -14,7 +14,7 @@ import { forceHttps } from './middlewares/ForceHttps';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
 import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
-import { RealTimeDataProvider } from './realtime-data/realtimeDataProvider';
+import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
 
 export function initServer(logger: winston.Logger) {
   const app = express();
@@ -24,7 +24,7 @@ export function initServer(logger: winston.Logger) {
   }
 
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
-  const realtimeDataProvider: RealTimeDataProvider = new RealTimeDataProvider(ethplorerAdapter);
+  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(ethplorerAdapter);
   ethplorerAdapter.init();
 
   app.set('view engine', 'ejs');
