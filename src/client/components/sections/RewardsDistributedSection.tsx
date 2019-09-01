@@ -18,7 +18,7 @@ interface IProps {
 
 export const RewardsDistributedSection = inject('posStore')(({ posStore }: IProps) => {
   return (
-    <Section title='Rewards distributed' helpText='this is a help text'>
+    <Section title='Rewards distributed' helpText='Total Orbs tokens rewarded to delegators, guardians and validators for securing the network'>
       <Typography variant='xx-large' dataTestId='rewards-distributed'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
     </Section>
   );

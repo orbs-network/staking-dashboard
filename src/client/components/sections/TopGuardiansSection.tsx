@@ -30,7 +30,7 @@ interface IProps {
 
 export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => {
   return (
-    <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='this is a help text'>
+    <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='The top 3 Guardians with biggest amount of Orbs tokens delegated to them'>
       <ListContainer>
         {posStore.topGuardians.map((g, idx) => (
           <ListItem key={g}>

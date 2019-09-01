@@ -25,7 +25,7 @@ export const BlockchainGraphSection = inject('posStore')(
       </>
     );
     return (
-      <Section title={title}>
+      <Section title={title} helpPlacement='bottom' helpText='Total blocks created, for more information please visit Orbs Block Explorer'>
         <Blockchain blockHeight={posStore.blockHeight} />
       </Section>
     );
