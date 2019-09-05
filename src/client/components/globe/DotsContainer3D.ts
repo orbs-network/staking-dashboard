@@ -87,15 +87,9 @@ export class DotsContainer3D extends Object3D {
   private activeDotIdx: number = 0;
   private dotsList: Dot3D[] = [];
 
-  constructor(private globeRadius: number, count: number) {
+  constructor(globeRadius: number) {
     super();
-    staticDots.forEach(dot => this.addDot(dot.xRotation, dot.yRotation));
-
-    // for (let i = 0; i < 5; i++) {
-    //   const xRotation = Math.random() * Math.PI * 2;
-    //   const yRotation = Math.random() * Math.PI * 2;
-    //   this.addDot(xRotation, yRotation);
-    // }
+    staticDots.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation));
   }
 
   public get activeDot(): Dot3D {
@@ -106,8 +100,8 @@ export class DotsContainer3D extends Object3D {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 
-  private addDot(xRotation: number, yRotation: number): void {
-    const dot = new Dot3D(this.globeRadius, 0.15, xRotation, yRotation);
+  private addDot(globeRadius: number, xRotation: number, yRotation: number): void {
+    const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation);
     this.add(dot);
     this.dotsList.push(dot);
 }

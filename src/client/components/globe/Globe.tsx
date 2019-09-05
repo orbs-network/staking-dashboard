@@ -88,7 +88,7 @@ export class Globe extends React.Component<{}, IState> {
     this.scene.add(this.globe3D.build());
 
     // Add the dots
-    this.dotsContainer = new DotsContainer3D(10, 25);
+    this.dotsContainer = new DotsContainer3D(10);
     this.scene.add(this.dotsContainer);
 
     // Add the starfield
