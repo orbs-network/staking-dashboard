@@ -98,3 +98,6 @@ export class Globe3D {
 }
 
 Added line on master
+cm1
+cm2
+cm3
