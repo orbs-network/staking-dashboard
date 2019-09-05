@@ -30,7 +30,7 @@ export class Globe3D {
 
   constructor(private globeRadius: number) {
     const textureLoader = new TextureLoader();
-    const sphereTexture = textureLoader.load('/assets/mapgil2.png');
+    const sphereTexture = textureLoader.load('/assets/map-texture.png');
     this.sphereGeometry = new SphereGeometry(globeRadius, 32, 32);
     this.sphereMaterial = new MeshLambertMaterial({
       color: 0xffffff,
