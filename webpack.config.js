@@ -25,6 +25,7 @@ if (IS_DEV) {
 const nodeModulesPath = path.resolve(__dirname, 'node_modules');
 module.exports = {
   mode: IS_DEV ? 'development' : 'production',
+  target: "web",
   devtool: IS_DEV ? 'inline-source-map' : '',
   entry: ['./src/client/client'],
   output: {
