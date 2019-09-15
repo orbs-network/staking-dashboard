@@ -14,6 +14,7 @@ import { forceHttps } from './middlewares/ForceHttps';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
 import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
+import { OrbsPosDataAdapter } from './realtime-data/orbsPosDataAdapter';
 import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
 
 export function initServer(logger: winston.Logger) {
@@ -23,8 +24,10 @@ export function initServer(logger: winston.Logger) {
     app.use(forceHttps);
   }
 
+  const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter();
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
-  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(ethplorerAdapter);
+  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(ethplorerAdapter, orbsPosDataAdapter);
+  orbsPosDataAdapter.init();
   ethplorerAdapter.init();
 
   app.set('view engine', 'ejs');
