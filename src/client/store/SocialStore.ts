@@ -12,5 +12,6 @@ export class SocialStore {
     this.recentUpdate = initialData.recentUpdate;
   }
 
-  public async init(): Promise<void> {}
+  public async init(): Promise<void> {
+  }
 }

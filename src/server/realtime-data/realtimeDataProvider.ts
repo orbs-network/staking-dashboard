@@ -1,8 +1,9 @@
-import { EthplorerAdapter } from './ethplorerAdapter';
 import { IStoreInitialData } from '../../shared/IStore';
+import { EthplorerAdapter } from './ethplorerAdapter';
+import { OrbsPosDataAdapter } from './orbsPosDataAdapter';
 
 export class RealtimeDataProvider {
-  constructor(private ethplorer: EthplorerAdapter) {}
+  constructor(private ethplorer: EthplorerAdapter, private orbsPosDataAdapter: OrbsPosDataAdapter) {}
 
   public getStoreInitialData(): IStoreInitialData {
     return {
@@ -10,7 +11,7 @@ export class RealtimeDataProvider {
         blockHeight: 1_234_567,
         rewardsDistributed: 68_789,
         nextVotingTime: Date.now() + 15 * 60 * 60 * 1_000 + 45 * 60 * 1_000 + 15 * 1_000,
-        topGuardians: ['MR.SHOWOFFTOKEN', 'SLOWMOSHE', 'DONTTELLMYMAMA'],
+        topGuardians: this.orbsPosDataAdapter.top3Guardians,
       },
       socialStore: {
         latestTweet: '#SUMMIT2019 #LIVECRYPTO #KEYWORD #TALKINGABOUTIT #GITHUB #SOCIALIMPACT #GUARDIANS',
