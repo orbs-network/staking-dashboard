@@ -29,4 +29,5 @@ interface IProps {
 export const GithubSection = inject('socialStore')(
     observer(({ socialStore }: IProps) => {
         return <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />;
-    }));
+    })
+);

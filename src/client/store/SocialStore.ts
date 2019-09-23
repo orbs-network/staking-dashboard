@@ -1,5 +1,7 @@
-import { observable, action } from 'mobx';
+import {observable, action, runInAction} from 'mobx';
 import { ISocialStore } from '../../shared/IStore';
+import {getRepoLastCommitGist} from '../services/gitHubService';
+
 
 export class SocialStore {
   @observable public latestTweet: string = '';
@@ -13,5 +15,13 @@ export class SocialStore {
   }
 
   public async init(): Promise<void> {
+    await this.initLatestCommit();
+  }
+
+  private async initLatestCommit() {
+    const latestCommitSummary = await getRepoLastCommitGist('orbs-network', 'orbs-network-go');
+
+    // Update the latest commit message
+    runInAction('Set Latest commit', () => this.latestCommit = latestCommitSummary.message);
   }
 }
