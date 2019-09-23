@@ -18,7 +18,12 @@ export class POSStore {
     this.fakeBlockHeight();
   }
 
+  @action('Increase block height')
+  private increaseBlockHeight() {
+    this.blockHeight++;
+  }
+
   private fakeBlockHeight() {
-    setInterval(() => this.blockHeight++, 3_000);
+    setInterval(this.increaseBlockHeight, 3_000);
   }
 }

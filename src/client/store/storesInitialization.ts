@@ -1,3 +1,4 @@
+import { configure } from 'mobx';
 import {IPOSStore, ISocialStore, IStoreInitialData, ITokenStore} from '../../shared/IStore';
 import {SocialStore} from './SocialStore';
 import {TokenStore} from './TokenStore';
@@ -8,6 +9,12 @@ interface IStores {
     tokenStore: ITokenStore,
     posStore: IPOSStore
 };
+
+export function configureMobx() {
+    configure({
+        enforceActions: 'observed',
+    });
+}
 
 export function getStores(initialStore: IStoreInitialData): IStores {
     // Hydrate the stores

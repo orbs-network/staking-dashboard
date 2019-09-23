@@ -13,10 +13,12 @@ import { DISABLE_CANVAS } from './config';
 import { Main } from './components/Main';
 import { IStoreInitialData } from '../shared/IStore';
 import {getStores} from './store';
+import {configureMobx} from './store/storesInitialization';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;
 
+configureMobx();
 const stores = getStores(initialStore);
 
 export const App = () => (
