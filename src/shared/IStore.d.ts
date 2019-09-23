@@ -1,4 +1,4 @@
-export interface IPOSInitialData {
+export interface IPOSStore {
   blockHeight: number;
   rewardsDistributed: number;
   nextVotingTime: number;
@@ -19,7 +19,7 @@ export interface ITokenStore {
 }
 
 export interface IStoreInitialData {
-  posStore: IPOSInitialData;
+  posStore: IPOSStore;
   socialStore: ISocialStore;
   tokenStore: ITokenStore;
 }

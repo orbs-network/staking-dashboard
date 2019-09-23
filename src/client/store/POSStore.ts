@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { IPOSInitialData } from '../../shared/IStore';
+import { IPOSStore } from '../../shared/IStore';
 
 export class POSStore {
   @observable public blockHeight: number;
@@ -7,7 +7,7 @@ export class POSStore {
   @observable public nextVotingTime: number;
   @observable public topGuardians: string[];
 
-  constructor(initialData: IPOSInitialData) {
+  constructor(initialData: IPOSStore) {
     this.blockHeight = initialData.blockHeight;
     this.rewardsDistributed = initialData.rewardsDistributed;
     this.nextVotingTime = initialData.nextVotingTime;
