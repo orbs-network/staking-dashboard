@@ -1,5 +1,5 @@
 module.exports = {
-  presets: ['@babel/typescript', '@babel/react', ['@babel/env', {loose: true}]],
+  presets: [['@babel/env', {loose: true}], '@babel/react', '@babel/typescript'],
   plugins: [
     "@babel/proposal-numeric-separator",
     "@babel/plugin-transform-runtime",
