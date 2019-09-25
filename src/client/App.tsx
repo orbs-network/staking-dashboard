@@ -14,12 +14,15 @@ import { Main } from './components/Main';
 import { IStoreInitialData } from '../shared/IStore';
 import {getStores} from './store';
 import {configureMobx} from './store/storesInitialization';
+import {buildProductionAppServices} from './services/services';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;
 
+const appServices = buildProductionAppServices();
+
 configureMobx();
-const stores = getStores(initialStore);
+const stores = getStores(appServices, initialStore);
 
 export const App = () => (
   <BrowserRouter>

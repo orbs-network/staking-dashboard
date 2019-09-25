@@ -3,22 +3,31 @@ import {IPOSStore, ISocialStore, IStoreInitialData, ITokenStore} from '../../sha
 import {SocialStore} from './SocialStore';
 import {TokenStore} from './TokenStore';
 import {POSStore} from './POSStore';
+import {IAppServices} from '../services/services';
 
 interface IStores {
-    socialStore: ISocialStore,
-    tokenStore: ITokenStore,
-    posStore: IPOSStore
-};
+    socialStore: ISocialStore;
+    tokenStore: ITokenStore;
+    posStore: IPOSStore;
+}
 
+/**
+ * Configures the mobx library. Should get called at App's initialization.
+ */
 export function configureMobx() {
     configure({
         enforceActions: 'observed',
     });
 }
 
-export function getStores(initialStore: IStoreInitialData): IStores {
-    // Hydrate the stores
-    const socialStore = new SocialStore(initialStore.socialStore);
+/**
+ * Builds and initializes all of the stores
+ */
+export function getStores(services: IAppServices, initialStore: IStoreInitialData): IStores {
+    const { gitHubService } = services;
+
+    // Create stores instances + Hydrate the stores
+    const socialStore = new SocialStore(gitHubService, initialStore.socialStore);
     const tokenStore = new TokenStore(initialStore.tokenStore);
     const posStore = new POSStore(initialStore.posStore);
 

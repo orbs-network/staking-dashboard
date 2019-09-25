@@ -1,15 +1,26 @@
 import GitHub from 'github-api';
 
-const gh = new GitHub();
+export interface IGithubService {
+    /**
+     * Returns the gist of the latest commit for the given owner/repo.
+     */
+    getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }>;
+}
 
-export async function getRepoLastCommitGist(owner: string, repo: string) {
-    const repoData = await gh.getRepo(owner, repo);
+export class GitHubService implements IGithubService {
+    constructor(private gitHubApi: GitHub) {
+        console.log(this.gitHubApi);
+    }
 
-    const commits = await repoData.listCommits();
+    public async getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }> {
+        const repoData = await this.gitHubApi.getRepo(owner, repo);
 
-    const latestCommitMessage = commits.data[0].commit.message;
+        const commits = await repoData.listCommits();
 
-    return {
-        message: latestCommitMessage,
-    };
+        const latestCommitMessage = commits.data[0].commit.message;
+
+        return {
+            message: latestCommitMessage,
+        };
+    }
 }
