@@ -1,21 +1,29 @@
 import {observable, action, runInAction} from 'mobx';
-import { ISocialStore } from '../../shared/IStore';
+import { ISocialStoreState } from '../../shared/IStore';
 import {IGithubService} from '../services/gitHubService';
 
-export class SocialStore {
-  @observable public latestTweet: string = '';
-  @observable public latestCommit: string = '';
-  @observable public recentUpdate: string = '';
+export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
+  latestTweet: '',
+  latestCommit: '',
+  recentUpdate: '',
+};
+
+export class SocialStore implements ISocialStoreState {
+  @observable public latestTweet: string = defaultSocialStoreState.latestTweet;
+  @observable public latestCommit: string = defaultSocialStoreState.latestCommit;
+  @observable public recentUpdate: string = defaultSocialStoreState.recentUpdate;
 
   // Services
   private githubService: IGithubService;
 
-  constructor(gitHubService: IGithubService, initialData: ISocialStore) {
+  constructor(gitHubService: IGithubService, initialData?: ISocialStoreState) {
     this.githubService = gitHubService;
 
-    this.latestTweet = initialData.latestTweet;
-    this.latestCommit = initialData.latestCommit;
-    this.recentUpdate = initialData.recentUpdate;
+    if (initialData) {
+      this.latestTweet = initialData.latestTweet;
+      this.latestCommit = initialData.latestCommit;
+      this.recentUpdate = initialData.recentUpdate;
+    }
   }
 
   public async init(): Promise<void> {

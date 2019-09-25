@@ -1,5 +1,12 @@
 import { observable, action } from 'mobx';
-import { ITokenStore } from '../../shared/IStore';
+import {ITokenStoreState} from '../../shared/IStore';
+
+export const defaultTokenStoreState: Readonly<ITokenStoreState> = {
+  orbsInCirculation: 0,
+  tokenPrice: 0,
+  token24HVolume: 0,
+  totalHolders: 0,
+};
 
 export class TokenStore {
   @observable public orbsInCirculation: number;
@@ -7,7 +14,7 @@ export class TokenStore {
   @observable public token24HVolume: number;
   @observable public totalHolders: number;
 
-  constructor(initialData: ITokenStore) {
+  constructor(initialData: ITokenStoreState) {
     this.orbsInCirculation = initialData.orbsInCirculation;
     this.tokenPrice = initialData.tokenPrice;
     this.token24HVolume = initialData.token24HVolume;

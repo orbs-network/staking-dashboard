@@ -1,14 +1,14 @@
 import { configure } from 'mobx';
-import {IPOSStore, ISocialStore, IStoreInitialData, ITokenStore} from '../../shared/IStore';
+import {IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState} from '../../shared/IStore';
 import {SocialStore} from './SocialStore';
 import {TokenStore} from './TokenStore';
 import {POSStore} from './POSStore';
 import {IAppServices} from '../services/services';
 
 interface IStores {
-    socialStore: ISocialStore;
-    tokenStore: ITokenStore;
-    posStore: IPOSStore;
+    socialStore: ISocialStoreState;
+    tokenStore: ITokenStoreState;
+    posStore: IPOSStoreState;
 }
 
 /**

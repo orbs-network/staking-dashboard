@@ -9,20 +9,36 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'mobx-react';
 import React from 'react';
-import { POSStore } from '../store/POSStore';
-import { SocialStore } from '../store/SocialStore';
-import { TokenStore } from '../store/TokenStore';
+import {defaultPosStoreState, POSStore} from '../store/POSStore';
+import {defaultSocialStoreState, SocialStore} from '../store/SocialStore';
+import {defaultTokenStoreState, TokenStore} from '../store/TokenStore';
 import { Main } from '../components/Main';
+import {IStoreInitialData} from '../../shared/IStore';
+import {IGithubService} from '../services/gitHubService';
 
 export class AppDriver {
-  private socialStore: SocialStore;
-  private tokenStore: TokenStore;
-  private posStore: POSStore;
+  private readonly socialStore: SocialStore;
+  private readonly tokenStore: TokenStore;
+  private readonly posStore: POSStore;
 
   constructor() {
-    this.socialStore = new SocialStore();
-    this.tokenStore = new TokenStore();
-    this.posStore = new POSStore();
+    const initialStoresState: IStoreInitialData = {
+      socialStore: defaultSocialStoreState,
+      posStore: defaultPosStoreState,
+      tokenStore: defaultTokenStoreState,
+    };
+
+    const mockGithubService: IGithubService = {
+      async getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }> {
+        return {
+          message: 'bla'
+        };
+      }
+    };
+
+    this.socialStore = new SocialStore(mockGithubService, initialStoresState.socialStore);
+    this.tokenStore = new TokenStore(initialStoresState.tokenStore);
+    this.posStore = new POSStore(initialStoresState.posStore);
 
     this.socialStore.init();
     this.tokenStore.init();
