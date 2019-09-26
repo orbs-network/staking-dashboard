@@ -9,13 +9,13 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'mobx-react';
 import React from 'react';
-import {defaultPosStoreState, POSStore} from '../store/POSStore';
-import {defaultSocialStoreState, SocialStore} from '../store/SocialStore';
-import {defaultTokenStoreState, TokenStore} from '../store/TokenStore';
-import { Main } from '../components/Main';
-import {IStoreInitialData} from '../../shared/IStore';
-import {IGithubService} from '../services/gitHubService';
-import {buildAppServices} from '../services/services';
+import {defaultPosStoreState, POSStore} from '../../store/POSStore';
+import {defaultSocialStoreState, SocialStore} from '../../store/SocialStore';
+import {defaultTokenStoreState, TokenStore} from '../../store/TokenStore';
+import { Main } from '../../components/Main';
+import {IStoreInitialData} from '../../../shared/IStore';
+import {IGithubService} from '../../services/gitHubService';
+import {buildAppServices} from '../../services/services';
 
 import GitHub from 'github-api';
 import {anyString, instance, mock, when} from 'ts-mockito';

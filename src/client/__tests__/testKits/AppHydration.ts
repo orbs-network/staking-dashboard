@@ -1,8 +1,8 @@
 /* tslint:disable:variable-name */
-import {defaultSocialStoreState, SocialStore} from '../store/SocialStore';
-import {defaultTokenStoreState, TokenStore} from '../store/TokenStore';
-import {defaultPosStoreState, POSStore} from '../store/POSStore';
-import {IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState} from '../../shared/IStore';
+import {defaultSocialStoreState, SocialStore} from '../../store/SocialStore';
+import {defaultTokenStoreState, TokenStore} from '../../store/TokenStore';
+import {defaultPosStoreState, POSStore} from '../../store/POSStore';
+import {IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState} from '../../../shared/IStore';
 
 export class AppHydration implements IStoreInitialData {
     private _socialStoreState: ISocialStoreState;
