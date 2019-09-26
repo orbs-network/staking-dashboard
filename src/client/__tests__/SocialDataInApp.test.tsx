@@ -9,6 +9,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
 import {AppHydration} from './testKits/AppHydration';
+import {ApiDependenciesKit} from './testKits/apis/apiDependenciesKit';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;
@@ -20,13 +21,19 @@ describe('Social Data in the app', () => {
   });
 
   it('should display the "Latest commit" from the hydrated hydrated Social store', async () => {
-    appHydration.withLatestCommit('Latest commit');
+    const hydrationCommit = 'Hydration Commit';
+    const apiCommit = 'Api Commit';
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
-    expect(getByTestId('latest-commit')).toHaveTextContent('Latest commit');
+    appHydration.withLatestCommit(hydrationCommit);
+
+    const apiDependencies = new ApiDependenciesKit();
+    apiDependencies.gitHubApiTestKit.withLasCommitMessage(apiCommit);
+
+    const { getByTestId } = appDriver.hydrateApp(appHydration, apiDependencies.buildAppDependencies()).render();
+    expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommit);
 
     await appDriver.initApp();
-    expect(getByTestId('latest-commit')).toHaveTextContent('Latest commit');
+    expect(getByTestId('latest-commit')).toHaveTextContent(apiCommit);
 
   });
 

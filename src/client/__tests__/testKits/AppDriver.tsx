@@ -19,7 +19,7 @@ import {buildAppServices, IServicesDependencies} from '../../services/services';
 
 import GitHub from 'github-api';
 import {anyString, instance, mock, when} from 'ts-mockito';
-import {ApiDependencies} from './apis/apiDependencies';
+import {ApiDependenciesKit} from './apis/apiDependenciesKit';
 
 export class AppDriver {
   private socialStore: SocialStore;
@@ -49,7 +49,7 @@ export class AppDriver {
     };
 
     const initialStoresState = stateHydration || defaultInitialStoresState;
-    const appServicesDependenciesToUse = appApisDependencies || new ApiDependencies().buildAppDependencies();
+    const appServicesDependenciesToUse = appApisDependencies || new ApiDependenciesKit().buildAppDependencies();
 
     const services = buildAppServices(appServicesDependenciesToUse);
 

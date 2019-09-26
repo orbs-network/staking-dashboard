@@ -1,7 +1,7 @@
 import {GitHubApiTestKit} from './githubApi';
 import {IServicesDependencies} from '../../../services/services';
 
-export class ApiDependencies {
+export class ApiDependenciesKit {
     public gitHubApiTestKit: GitHubApiTestKit;
 
     constructor() {

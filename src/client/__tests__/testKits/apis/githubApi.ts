@@ -22,6 +22,13 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
         return githubApi;
     }
 
+    public withLasCommitMessage(commitMessage: string) {
+        this.lastCommitMessage = commitMessage;
+    }
+
+    /**
+     * Used to mimic the response of 'getRepo'
+     */
     private buildGetRepositoryResponse() {
         const mockedRepositoryResponse = {
             listCommits: async () => {
@@ -29,7 +36,7 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
                     data: [
                         {
                             commit: {
-                                message: 'last commit for test',
+                                message: this.lastCommitMessage,
                             }
                         }
                     ]
