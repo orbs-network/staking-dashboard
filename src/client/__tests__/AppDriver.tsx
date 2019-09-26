@@ -18,28 +18,63 @@ import {IGithubService} from '../services/gitHubService';
 import {buildAppServices} from '../services/services';
 
 import GitHub from 'github-api';
+import {anyString, instance, mock, when} from 'ts-mockito';
 
 export class AppDriver {
   private socialStore: SocialStore;
   private tokenStore: TokenStore;
   private posStore: POSStore;
 
-  public initializeApp(stateHydration: IStoreInitialData): this {
+  public async hydrateAndInitializeApp(stateHydration: IStoreInitialData): Promise<this> {
+    this.hydrateApp(stateHydration);
+    await this.initApp();
+
+    return this;
+  }
+
+  public async initApp(): Promise<this> {
+    await this.socialStore.init();
+    await this.tokenStore.init();
+    await this.posStore.init();
+
+    return this;
+  }
+
+  public hydrateApp(stateHydration: IStoreInitialData): this {
     const initialStoresState: IStoreInitialData = {
       socialStoreState: defaultSocialStoreState,
       posStoreState: defaultPosStoreState,
       tokenStoreState: defaultTokenStoreState,
     };
 
-    const services = buildAppServices({ gitHubApi: new GitHub()});
+    const mockedGitHubApi = mock(GitHub);
 
-    this.socialStore = new SocialStore(services.gitHubService, initialStoresState.socialStoreState);
-    this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
-    this.posStore = new POSStore(initialStoresState.posStoreState);
+    // Build the mocked response
+    const mockedRepositoryResponse = {
+      listCommits: async () => {
+        return {
+          data: [
+            {
+              commit: {
+                message: 'last commit for test',
+              }
+            }
+          ]
+        };
+      }
+    };
 
-    this.socialStore.init();
-    this.tokenStore.init();
-    this.posStore.init();
+    when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedRepositoryResponse);
+
+    const githubApi = instance(mockedGitHubApi);
+
+
+
+    const services = buildAppServices({ gitHubApi: githubApi});
+
+    this.socialStore = new SocialStore(services.gitHubService, stateHydration.socialStoreState);
+    this.tokenStore = new TokenStore(stateHydration.tokenStoreState);
+    this.posStore = new POSStore(stateHydration.posStoreState);
 
     return this;
   }

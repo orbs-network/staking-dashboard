@@ -19,24 +19,34 @@ describe('Social Data in the app', () => {
     appHydration = new AppHydration();
   });
 
-  it('should display the "Latest commit" from the hydrated hydrated Social store', () => {
+  it('should display the "Latest commit" from the hydrated hydrated Social store', async () => {
     appHydration.withLatestCommit('Latest commit');
 
-    const { getByTestId } = appDriver.initializeApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
     expect(getByTestId('latest-commit')).toHaveTextContent('Latest commit');
+
+    await appDriver.initApp();
+    expect(getByTestId('latest-commit')).toHaveTextContent('Latest commit');
+
   });
 
-  it('should display the "Latest tweet" from the hydrated hydrated Social store', () => {
+  it('should display the "Latest tweet" from the hydrated hydrated Social store', async () => {
     appHydration.withLatestTweet('Latest tweet');
 
-    const { getByTestId } = appDriver.initializeApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    expect(getByTestId('latest-tweet')).toHaveTextContent('Latest tweet');
+
+    await appDriver.initApp();
     expect(getByTestId('latest-tweet')).toHaveTextContent('Latest tweet');
   });
 
-  it('should display the "Recent Update" from the hydrated hydrated Social store', () => {
+  it('should display the "Recent Update" from the hydrated hydrated Social store', async () => {
     appHydration.withRecentUpdate('Recent Update');
 
-    const { getByTestId } = appDriver.initializeApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    expect(getByTestId('recent-update')).toHaveTextContent('Recent Update');
+
+    await appDriver.initApp();
     expect(getByTestId('recent-update')).toHaveTextContent('Recent Update');
   });
 });
