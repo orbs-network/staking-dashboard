@@ -2,6 +2,7 @@ import {anyString, instance, mock, when} from 'ts-mockito';
 import GitHub from 'github-api';
 import {GitHubService, IGithubService} from '../../services/gitHubService';
 import {SocialStore} from '../../store/SocialStore';
+import {buildGetRepositoryResponse} from '../testKits/apis/githubApi';
 
 describe('Social Data in the app', () => {
     let mockedGitHubApi: GitHub;
@@ -15,19 +16,7 @@ describe('Social Data in the app', () => {
         const expectedLastCommit = 'This is the latest commit';
 
         // Build the mocked response
-        const mockedRepositoryResponse = {
-            listCommits: async () => {
-                return {
-                 data: [
-                     {
-                         commit: {
-                             message: expectedLastCommit,
-                         }
-                     }
-                 ]
-                };
-            }
-        };
+        const mockedRepositoryResponse = buildGetRepositoryResponse(expectedLastCommit);
 
         when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedRepositoryResponse);
 

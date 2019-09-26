@@ -15,6 +15,7 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
         // Build the mocked response for 'getRepo
         const mockedRepositoryResponse = this.buildGetRepositoryResponse();
 
+        // @ts-ignore (no types for library)
         when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedRepositoryResponse);
 
         const githubApi = instance(mockedGitHubApi);
@@ -30,20 +31,24 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
      * Used to mimic the response of 'getRepo'
      */
     private buildGetRepositoryResponse() {
-        const mockedRepositoryResponse = {
-            listCommits: async () => {
-                return {
-                    data: [
-                        {
-                            commit: {
-                                message: this.lastCommitMessage,
-                            }
-                        }
-                    ]
-                };
-            }
-        };
-
-        return mockedRepositoryResponse;
+        return buildGetRepositoryResponse(this.lastCommitMessage);
     }
+}
+
+export function buildGetRepositoryResponse(lastCommitMessage: string) {
+    const mockedRepositoryResponse = {
+        listCommits: async () => {
+            return {
+                data: [
+                    {
+                        commit: {
+                            message: lastCommitMessage,
+                        }
+                    }
+                ]
+            };
+        }
+    };
+
+    return mockedRepositoryResponse;
 }
