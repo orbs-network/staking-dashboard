@@ -27,9 +27,9 @@ export function getStores(services: IAppServices, initialStore: IStoreInitialDat
     const { gitHubService } = services;
 
     // Create stores instances + Hydrate the stores
-    const socialStore = new SocialStore(gitHubService, initialStore.socialStore);
-    const tokenStore = new TokenStore(initialStore.tokenStore);
-    const posStore = new POSStore(initialStore.posStore);
+    const socialStore = new SocialStore(gitHubService, initialStore.socialStoreState);
+    const tokenStore = new TokenStore(initialStore.tokenStoreState);
+    const posStore = new POSStore(initialStore.posStoreState);
 
     // Call the initialize function on each one
     // NOTE : FUTURE : O.L : Should consider the order and relation between Hydrating and 'init'

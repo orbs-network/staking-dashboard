@@ -39,7 +39,7 @@ describe('Social Data in the app', () => {
     });
 });
 
-function buildWithMocks(mockedGithubApi: GitHub) : IGithubService {
+function buildWithMocks(mockedGithubApi: GitHub): IGithubService {
     const githubApi = instance(mockedGithubApi);
 
     const githubService: IGithubService = new GitHubService(githubApi);

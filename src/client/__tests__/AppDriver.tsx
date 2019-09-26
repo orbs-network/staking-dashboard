@@ -15,91 +15,32 @@ import {defaultTokenStoreState, TokenStore} from '../store/TokenStore';
 import { Main } from '../components/Main';
 import {IStoreInitialData} from '../../shared/IStore';
 import {IGithubService} from '../services/gitHubService';
+import {buildAppServices} from '../services/services';
+
+import GitHub from 'github-api';
 
 export class AppDriver {
-  private readonly socialStore: SocialStore;
-  private readonly tokenStore: TokenStore;
-  private readonly posStore: POSStore;
+  private socialStore: SocialStore;
+  private tokenStore: TokenStore;
+  private posStore: POSStore;
 
-  constructor() {
+  public initializeApp(stateHydration: IStoreInitialData): this {
     const initialStoresState: IStoreInitialData = {
-      socialStore: defaultSocialStoreState,
-      posStore: defaultPosStoreState,
-      tokenStore: defaultTokenStoreState,
+      socialStoreState: defaultSocialStoreState,
+      posStoreState: defaultPosStoreState,
+      tokenStoreState: defaultTokenStoreState,
     };
 
-    const mockGithubService: IGithubService = {
-      async getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }> {
-        return {
-          message: 'bla'
-        };
-      }
-    };
+    const services = buildAppServices({ gitHubApi: new GitHub()});
 
-    this.socialStore = new SocialStore(mockGithubService, initialStoresState.socialStore);
-    this.tokenStore = new TokenStore(initialStoresState.tokenStore);
-    this.posStore = new POSStore(initialStoresState.posStore);
+    this.socialStore = new SocialStore(services.gitHubService, initialStoresState.socialStoreState);
+    this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
+    this.posStore = new POSStore(initialStoresState.posStoreState);
 
     this.socialStore.init();
     this.tokenStore.init();
     this.posStore.init();
-  }
 
-  // POS data
-  public withBlockHeight(value: number): this {
-    this.posStore.blockHeight = value;
-    return this;
-  }
-
-  public withNextVotingTime(value: number): this {
-    this.posStore.nextVotingTime = value;
-    return this;
-  }
-
-  public withTopGuardians(value: string[]): this {
-    this.posStore.topGuardians = value;
-    return this;
-  }
-
-  public withRewardsDistributed(value: number): this {
-    this.posStore.rewardsDistributed = value;
-    return this;
-  }
-
-  // SOCIAL data
-  public withRecentUpdate(value: string): this {
-    this.socialStore.recentUpdate = value;
-    return this;
-  }
-
-  public withLatestTweet(value: string): this {
-    this.socialStore.latestTweet = value;
-    return this;
-  }
-
-  public withLatestCommit(value: string): this {
-    this.socialStore.latestCommit = value;
-    return this;
-  }
-
-  // TOKEN data
-  public with24HVolume(volume: number): this {
-    this.tokenStore.token24HVolume = volume;
-    return this;
-  }
-
-  public withOrbsInCirculation(orbsInCirculation: number): this {
-    this.tokenStore.orbsInCirculation = orbsInCirculation;
-    return this;
-  }
-
-  public withTokenPrice(tokenPrice: number): this {
-    this.tokenStore.tokenPrice = tokenPrice;
-    return this;
-  }
-
-  public withTotalHolders(totalHolders: number): this {
-    this.tokenStore.totalHolders = totalHolders;
     return this;
   }
 

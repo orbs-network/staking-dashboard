@@ -19,7 +19,7 @@ export interface ITokenStoreState {
 }
 
 export interface IStoreInitialData {
-  posStore: IPOSStoreState;
-  socialStore: ISocialStoreState;
-  tokenStore: ITokenStoreState;
+  posStoreState: IPOSStoreState;
+  socialStoreState: ISocialStoreState;
+  tokenStoreState: ITokenStoreState;
 }
