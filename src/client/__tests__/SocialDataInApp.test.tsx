@@ -24,12 +24,13 @@ describe('Social Data in the app', () => {
     const hydrationCommit = 'Hydration Commit';
     const apiCommit = 'Api Commit';
 
+    // Set the commit for the hydration
     appHydration.withLatestCommit(hydrationCommit);
 
-    const apiDependencies = new ApiDependenciesKit();
-    apiDependencies.gitHubApiTestKit.withLasCommitMessage(apiCommit);
+    // Set the commit for the 'real world'
+    appDriver.outerWorldState.setLastGitHubCommitMessage(apiCommit);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration, apiDependencies.buildAppDependencies()).render();
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
     expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommit);
 
     await appDriver.initApp();

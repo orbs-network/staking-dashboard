@@ -22,9 +22,15 @@ import {anyString, instance, mock, when} from 'ts-mockito';
 import {ApiDependenciesKit} from './apis/apiDependenciesKit';
 
 export class AppDriver {
+  public readonly outerWorldState: OuterWorldState;
+
   private socialStore: SocialStore;
   private tokenStore: TokenStore;
   private posStore: POSStore;
+
+  constructor() {
+    this.outerWorldState = new OuterWorldState(new ApiDependenciesKit());
+  }
 
   public async hydrateAndInitializeApp(stateHydration: IStoreInitialData): Promise<this> {
     this.hydrateApp(stateHydration);
@@ -49,7 +55,7 @@ export class AppDriver {
     };
 
     const initialStoresState = stateHydration || defaultInitialStoresState;
-    const appServicesDependenciesToUse = appApisDependencies || new ApiDependenciesKit().buildAppDependencies();
+    const appServicesDependenciesToUse = appApisDependencies || this.outerWorldState.appApisDependencies;
 
     const services = buildAppServices(appServicesDependenciesToUse);
 
@@ -72,5 +78,24 @@ export class AppDriver {
         <Main disableCanvas={true} />
       </Provider>,
     );
+  }
+}
+
+/**
+ * Helps us set the state of the 'Real world' (Anything outside of our application, usually gets read vi api calls)
+ */
+// tslint:disable-next-line:max-classes-per-file
+class OuterWorldState {
+  // tslint:disable-next-line:variable-name
+  constructor(private apiDependenciesKit: ApiDependenciesKit) {
+
+  }
+
+  get appApisDependencies(): IServicesDependencies {
+    return this.apiDependenciesKit.buildAppDependencies();
+  }
+
+  public setLastGitHubCommitMessage(lastCommitMessage: string): void {
+    this.apiDependenciesKit.gitHubApiTestKit.withLasCommitMessage(lastCommitMessage);
   }
 }
