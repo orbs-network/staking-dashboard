@@ -8,8 +8,8 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
-import {AppHydration} from './testKits/AppHydration';
-import {ApiDependenciesKit} from './testKits/apis/apiDependenciesKit';
+import { AppHydration } from './testKits/AppHydration';
+import { ApiDependenciesKit } from './testKits/apis/apiDependenciesKit';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;
@@ -35,7 +35,6 @@ describe('Social Data in the app', () => {
 
     await appDriver.initApp();
     expect(getByTestId('latest-commit')).toHaveTextContent(apiCommit);
-
   });
 
   it('should display the "Latest tweet" from the hydrated hydrated Social store', async () => {

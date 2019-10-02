@@ -1,6 +1,6 @@
-import {observable, action, runInAction} from 'mobx';
+import { observable, action, runInAction } from 'mobx';
 import { ISocialStoreState } from '../../shared/IStore';
-import {IGithubService} from '../services/gitHubService';
+import { IGithubService } from '../services/gitHubService';
 
 export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
   latestTweet: '',
@@ -34,6 +34,6 @@ export class SocialStore implements ISocialStoreState {
     const latestCommitSummary = await this.githubService.getRepoLastCommitGist('orbs-network', 'orbs-network-go');
 
     // Update the latest commit message
-    runInAction('Set Latest commit', () => this.latestCommit = latestCommitSummary.message);
+    runInAction('Set Latest commit', () => (this.latestCommit = latestCommitSummary.message));
   }
 }

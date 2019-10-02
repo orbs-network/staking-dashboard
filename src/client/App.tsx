@@ -12,9 +12,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { DISABLE_CANVAS } from './config';
 import { Main } from './components/Main';
 import { IStoreInitialData } from '../shared/IStore';
-import {getStores} from './store';
-import {configureMobx} from './store/storesInitialization';
-import {buildProductionAppServices} from './services/services';
+import { getStores, configureMobx } from './store/storesInitialization';
+import { buildProductionAppServices } from './services/services';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;

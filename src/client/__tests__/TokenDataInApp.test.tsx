@@ -8,10 +8,9 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
-import {AppHydration} from './testKits/AppHydration';
+import { AppHydration } from './testKits/AppHydration';
 
 describe('Token Data in the app', () => {
-
   let appHydration: AppHydration;
   let appDriver: AppDriver;
 

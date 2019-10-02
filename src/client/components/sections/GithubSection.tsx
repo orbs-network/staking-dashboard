@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { SocialSection } from './SocialSection';
-import {inject, observer} from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { SocialStore } from '../../store/SocialStore';
 import { theme } from '../base/Theme';
 
@@ -27,7 +27,9 @@ interface IProps {
 }
 
 export const GithubSection = inject('socialStore')(
-    observer(({ socialStore }: IProps) => {
-        return <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />;
-    })
+  observer(({ socialStore }: IProps) => {
+    return (
+      <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />
+    );
+  }),
 );

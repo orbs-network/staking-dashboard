@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import {ITokenStoreState} from '../../shared/IStore';
+import { ITokenStoreState } from '../../shared/IStore';
 
 export const defaultTokenStoreState: Readonly<ITokenStoreState> = {
   orbsInCirculation: 0,

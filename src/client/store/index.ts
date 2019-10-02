@@ -1,2 +1,0 @@
-export {getStores} from './storesInitialization';
-

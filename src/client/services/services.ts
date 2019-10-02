@@ -3,21 +3,21 @@ import GitHub from 'github-api';
 import { IGithubService, GitHubService } from './gitHubService';
 
 export interface IAppServices {
-    gitHubService: IGithubService,
+  gitHubService: IGithubService;
 }
 
 export interface IServicesDependencies {
-    gitHubApi: GitHub,
+  gitHubApi: GitHub;
 }
 
 /**
  * Builds the app-services with production dependencies-implementations.
  */
 export function buildProductionAppServices(): IAppServices {
-    const productionDependencies: IServicesDependencies = {
-        gitHubApi: new GitHub(),
-    };
-    return buildAppServices(productionDependencies);
+  const productionDependencies: IServicesDependencies = {
+    gitHubApi: new GitHub(),
+  };
+  return buildAppServices(productionDependencies);
 }
 
 /**
@@ -25,13 +25,11 @@ export function buildProductionAppServices(): IAppServices {
  * @param servicesDependencies
  */
 export function buildAppServices(servicesDependencies: IServicesDependencies): IAppServices {
-    const {
-        gitHubApi,
-    } = servicesDependencies;
+  const { gitHubApi } = servicesDependencies;
 
-    const gitHubService = new GitHubService(gitHubApi);
+  const gitHubService = new GitHubService(gitHubApi);
 
-    return {
-        gitHubService
-    };
+  return {
+    gitHubService,
+  };
 }

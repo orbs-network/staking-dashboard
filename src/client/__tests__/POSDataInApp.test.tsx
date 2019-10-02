@@ -8,10 +8,9 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
-import {AppHydration} from './testKits/AppHydration';
+import { AppHydration } from './testKits/AppHydration';
 
 describe('POS Data in the app', () => {
-
   let appHydration: AppHydration;
   let appDriver: AppDriver;
 
@@ -66,7 +65,7 @@ describe('POS Data in the app', () => {
     const HOURS = 15;
     const MINUTES = 45;
     const SECONDS = 17;
-    const nextVotingTime = Date.now() + (HOURS * 60 * 60 * 1_000) + (MINUTES * 60 * 1_000) + SECONDS * 1_000;
+    const nextVotingTime = Date.now() + HOURS * 60 * 60 * 1_000 + MINUTES * 60 * 1_000 + SECONDS * 1_000;
 
     appHydration.withNextVotingTime(nextVotingTime);
 

@@ -9,17 +9,17 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'mobx-react';
 import React from 'react';
-import {defaultPosStoreState, POSStore} from '../../store/POSStore';
-import {defaultSocialStoreState, SocialStore} from '../../store/SocialStore';
-import {defaultTokenStoreState, TokenStore} from '../../store/TokenStore';
+import { defaultPosStoreState, POSStore } from '../../store/POSStore';
+import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
+import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
 import { Main } from '../../components/Main';
-import {IStoreInitialData} from '../../../shared/IStore';
-import {IGithubService} from '../../services/gitHubService';
-import {buildAppServices, IServicesDependencies} from '../../services/services';
+import { IStoreInitialData } from '../../../shared/IStore';
+import { IGithubService } from '../../services/gitHubService';
+import { buildAppServices, IServicesDependencies } from '../../services/services';
 
 import GitHub from 'github-api';
-import {anyString, instance, mock, when} from 'ts-mockito';
-import {ApiDependenciesKit} from './apis/apiDependenciesKit';
+import { anyString, instance, mock, when } from 'ts-mockito';
+import { ApiDependenciesKit } from './apis/apiDependenciesKit';
 
 export class AppDriver {
   public readonly outerWorldState: OuterWorldState;
@@ -87,9 +87,7 @@ export class AppDriver {
 // tslint:disable-next-line:max-classes-per-file
 class OuterWorldState {
   // tslint:disable-next-line:variable-name
-  constructor(private apiDependenciesKit: ApiDependenciesKit) {
-
-  }
+  constructor(private apiDependenciesKit: ApiDependenciesKit) {}
 
   get appApisDependencies(): IServicesDependencies {
     return this.apiDependenciesKit.buildAppDependencies();
