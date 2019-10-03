@@ -1,7 +1,7 @@
 import { anyString, instance, mock, when } from 'ts-mockito';
 import GitHub from 'github-api';
 import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHubService';
-import { buildGetRepositoryResponse } from '../testKits/apis/githubApi';
+import { buildGetRepositoryResponse } from '../testKits/apis/GithubApi';
 
 describe('Social Data in the app', () => {
   let mockedGitHubApi: GitHub;

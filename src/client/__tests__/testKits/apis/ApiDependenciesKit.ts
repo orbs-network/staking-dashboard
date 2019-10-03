@@ -1,4 +1,4 @@
-import { GitHubApiTestKit } from './githubApi';
+import { GitHubApiTestKit } from './GithubApi';
 import { IServicesDependencies } from '../../../services/services';
 
 export class ApiDependenciesKit {
