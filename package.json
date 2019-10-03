@@ -132,6 +132,7 @@
     "nock": "^10.0.6",
     "open-browser-webpack-plugin": "github:rodrigopandini/open-browser-webpack-plugin",
     "postcss-loader": "^3.0.0",
+    "prettier": "^1.18.2",
     "puppeteer": "^1.11.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
