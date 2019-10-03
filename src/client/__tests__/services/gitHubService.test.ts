@@ -1,6 +1,6 @@
 import { anyString, instance, mock, when } from 'ts-mockito';
 import GitHub from 'github-api';
-import { GitHubService, IGithubService } from '../../services/gitHubService';
+import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { buildGetRepositoryResponse } from '../testKits/apis/githubApi';
 
 describe('Social Data in the app', () => {
@@ -27,10 +27,10 @@ describe('Social Data in the app', () => {
   });
 });
 
-function buildWithMocks(mockedGithubApi: GitHub): IGithubService {
+function buildWithMocks(mockedGithubApi: GitHub): IOrbsGithubService {
   const githubApi = instance(mockedGithubApi);
 
-  const githubService: IGithubService = new GitHubService(githubApi);
+  const githubService: IOrbsGithubService = new OrbsGitHubService(githubApi);
 
   return githubService;
 }

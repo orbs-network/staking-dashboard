@@ -14,7 +14,7 @@ import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
 import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
 import { Main } from '../../components/Main';
 import { IStoreInitialData } from '../../../shared/IStore';
-import { IGithubService } from '../../services/gitHubService';
+import { IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { buildAppServices, IServicesDependencies } from '../../services/services';
 
 import GitHub from 'github-api';
@@ -59,7 +59,7 @@ export class AppDriver {
 
     const services = buildAppServices(appServicesDependenciesToUse);
 
-    this.socialStore = new SocialStore(services.gitHubService, initialStoresState.socialStoreState);
+    this.socialStore = new SocialStore(services.orbsGitHubService, initialStoresState.socialStoreState);
     this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
     this.posStore = new POSStore(initialStoresState.posStoreState);
 

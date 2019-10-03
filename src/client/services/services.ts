@@ -1,9 +1,9 @@
 import GitHub from 'github-api';
 
-import { IGithubService, GitHubService } from './gitHubService';
+import { IOrbsGithubService, OrbsGitHubService } from './OrbsGitHubService';
 
 export interface IAppServices {
-  gitHubService: IGithubService;
+  orbsGitHubService: IOrbsGithubService;
 }
 
 export interface IServicesDependencies {
@@ -27,9 +27,9 @@ export function buildProductionAppServices(): IAppServices {
 export function buildAppServices(servicesDependencies: IServicesDependencies): IAppServices {
   const { gitHubApi } = servicesDependencies;
 
-  const gitHubService = new GitHubService(gitHubApi);
+  const orbsGitHubService = new OrbsGitHubService(gitHubApi);
 
   return {
-    gitHubService,
+    orbsGitHubService,
   };
 }

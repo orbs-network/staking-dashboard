@@ -1,16 +1,14 @@
 import GitHub from 'github-api';
 
-export interface IGithubService {
+export interface IOrbsGithubService {
   /**
    * Returns the gist of the latest commit for the given owner/repo.
    */
   getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }>;
 }
 
-export class GitHubService implements IGithubService {
-  constructor(private gitHubApi: GitHub) {
-    console.log(this.gitHubApi);
-  }
+export class OrbsGitHubService implements IOrbsGithubService {
+  constructor(private gitHubApi: GitHub) {}
 
   public async getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }> {
     const repoData = await this.gitHubApi.getRepo(owner, repo);

@@ -1,14 +1,14 @@
 import { instance, mock, verify, when, anyString } from 'ts-mockito';
-import { IGithubService } from '../../services/gitHubService';
+import { IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { SocialStore } from '../../store/SocialStore';
 import { ISocialStoreState } from '../../../shared/IStore';
 
 describe('Social store functionality', () => {
-  let mockedGithubService = mock<IGithubService>();
+  let mockedGithubService = mock<IOrbsGithubService>();
 
   // Initialize a new mock
   beforeEach(() => {
-    mockedGithubService = mock<IGithubService>();
+    mockedGithubService = mock<IOrbsGithubService>();
   });
 
   // TODO : FUTURE : Add tests for default values.
@@ -46,7 +46,7 @@ describe('Social store functionality', () => {
   });
 });
 
-function buildWithMocks(mockedGithubService: IGithubService): SocialStore {
+function buildWithMocks(mockedGithubService: IOrbsGithubService): SocialStore {
   const gitHubServiceInstance = instance(mockedGithubService);
 
   const socialStore: SocialStore = new SocialStore(gitHubServiceInstance);
