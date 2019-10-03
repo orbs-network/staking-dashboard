@@ -23,7 +23,7 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
     return githubApi;
   }
 
-  public withLasCommitMessage(commitMessage: string) {
+  public withLastCommitMessage(commitMessage: string) {
     this.lastCommitMessage = commitMessage;
   }
 

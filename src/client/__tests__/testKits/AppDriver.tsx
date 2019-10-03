@@ -94,6 +94,6 @@ class OuterWorldState {
   }
 
   public setLastGitHubCommitMessage(lastCommitMessage: string): void {
-    this.apiDependenciesKit.gitHubApiTestKit.withLasCommitMessage(lastCommitMessage);
+    this.apiDependenciesKit.gitHubApiTestKit.withLastCommitMessage(lastCommitMessage);
   }
 }
