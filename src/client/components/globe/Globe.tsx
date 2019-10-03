@@ -220,6 +220,7 @@ export class Globe extends React.Component<{}, IState> {
         scale: 0.2,
         autoAlpha: 0,
       }),
+      0,
     );
 
     // Creates the zoom out - zoom in when transitioning between dots.
@@ -230,6 +231,7 @@ export class Globe extends React.Component<{}, IState> {
         repeat: 1,
         yoyo: true,
       }),
+      0,
     );
 
     // This tween is responsible for rotating the scene to the appropriate active dot.
