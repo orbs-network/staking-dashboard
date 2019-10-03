@@ -27,7 +27,11 @@ export function buildProductionAppServices(): IAppServices {
 export function buildAppServices(servicesDependencies: IServicesDependencies): IAppServices {
   const { gitHubApi } = servicesDependencies;
 
-  const orbsGitHubService = new OrbsGitHubService(gitHubApi);
+  // TODO : FUTURE : O.L : We can move this constants to a file/make them injected as well.
+  const orbsGitHubService = new OrbsGitHubService(gitHubApi, {
+    repoOwner: 'orbs-network',
+    repoName: 'orbs-network-go',
+  });
 
   return {
     orbsGitHubService,

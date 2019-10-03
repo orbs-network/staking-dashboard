@@ -4,14 +4,20 @@ export interface IOrbsGithubService {
   /**
    * Returns the gist of the latest commit for the given owner/repo.
    */
-  getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }>;
+  getRepoLastCommitGist(): Promise<{ message: string }>;
 }
 
 export class OrbsGitHubService implements IOrbsGithubService {
-  constructor(private gitHubApi: GitHub) {}
+  private readonly repoOwner: string;
+  private readonly repoName: string;
 
-  public async getRepoLastCommitGist(owner: string, repo: string): Promise<{ message: string }> {
-    const repoData = await this.gitHubApi.getRepo(owner, repo);
+  constructor(private gitHubApi: GitHub, repoData: { repoOwner: string; repoName: string }) {
+    this.repoOwner = repoData.repoOwner;
+    this.repoName = repoData.repoName;
+  }
+
+  public async getRepoLastCommitGist(): Promise<{ message: string }> {
+    const repoData = await this.gitHubApi.getRepo(this.repoOwner, this.repoName);
 
     const commits = await repoData.listCommits();
 

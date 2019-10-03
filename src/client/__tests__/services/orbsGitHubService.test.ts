@@ -3,6 +3,11 @@ import GitHub from 'github-api';
 import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { buildGetRepositoryResponse } from '../testKits/apis/GithubApi';
 
+const TEST_CONSTANTS = {
+  repoOwner: 'orbs-network',
+  repoName: 'orbs-network-go',
+};
+
 describe('Orbs-GitHub service functionality', () => {
   let mockedGitHubApi: GitHub;
 
@@ -21,8 +26,9 @@ describe('Orbs-GitHub service functionality', () => {
 
     const gitHubService = buildWithMocks(mockedGitHubApi);
 
-    const lastCommitGist = await gitHubService.getRepoLastCommitGist('orbs', 'orbs');
+    const lastCommitGist = await gitHubService.getRepoLastCommitGist();
 
+    // We expect the returned value to be in the proper form + have the proper value
     expect(lastCommitGist).toEqual({ message: expectedLastCommit });
   });
 });
@@ -30,7 +36,10 @@ describe('Orbs-GitHub service functionality', () => {
 function buildWithMocks(mockedGithubApi: GitHub): IOrbsGithubService {
   const githubApi = instance(mockedGithubApi);
 
-  const githubService: IOrbsGithubService = new OrbsGitHubService(githubApi);
+  const githubService: IOrbsGithubService = new OrbsGitHubService(githubApi, {
+    repoOwner: TEST_CONSTANTS.repoOwner,
+    repoName: TEST_CONSTANTS.repoName,
+  });
 
   return githubService;
 }

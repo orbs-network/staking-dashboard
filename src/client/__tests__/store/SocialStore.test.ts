@@ -31,7 +31,7 @@ describe('Social store functionality', () => {
 
   it('Init works properly', async () => {
     // Mock the service
-    when(mockedGithubService.getRepoLastCommitGist(anyString(), anyString())).thenResolve({ message: 'lastCommit' });
+    when(mockedGithubService.getRepoLastCommitGist()).thenResolve({ message: 'lastCommit' });
 
     // Get store instance
     const socialStore = buildWithMocks(mockedGithubService);
@@ -39,9 +39,10 @@ describe('Social store functionality', () => {
     // The tested function
     await socialStore.init();
 
-    // TOOD : FUTURE: O.L : make app constants injectable.
-    verify(mockedGithubService.getRepoLastCommitGist('orbs-network', 'orbs-network-go')).called();
+    // We expect the service to be called in order to get the latest commit gist.
+    verify(mockedGithubService.getRepoLastCommitGist()).called();
 
+    // We expect returned value to be assigned properly
     expect(socialStore.latestCommit).toBe('lastCommit');
   });
 });

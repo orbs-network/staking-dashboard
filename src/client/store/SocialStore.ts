@@ -31,7 +31,7 @@ export class SocialStore implements ISocialStoreState {
   }
 
   private async initLatestCommit() {
-    const latestCommitSummary = await this.orbsGithubService.getRepoLastCommitGist('orbs-network', 'orbs-network-go');
+    const latestCommitSummary = await this.orbsGithubService.getRepoLastCommitGist();
 
     // Update the latest commit message
     runInAction('Set Latest commit', () => (this.latestCommit = latestCommitSummary.message));
