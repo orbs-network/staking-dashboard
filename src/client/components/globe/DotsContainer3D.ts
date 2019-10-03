@@ -125,7 +125,7 @@ export class DotsContainer3D extends Object3D {
 
   constructor(globeRadius: number) {
     super();
-    staticDots.slice(0, 2).forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name));
+    staticDots.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name));
   }
 
   public get activeDot(): Dot3D {

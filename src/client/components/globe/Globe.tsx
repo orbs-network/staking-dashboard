@@ -216,8 +216,9 @@ export class Globe extends React.Component<{}, IState> {
     const singleAnimationDuration = 1;
 
     timeLine.add(
-      TweenMax.to(this.popUpDivRef.current, 0, {
-        opacity: 0,
+      TweenMax.to(this.popUpDivRef.current, singleAnimationDuration / 4, {
+        scale: 0.2,
+        autoAlpha: 0,
       }),
     );
 
@@ -244,8 +245,9 @@ export class Globe extends React.Component<{}, IState> {
 
     // Display the node data "pop up"
     timeLine.add(
-      TweenMax.to(this.popUpDivRef.current, 1, {
-        opacity: 1,
+      TweenMax.to(this.popUpDivRef.current, singleAnimationDuration / 4, {
+        scale: 1,
+        autoAlpha: 1,
       }),
     );
 
