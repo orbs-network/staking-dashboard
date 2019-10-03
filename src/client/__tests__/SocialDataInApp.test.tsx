@@ -9,7 +9,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
 import { AppHydration } from './testKits/AppHydration';
-import { ApiDependenciesKit } from './testKits/apis/apiDependenciesKit';
+import { ApiDependenciesKit } from './testKits/apis/ApiDependenciesKit';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;

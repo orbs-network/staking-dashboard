@@ -19,7 +19,7 @@ import { buildAppServices, IServicesDependencies } from '../../services/services
 
 import GitHub from 'github-api';
 import { anyString, instance, mock, when } from 'ts-mockito';
-import { ApiDependenciesKit } from './apis/apiDependenciesKit';
+import { ApiDependenciesKit } from './apis/ApiDependenciesKit';
 
 export class AppDriver {
   public readonly outerWorldState: OuterWorldState;
