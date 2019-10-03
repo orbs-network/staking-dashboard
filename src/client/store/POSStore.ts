@@ -1,5 +1,12 @@
 import { observable, action } from 'mobx';
-import { IPOSInitialData } from '../../shared/IStore';
+import { IPOSStoreState } from '../../shared/IStore';
+
+export const defaultPosStoreState: IPOSStoreState = {
+  blockHeight: 0,
+  rewardsDistributed: 0,
+  nextVotingTime: 0,
+  topGuardians: [],
+};
 
 export class POSStore {
   @observable public blockHeight: number;
@@ -7,7 +14,7 @@ export class POSStore {
   @observable public nextVotingTime: number;
   @observable public topGuardians: string[];
 
-  constructor(initialData: IPOSInitialData) {
+  constructor(initialData: IPOSStoreState) {
     this.blockHeight = initialData.blockHeight;
     this.rewardsDistributed = initialData.rewardsDistributed;
     this.nextVotingTime = initialData.nextVotingTime;
@@ -18,7 +25,12 @@ export class POSStore {
     this.fakeBlockHeight();
   }
 
+  @action('Increase block height')
+  private increaseBlockHeight() {
+    this.blockHeight++;
+  }
+
   private fakeBlockHeight() {
-    setInterval(() => this.blockHeight++, 3_000);
+    setInterval(this.increaseBlockHeight, 3_000);
   }
 }

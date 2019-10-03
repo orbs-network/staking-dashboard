@@ -1,17 +1,39 @@
-import { observable, action } from 'mobx';
-import { ISocialStore } from '../../shared/IStore';
+import { observable, action, runInAction } from 'mobx';
+import { ISocialStoreState } from '../../shared/IStore';
+import { IOrbsGithubService } from '../services/OrbsGitHubService';
 
-export class SocialStore {
-  @observable public latestTweet: string = '';
-  @observable public latestCommit: string = '';
-  @observable public recentUpdate: string = '';
+export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
+  latestTweet: '',
+  latestCommit: '',
+  recentUpdate: '',
+};
 
-  constructor(initialData: ISocialStore) {
-    this.latestTweet = initialData.latestTweet;
-    this.latestCommit = initialData.latestCommit;
-    this.recentUpdate = initialData.recentUpdate;
+export class SocialStore implements ISocialStoreState {
+  @observable public latestTweet: string = defaultSocialStoreState.latestTweet;
+  @observable public latestCommit: string = defaultSocialStoreState.latestCommit;
+  @observable public recentUpdate: string = defaultSocialStoreState.recentUpdate;
+
+  // Services
+  private orbsGithubService: IOrbsGithubService;
+
+  constructor(orbsGitHubService: IOrbsGithubService, initialData?: ISocialStoreState) {
+    this.orbsGithubService = orbsGitHubService;
+
+    if (initialData) {
+      this.latestTweet = initialData.latestTweet;
+      this.latestCommit = initialData.latestCommit;
+      this.recentUpdate = initialData.recentUpdate;
+    }
   }
 
   public async init(): Promise<void> {
+    await this.initLatestCommit();
+  }
+
+  private async initLatestCommit() {
+    const latestCommitSummary = await this.orbsGithubService.getRepoLastCommitGist();
+
+    // Update the latest commit message
+    runInAction('Set Latest commit', () => (this.latestCommit = latestCommitSummary.message));
   }
 }

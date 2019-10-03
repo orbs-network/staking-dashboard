@@ -11,27 +11,17 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { DISABLE_CANVAS } from './config';
 import { Main } from './components/Main';
-import { POSStore } from './store/POSStore';
-import { SocialStore } from './store/SocialStore';
-import { TokenStore } from './store/TokenStore';
 import { IStoreInitialData } from '../shared/IStore';
+import { getStores, configureMobx } from './store/storesInitialization';
+import { buildProductionAppServices } from './services/services';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;
 
-const socialStore = new SocialStore(initialStore.socialStore);
-const tokenStore = new TokenStore(initialStore.tokenStore);
-const posStore = new POSStore(initialStore.posStore);
+const appServices = buildProductionAppServices();
 
-const stores = {
-  socialStore,
-  tokenStore,
-  posStore,
-};
-
-socialStore.init();
-tokenStore.init();
-posStore.init();
+configureMobx();
+const stores = getStores(appServices, initialStore);
 
 export const App = () => (
   <BrowserRouter>

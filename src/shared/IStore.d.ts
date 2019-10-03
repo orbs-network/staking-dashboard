@@ -1,17 +1,17 @@
-export interface IPOSInitialData {
+export interface IPOSStoreState {
   blockHeight: number;
   rewardsDistributed: number;
   nextVotingTime: number;
   topGuardians: string[];
 }
 
-export interface ISocialStore {
+export interface ISocialStoreState {
   latestTweet: string;
   latestCommit: string;
   recentUpdate: string;
 }
 
-export interface ITokenStore {
+export interface ITokenStoreState {
   orbsInCirculation: number;
   tokenPrice: number;
   token24HVolume: number;
@@ -19,7 +19,7 @@ export interface ITokenStore {
 }
 
 export interface IStoreInitialData {
-  posStore: IPOSInitialData;
-  socialStore: ISocialStore;
-  tokenStore: ITokenStore;
+  posStoreState: IPOSStoreState;
+  socialStoreState: ISocialStoreState;
+  tokenStoreState: ITokenStoreState;
 }

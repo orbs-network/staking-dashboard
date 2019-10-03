@@ -7,41 +7,75 @@
  */
 
 import '@testing-library/jest-dom/extend-expect';
-import { AppDriver } from './AppDriver';
+import { AppDriver } from './testKits/AppDriver';
+import { AppHydration } from './testKits/AppHydration';
 
 describe('POS Data in the app', () => {
+  let appHydration: AppHydration;
+  let appDriver: AppDriver;
 
-  it('should display the "Top Guardians" from the Token store', () => {
-    const appDriver = new AppDriver();
-    const { getByTestId } = appDriver.withTopGuardians(['guardian 0', 'guardian 1', 'guardian 2']).render();
+  beforeEach(() => {
+    appDriver = new AppDriver();
+    appHydration = new AppHydration();
+  });
+
+  it('should display the "Top Guardians" from the Token store', async () => {
+    appHydration.withTopGuardians(['guardian 0', 'guardian 1', 'guardian 2']);
+
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+
+    expect(getByTestId('guardian-0')).toHaveTextContent('guardian 0');
+    expect(getByTestId('guardian-1')).toHaveTextContent('guardian 1');
+    expect(getByTestId('guardian-2')).toHaveTextContent('guardian 2');
+
+    await appDriver.initApp();
     expect(getByTestId('guardian-0')).toHaveTextContent('guardian 0');
     expect(getByTestId('guardian-1')).toHaveTextContent('guardian 1');
     expect(getByTestId('guardian-2')).toHaveTextContent('guardian 2');
   });
 
-  it('should display the "Rewards Distributed" from the Token store', () => {
-    const appDriver = new AppDriver();
-    const { getByTestId } = appDriver.withRewardsDistributed(123_456).render();
+  it('should display the "Rewards Distributed" from the hydrated Token store', async () => {
+    appHydration.withRewardsDistributed(123_456);
+
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+
+    expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
+
+    await appDriver.initApp();
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
   });
 
-  it('should display the "BlockHeight" from the Token store', () => {
-    const appDriver = new AppDriver();
-    appDriver.withBlockHeight(1_234_000);
-    const { getByTestId } = appDriver.render();
+  it('should display the "BlockHeight" from the hydrated Token store', async () => {
+    appHydration.withBlockHeight(1_234_000);
+
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+
     expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
-    appDriver.withBlockHeight(1_234_568);
-    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,568');
+
+    await appDriver.initApp();
+    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
+
+    // TODO : FUTURE : O.L : Move this test to the 'store-to-ui' tests.
+    // appDriver.withBlockHeight(1_234_568);
+    // expect(getByTestId('total-blocks')).toHaveTextContent('1,234,568');
   });
 
-  it('should display the "Rewards Clock" from the Token store', () => {
-    const appDriver = new AppDriver();
+  it('should display the "Rewards Clock" from the hydrated Token store', async () => {
     jest.spyOn(Date, 'now').mockImplementation(() => 1566724665192); // In order to prevent flackyness
     const HOURS = 15;
     const MINUTES = 45;
     const SECONDS = 17;
-    const nextVotingTime = Date.now() + (HOURS * 60 * 60 * 1_000) + (MINUTES * 60 * 1_000) + SECONDS * 1_000;
-    const { getByTestId } = appDriver.withNextVotingTime(nextVotingTime).render();
+    const nextVotingTime = Date.now() + HOURS * 60 * 60 * 1_000 + MINUTES * 60 * 1_000 + SECONDS * 1_000;
+
+    appHydration.withNextVotingTime(nextVotingTime);
+
+    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+
+    expect(getByTestId('clock-hours')).toHaveTextContent(HOURS.toString());
+    expect(getByTestId('clock-minutes')).toHaveTextContent(MINUTES.toString());
+    expect(getByTestId('clock-seconds')).toHaveTextContent(SECONDS.toString());
+
+    await appDriver.initApp();
     expect(getByTestId('clock-hours')).toHaveTextContent(HOURS.toString());
     expect(getByTestId('clock-minutes')).toHaveTextContent(MINUTES.toString());
     expect(getByTestId('clock-seconds')).toHaveTextContent(SECONDS.toString());
