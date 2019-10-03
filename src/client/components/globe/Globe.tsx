@@ -23,15 +23,28 @@ import {
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
+import { PoiPopup } from './PoiPopup';
 
 const raycaster = new Raycaster();
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
 
+const boxSizeForDev = {
+  height: 100,
+  width: 200,
+};
+
 interface IState {
   rotationX: number;
   rotationY: number;
+
+  width: number;
+  height: number;
 }
+
+// TODO : ORL : CONTINUE_FROM_HERE: Understand what causes the animation to jump from point to point, add the demo-popup there,
+//  Then change the data flow to allow the points datas to be recieved as props with the display data.
+
 export class Globe extends React.Component<{}, IState> {
   private clock: Clock = new Clock();
   private globe3D: Globe3D;
@@ -39,6 +52,7 @@ export class Globe extends React.Component<{}, IState> {
   private dotsContainer: DotsContainer3D;
   private scene: Scene;
   private mount: HTMLDivElement;
+  private popUpDivRef = React.createRef<HTMLDivElement>();
   private camera: PerspectiveCamera;
   private renderer: WebGLRenderer;
   private composer: EffectComposer;
@@ -48,18 +62,18 @@ export class Globe extends React.Component<{}, IState> {
 
   constructor(props) {
     super(props);
-    this.state = { rotationX: 0, rotationY: 0 };
+    this.state = { rotationX: 0, rotationY: 0, width: 0, height: 0 };
   }
 
   public componentWillMount() {
-    // ADD SCENE
+    // Create new Scene object
     this.scene = new Scene();
 
-    // Add light
+    // Add main light
     const light = new AmbientLight(0xffffff, 0.7);
     this.scene.add(light);
 
-    // another light
+    // Add secondary lights
     const leftLight = new DirectionalLight(0xffffff, 0.8);
     leftLight.position.set(-1, 0, 0);
     this.scene.add(leftLight);
@@ -82,7 +96,7 @@ export class Globe extends React.Component<{}, IState> {
 
     // ADD RENDERER
     this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
-    this.renderer.setClearColor(0x000000, 0);
+    this.renderer.setClearColor(0x000000, 0.0);
     this.renderer.setPixelRatio(window.devicePixelRatio);
 
     // Add effects
@@ -110,6 +124,8 @@ export class Globe extends React.Component<{}, IState> {
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
 
+    console.log(`Width: ${width} X Height: ${height}`);
+
     this.camera.aspect = width / height;
     this.renderer.setSize(width, height, false);
 
@@ -117,6 +133,15 @@ export class Globe extends React.Component<{}, IState> {
 
     this.resizeRendererToDisplaySize(true);
     this.startAnimation();
+
+    const canvasHalfWidth = this.renderer.domElement.offsetWidth / 2;
+    const canvasHalfHeight = this.renderer.domElement.offsetHeight / 2;
+
+    // TODO : ORL : Move this to a function and apply it on resize as well.
+    this.setState({
+      width: canvasHalfWidth + this.renderer.domElement.offsetLeft,
+      height: canvasHalfHeight + this.renderer.domElement.offsetTop,
+    });
   }
 
   public componentWillUnmount() {
@@ -136,6 +161,18 @@ export class Globe extends React.Component<{}, IState> {
           onClick={e => this.onClick()}
           ref={mount => (this.mount = mount)}
         />
+        <div
+          style={{
+            position: 'absolute',
+            left: this.state.width,
+            top: this.state.height,
+            zIndex: 1,
+            borderStyle: 'solid',
+            borderColor: 'pink',
+            borderWidth: 1,
+          }}
+        />
+
         <div style={{ position: 'absolute', left: 200, top: 900 }}>
           <label style={{ color: 'white', display: 'block' }}>X: {this.state.rotationX}</label>
           <input
@@ -156,31 +193,47 @@ export class Globe extends React.Component<{}, IState> {
             onChange={e => this.setState({ rotationY: parseInt(e.currentTarget.value, 10) / 100 })}
           />
         </div>
+
+        <PoiPopup
+          ref={this.popUpDivRef}
+          top={this.state.height}
+          left={this.state.width}
+          name={this.dotsContainer.activeDot.name}
+        />
       </>
     );
   }
 
   private onClick(): void {
+    // TODO : ORL :  Move this to an an outer 'current poi' store/state
     this.dotsContainer.activeDot.unblink();
     this.dotsContainer.nextActiveDot();
     this.dotsContainer.activeDot.blink();
 
     const timeLine = new TimelineLite();
     timeLine.timeScale(ANIMATION_SPEED);
+
+    const singleAnimationDuration = 1;
+
     timeLine.add(
-      TweenMax.to(this.camera.position, 0.5, {
+      TweenMax.to(this.popUpDivRef.current, 0, {
+        opacity: 0,
+      }),
+    );
+
+    // Creates the zoom out - zoom in when transitioning between dots.
+    timeLine.add(
+      TweenMax.to(this.camera.position, singleAnimationDuration / 2, {
         z: CAMERA_POS * 1.25,
         ease: Power2.easeInOut,
+        repeat: 1,
+        yoyo: true,
       }),
     );
+
+    // This tween is responsible for rotating the scene to the appropriate active dot.
     timeLine.add(
-      TweenMax.to(this.camera.position, 0.5, {
-        z: CAMERA_POS,
-        ease: Power2.easeInOut,
-      }),
-    );
-    timeLine.add(
-      TweenMax.to(this.scene.rotation, 1, {
+      TweenMax.to(this.scene.rotation, singleAnimationDuration, {
         x: -this.dotsContainer.activeDot.rotation.x,
         y: -this.dotsContainer.activeDot.rotation.y,
         z: 0,
@@ -188,6 +241,16 @@ export class Globe extends React.Component<{}, IState> {
       }),
       0,
     );
+
+    // Display the node data "pop up"
+    timeLine.add(
+      TweenMax.to(this.popUpDivRef.current, 1, {
+        opacity: 1,
+      }),
+    );
+
+    // TODO : ORL : Ensure re-rendering with a better method.
+    this.forceUpdate();
   }
 
   private onDocumentMouseMove(e: React.MouseEvent): void {
@@ -206,6 +269,7 @@ export class Globe extends React.Component<{}, IState> {
   }
 
   private handleHover(): void {
+    // TODO : ORL : This does not seem to do anything, ask about it.
     raycaster.setFromCamera(this.mouse, this.camera);
     const intersects = raycaster.intersectObjects(this.scene.children, true);
     if (intersects.length > 0) {

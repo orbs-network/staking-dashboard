@@ -10,75 +10,111 @@ import { Object3D } from 'three';
 import { Dot3D } from './Dot3D';
 
 const staticDots = [
-  { // Israel
+  {
+    // Israel
+    name: 'Israel',
     xRotation: 5.68,
     yRotation: 1.75,
   },
-  { // Japan
+  {
+    // Japan
+    name: 'JP',
     xRotation: 5.59,
     yRotation: 3.58,
   },
-  { // Bulgaria
+  {
+    // Bulgaria
+    name: 'BG',
     xRotation: 5.47,
     yRotation: 1.57,
   },
-  { // Canada
+  {
+    // Canada
+    name: 'CA',
     xRotation: 5.35,
     yRotation: 5.84,
   },
-  { // Hoing Kong
+  {
+    // Hoing Kong
+    name: 'HK',
     xRotation: 5.86,
     yRotation: 3.26,
   },
-  { // Thailand
+  {
+    // Thailand
+    name: 'Th',
     xRotation: 6.05,
     yRotation: 3,
   },
-  { // USA (CA)
+  {
+    // USA (CA)
+    name: 'US-CA',
     xRotation: 5.64,
     yRotation: 5.39,
   },
-  { // Cayman Islands
+  {
+    // Cayman Islands
+    name: 'Cayman Islands',
     xRotation: 5.93,
     yRotation: 5.99,
   },
-  { // Korea
+  {
+    // Korea
+    name: 'Korea',
     xRotation: 5.6,
     yRotation: 3.38,
   },
-  { // Macau
+  {
+    // Macau
+    name: 'Macau',
     xRotation: 5.88,
     yRotation: 3.2,
   },
-  { // UK
+  {
+    // UK
+    name: 'UK',
     xRotation: 5.3,
     yRotation: 1.12,
   },
-  { // Cyprus
+  {
+    // Cyprus
+    name: 'CYP',
     xRotation: 5.65,
     yRotation: 1.71,
   },
-  { // Singapore
+  {
+    // Singapore
+    name: 'SG',
     xRotation: 6.27,
     yRotation: 3.06,
   },
-  { // Russia
+  {
+    // Russia
+    name: 'RUS',
     xRotation: 5.17,
     yRotation: 2.67,
   },
-  { // USA (NY)
+  {
+    // USA (NY)
+    name: 'NY',
     xRotation: 5.55,
     yRotation: 6.24,
   },
-  { // Slovak Republic
+  {
+    // Slovak Republic
+    name: 'SlV',
     xRotation: 5.39,
     yRotation: 1.46,
   },
-  { // New Zealand
+  {
+    // New Zealand
+    name: 'NZ',
     xRotation: 0.86,
     yRotation: 4.05,
   },
-  { // Scotland
+  {
+    // Scotland
+    name: 'Scotland',
     xRotation: 5.22,
     yRotation: 1.09,
   },
@@ -89,7 +125,7 @@ export class DotsContainer3D extends Object3D {
 
   constructor(globeRadius: number) {
     super();
-    staticDots.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation));
+    staticDots.slice(0, 2).forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name));
   }
 
   public get activeDot(): Dot3D {
@@ -100,9 +136,9 @@ export class DotsContainer3D extends Object3D {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 
-  private addDot(globeRadius: number, xRotation: number, yRotation: number): void {
-    const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation);
+  private addDot(globeRadius: number, xRotation: number, yRotation: number, name: string): void {
+    const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation, name);
     this.add(dot);
     this.dotsList.push(dot);
-}
+  }
 }
