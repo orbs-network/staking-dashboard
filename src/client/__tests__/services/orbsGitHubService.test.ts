@@ -3,7 +3,7 @@ import GitHub from 'github-api';
 import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { buildGetRepositoryResponse } from '../testKits/apis/GithubApi';
 
-describe('Social Data in the app', () => {
+describe('Orbs-GitHub service functionality', () => {
   let mockedGitHubApi: GitHub;
 
   // Initialize a new mock
