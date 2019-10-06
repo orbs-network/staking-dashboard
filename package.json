@@ -53,6 +53,7 @@
   "author": "Gil Amran",
   "dependencies": {
     "@material-ui/core": "^4.5.0",
+    "@material-ui/icons": "^4.4.3",
     "@types/find-up": "^2.1.1",
     "body-parser": "^1.18.3",
     "cloudinary": "^1.14.0",
