@@ -5,26 +5,23 @@ import { Link } from '@material-ui/icons';
 
 interface IProps {}
 
-const mainColor = 'rgb(96, 125, 131)';
-const textColor = 'rgb(156, 156, 156)';
+const StyledCardHeader = styled(CardHeader)(props => ({
+  color: props.theme.textColor,
+}));
 
-const StyledCardHeader = styled(CardHeader)({
-  color: textColor,
-});
-
-const StyledAvatar = styled(Avatar)({
+const StyledAvatar = styled(Avatar)(props => ({
   borderWidth: 2,
-  borderColor: textColor,
+  borderColor: props.theme.textColor,
   borderStyle: 'solid',
-});
+}));
 
-const StyledButton = styled(Button)({
-  color: mainColor,
-  borderColor: mainColor,
+const StyledButton = styled(Button)(props => ({
+  color: props.theme.mainColor,
+  borderColor: props.theme.mainColor,
   '.MuiButton-startIcon': {
     transform: 'rotate(-45deg)',
   },
-});
+}));
 
 export const PoiCardHeader: React.FC<IProps> = props => {
   const {} = props;

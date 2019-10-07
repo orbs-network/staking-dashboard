@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { Globe } from './globe/Globe';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StylesProvider } from '@material-ui/core';
 import { theme } from './base/Theme';
 import { LeftPanel } from './LeftPanel';
@@ -71,24 +71,31 @@ const Right = styled.div`
   width: 20em;
 `;
 
+const mainTheme = {
+  mainColor: 'rgb(96, 125, 131)',
+  textColor: 'rgb(156, 156, 156)',
+};
+
 interface IProps {
   disableCanvas: boolean;
 }
 export const Main: React.FunctionComponent<IProps> = ({ disableCanvas }) => {
   return (
     <StylesProvider injectFirst>
-      <Root>
-        <GlobalStyle />
-        <Container>
-          <Left>
-            <LeftPanel />
-          </Left>
-          <Center>{!disableCanvas && <Globe />}</Center>
-          <Right>
-            <RightPanel />
-          </Right>
-        </Container>
-      </Root>
+      <ThemeProvider theme={mainTheme}>
+        <Root>
+          <GlobalStyle />
+          <Container>
+            <Left>
+              <LeftPanel />
+            </Left>
+            <Center>{!disableCanvas && <Globe />}</Center>
+            <Right>
+              <RightPanel />
+            </Right>
+          </Container>
+        </Root>
+      </ThemeProvider>
     </StylesProvider>
   );
 };

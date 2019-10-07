@@ -14,12 +14,6 @@ interface IProps {
 
 type Ref = HTMLDivElement;
 
-const height = 100;
-const width = 200;
-
-const mainColor = 'rgb(96, 125, 131)';
-const textColor = 'rgb(156, 156, 156)';
-
 const PopUpCard = styled(Card)<{ top: number; left: number }>(props => ({
   width: '400px',
   position: 'absolute',
@@ -36,10 +30,10 @@ const StyledDivider = styled(Divider)({
   marginBottom: 10,
 });
 
-const StyledCardContent = styled(CardContent)({
-  color: textColor,
+const StyledCardContent = styled(CardContent)(props => ({
+  color: props.theme.textColor,
   paddingTop: 0,
-});
+}));
 
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
   const { top, left } = props;
