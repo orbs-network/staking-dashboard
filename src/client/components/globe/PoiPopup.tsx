@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
 
 import { Avatar, Button, Card, CardContent, CardHeader, Divider } from '@material-ui/core';
@@ -15,57 +15,72 @@ type Ref = HTMLDivElement;
 const height = 100;
 const width = 200;
 
-const StyledDiv = styled.div<{ top: number; left: number }>`
-  position: absolute;
-  border: 1px solid red;
+const mainColor = 'rgb(96, 125, 131)';
+const textColor = 'rgb(156, 156, 156)';
 
-  height: ${height}px;
-  width: ${width}px;
+const PopUpCard = styled(Card)<{ top: number; left: number }>(props => ({
+  width: '400px',
+  position: 'absolute',
+  left: props.left,
+  top: props.top, // TODO : ORL : Find out how to raise the card by its own height
+  backgroundColor: 'rgba(20, 20, 20, 0.6)',
+}));
 
-  align-content: 'center';
-  align-items: 'center';
+const StyledCardHeader = styled(CardHeader)({
+  color: textColor,
+});
 
-  // Positioning
-  left: ${props => props.left}px;
-  top: ${props => props.top - height - 5}px;
-`;
+const StyledDivider = styled(Divider)({
+  height: 2,
+  backgroundColor: 'gray',
+  borderRadius: 2,
+  marginTop: 5,
+  marginBottom: 5,
+});
 
-const StyledHeader = styled.h1`
-  color: blue;
-  text-align: center;
-`;
+const StyledButton = styled(Button)({
+  color: mainColor,
+  borderColor: mainColor,
+  '.MuiButton-startIcon': {
+    transform: 'rotate(-45deg)',
+  },
+});
 
-const PopUpCard = styled(Card)<{ top: number; left: number }>`
-  position: absolute;
-  // height: ${height}px;
-  // width: ${width}px;
-  width: 20%;
-
-  // Positioning
-  left: ${props => props.left}px;
-  top: ${props => props.top}px; // TODO : ORL : Find out how to raise the card by its own height
-`;
+const StyledCardContent = styled(CardContent)({
+  color: textColor,
+});
 
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
   const { top, left } = props;
 
+  const poiAvatar = useMemo(
+    () => <Avatar alt={'A'} src={'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg'} />,
+    [],
+  );
+
+  const buttonAction = useMemo(
+    () => (
+      <StyledButton variant='outlined' size='small' autoCapitalize={'false'} startIcon={<Link />}>
+        Guardian
+      </StyledButton>
+    ),
+    [],
+  );
+
   return (
     <PopUpCard top={top} left={left} ref={ref}>
-      <CardHeader
-        avatar={<Avatar alt={'A'} src={'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg'} />}
+      <StyledCardHeader
+        avatar={poiAvatar}
         title={'Andrey Tarantinov'}
         subheader={'South Korea'}
-        action={
-          <Button variant='outlined' size='small' startIcon={<Link />}>
-            Guardian
-          </Button>
-        }
+        action={buttonAction}
+        subheaderTypographyProps={{ color: 'inherit' }}
       />
-      <CardContent>
+      <StyledCardContent>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-        <Divider />
+        <StyledDivider />
         Rank #9 Total stake: 23,000 Orbs Active since: 2018
-      </CardContent>
+      </StyledCardContent>
       {/*<StyledHeader>Cool data about node - {props.name}</StyledHeader>*/}
     </PopUpCard>
   );
