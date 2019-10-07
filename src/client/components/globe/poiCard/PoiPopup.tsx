@@ -1,7 +1,7 @@
 import React, { forwardRef, useMemo } from 'react';
 import styled from 'styled-components';
 
-import { Avatar, Button, Card, CardContent, CardHeader, Divider } from '@material-ui/core';
+import { Avatar, Button, Card, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
 import { Link } from '@material-ui/icons';
 
 interface IProps {
@@ -50,11 +50,17 @@ const StyledCardContent = styled(CardContent)({
   color: textColor,
 });
 
+const StyledAvatar = styled(Avatar)({
+  borderWidth: 2,
+  borderColor: textColor,
+  borderStyle: 'solid',
+});
+
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
   const { top, left } = props;
 
   const poiAvatar = useMemo(
-    () => <Avatar alt={'A'} src={'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg'} />,
+    () => <StyledAvatar alt={'A'} src={'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg'} />,
     [],
   );
 
@@ -79,9 +85,18 @@ export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
       <StyledCardContent>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         <StyledDivider />
-        Rank #9 Total stake: 23,000 Orbs Active since: 2018
+        <Typography variant='caption' align='center' display='inline' style={{ color: mainColor }}>
+          Rank #9
+        </Typography>
+        <Typography variant='caption' display='inline'>
+          {' '}
+          Total stake: 23,000 Orbs
+        </Typography>
+        <Typography style={{ alignSelf: 'right' }} variant='caption' display='inline'>
+          {' '}
+          Active since: 2018
+        </Typography>
       </StyledCardContent>
-      {/*<StyledHeader>Cool data about node - {props.name}</StyledHeader>*/}
     </PopUpCard>
   );
 });

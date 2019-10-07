@@ -23,7 +23,7 @@ import {
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
-import { PoiPopup } from './PoiPopup';
+import { PoiPopup } from './poiCard/PoiPopup';
 
 const raycaster = new Raycaster();
 const CAMERA_POS = 35;
