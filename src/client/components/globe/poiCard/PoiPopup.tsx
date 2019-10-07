@@ -32,12 +32,13 @@ const StyledDivider = styled(Divider)({
   height: 2,
   backgroundColor: 'gray',
   borderRadius: 2,
-  marginTop: 5,
-  marginBottom: 5,
+  marginTop: 10,
+  marginBottom: 10,
 });
 
 const StyledCardContent = styled(CardContent)({
   color: textColor,
+  paddingTop: 0,
 });
 
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
