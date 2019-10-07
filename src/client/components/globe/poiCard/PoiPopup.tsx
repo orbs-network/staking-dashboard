@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Avatar, Button, Card, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
 import { Link } from '@material-ui/icons';
 import { PoiCardFooter } from './PoiCardFooter';
+import { PoiCardHeader } from './PoiCardHeader';
 
 interface IProps {
   name: string;
@@ -27,10 +28,6 @@ const PopUpCard = styled(Card)<{ top: number; left: number }>(props => ({
   backgroundColor: 'rgba(20, 20, 20, 0.6)',
 }));
 
-const StyledCardHeader = styled(CardHeader)({
-  color: textColor,
-});
-
 const StyledDivider = styled(Divider)({
   height: 2,
   backgroundColor: 'gray',
@@ -39,50 +36,16 @@ const StyledDivider = styled(Divider)({
   marginBottom: 5,
 });
 
-const StyledButton = styled(Button)({
-  color: mainColor,
-  borderColor: mainColor,
-  '.MuiButton-startIcon': {
-    transform: 'rotate(-45deg)',
-  },
-});
-
 const StyledCardContent = styled(CardContent)({
   color: textColor,
-});
-
-const StyledAvatar = styled(Avatar)({
-  borderWidth: 2,
-  borderColor: textColor,
-  borderStyle: 'solid',
 });
 
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
   const { top, left } = props;
 
-  const poiAvatar = useMemo(
-    () => <StyledAvatar alt={'A'} src={'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg'} />,
-    [],
-  );
-
-  const buttonAction = useMemo(
-    () => (
-      <StyledButton variant='outlined' size='small' autoCapitalize={'false'} startIcon={<Link />}>
-        Guardian
-      </StyledButton>
-    ),
-    [],
-  );
-
   return (
     <PopUpCard top={top} left={left} ref={ref}>
-      <StyledCardHeader
-        avatar={poiAvatar}
-        title={'Andrey Tarantinov'}
-        subheader={'South Korea'}
-        action={buttonAction}
-        subheaderTypographyProps={{ color: 'inherit' }}
-      />
+      <PoiCardHeader />
       <StyledCardContent>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         <StyledDivider />
