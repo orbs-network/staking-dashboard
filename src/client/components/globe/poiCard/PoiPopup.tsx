@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import { Avatar, Button, Card, CardContent, CardHeader, Divider, Typography } from '@material-ui/core';
 import { Link } from '@material-ui/icons';
+import { PoiCardFooter } from './PoiCardFooter';
 
 interface IProps {
   name: string;
@@ -85,17 +86,7 @@ export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
       <StyledCardContent>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         <StyledDivider />
-        <Typography variant='caption' align='center' display='inline' style={{ color: mainColor }}>
-          Rank #9
-        </Typography>
-        <Typography variant='caption' display='inline'>
-          {' '}
-          Total stake: 23,000 Orbs
-        </Typography>
-        <Typography style={{ alignSelf: 'right' }} variant='caption' display='inline'>
-          {' '}
-          Active since: 2018
-        </Typography>
+        <PoiCardFooter rank={9} totalStake={28000} activeSince={2018} />
       </StyledCardContent>
     </PopUpCard>
   );
