@@ -219,6 +219,7 @@ export class Globe extends React.Component<{}, IState> {
       TweenMax.to(this.popUpDivRef.current, singleAnimationDuration / 4, {
         scale: 0.2,
         autoAlpha: 0,
+        transformOrigin: 'top left',
       }),
       0,
     );
