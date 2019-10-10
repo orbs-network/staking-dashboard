@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { Globe } from './globe/Globe';
+import { Globe, GlobeFc } from './globe/Globe';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StylesProvider } from '@material-ui/core';
 import { theme } from './base/Theme';
@@ -89,7 +89,7 @@ export const Main: React.FunctionComponent<IProps> = ({ disableCanvas }) => {
             <Left>
               <LeftPanel />
             </Left>
-            <Center>{!disableCanvas && <Globe />}</Center>
+            <Center>{!disableCanvas && <GlobeFc />}</Center>
             <Right>
               <RightPanel />
             </Right>
