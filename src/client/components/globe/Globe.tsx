@@ -38,8 +38,8 @@ interface IState {
   rotationX: number;
   rotationY: number;
 
-  width: number;
-  height: number;
+  centerLeftOffset: number;
+  centerTopOffset: number;
 }
 
 export class Globe extends React.Component<{}, IState> {
@@ -59,7 +59,7 @@ export class Globe extends React.Component<{}, IState> {
 
   constructor(props) {
     super(props);
-    this.state = { rotationX: 0, rotationY: 0, width: 0, height: 0 };
+    this.state = { rotationX: 0, rotationY: 0, centerLeftOffset: 0, centerTopOffset: 0 };
   }
 
   public componentWillMount() {
@@ -121,8 +121,6 @@ export class Globe extends React.Component<{}, IState> {
     const width = this.mount.clientWidth;
     const height = this.mount.clientHeight;
 
-    console.log(`Width: ${width} X Height: ${height}`);
-
     this.camera.aspect = width / height;
     this.renderer.setSize(width, height, false);
 
@@ -130,15 +128,6 @@ export class Globe extends React.Component<{}, IState> {
 
     this.resizeRendererToDisplaySize(true);
     this.startAnimation();
-
-    const canvasHalfWidth = this.renderer.domElement.offsetWidth / 2;
-    const canvasHalfHeight = this.renderer.domElement.offsetHeight / 2;
-
-    // TODO : ORL : Move this to a function and apply it on resize as well.
-    this.setState({
-      width: canvasHalfWidth + this.renderer.domElement.offsetLeft,
-      height: canvasHalfHeight + this.renderer.domElement.offsetTop,
-    });
   }
 
   public componentWillUnmount() {
@@ -158,18 +147,6 @@ export class Globe extends React.Component<{}, IState> {
           onClick={e => this.onClick()}
           ref={mount => (this.mount = mount)}
         />
-        <div
-          style={{
-            position: 'absolute',
-            left: this.state.width,
-            top: this.state.height,
-            zIndex: 1,
-            borderStyle: 'solid',
-            borderColor: 'pink',
-            borderWidth: 1,
-          }}
-        />
-
         <div style={{ position: 'absolute', left: 200, top: 900 }}>
           <label style={{ color: 'white', display: 'block' }}>X: {this.state.rotationX}</label>
           <input
@@ -193,12 +170,21 @@ export class Globe extends React.Component<{}, IState> {
 
         <PoiPopup
           ref={this.popUpDivRef}
-          top={this.state.height}
-          left={this.state.width}
+          top={this.state.centerTopOffset}
+          left={this.state.centerLeftOffset}
           location={this.dotsContainer.activeDot.name}
         />
       </>
     );
+  }
+
+  private calculateAndSetCenterOffset(): void {
+    const canvasHalfWidth = this.renderer.domElement.offsetWidth / 2;
+    const canvasHalfHeight = this.renderer.domElement.offsetHeight / 2;
+    this.setState({
+      centerLeftOffset: canvasHalfWidth + this.renderer.domElement.offsetLeft,
+      centerTopOffset: canvasHalfHeight + this.renderer.domElement.offsetTop,
+    });
   }
 
   private onClick(): void {
@@ -297,6 +283,9 @@ export class Globe extends React.Component<{}, IState> {
       canvas.removeAttribute('style');
       this.camera.aspect = 1;
       this.camera.updateProjectionMatrix();
+
+      // Calculates and sets the center of the canvas for the POI popup
+      this.calculateAndSetCenterOffset();
     }
   }
 
