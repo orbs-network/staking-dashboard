@@ -195,7 +195,7 @@ export class Globe extends React.Component<{}, IState> {
           ref={this.popUpDivRef}
           top={this.state.height}
           left={this.state.width}
-          name={this.dotsContainer.activeDot.name}
+          location={this.dotsContainer.activeDot.name}
         />
       </>
     );

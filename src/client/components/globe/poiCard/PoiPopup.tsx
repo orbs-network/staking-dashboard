@@ -6,9 +6,10 @@ import { PoiCardFooter } from './PoiCardFooter';
 import { PoiCardHeader } from './PoiCardHeader';
 
 interface IProps {
-  name: string;
   top: number;
   left: number;
+
+  location: string;
 }
 
 type Ref = HTMLDivElement;
@@ -42,12 +43,11 @@ const StyledCardContent = styled(CardContent)(props => ({
 }));
 
 export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
-  const { top, left } = props;
+  const { top, left, location } = props;
 
   // TODO : FUTURE : O.L : Decide on a data structure for the POI's and take this information as a prop
   const name = 'Andrey Tarantinov';
   const profileImageUrl = 'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg';
-  const location = 'South Korea';
   const role = 'Guardian';
 
   return (
