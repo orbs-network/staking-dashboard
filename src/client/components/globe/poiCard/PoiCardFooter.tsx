@@ -17,9 +17,9 @@ const FooterContainer = styled('div')({
   display: 'flex',
 });
 
-const StyledTypography = styled((typographyProps: TypographyProps) => (
+const StyledTypography = styled(({ emphasised, ...typographyProps }: TypographyProps & { emphasised?: boolean }) => (
   <Typography variant='caption' align='center' display='inline' {...typographyProps} />
-))<{ emphasised?: boolean }>(props => ({
+))(props => ({
   color: props.emphasised ? props.theme.mainColor : props.theme.textColor,
 }));
 
