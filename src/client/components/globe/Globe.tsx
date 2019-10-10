@@ -42,9 +42,6 @@ interface IState {
   height: number;
 }
 
-// TODO : ORL : CONTINUE_FROM_HERE: Understand what causes the animation to jump from point to point, add the demo-popup there,
-//  Then change the data flow to allow the points datas to be recieved as props with the display data.
-
 export class Globe extends React.Component<{}, IState> {
   private clock: Clock = new Clock();
   private globe3D: Globe3D;

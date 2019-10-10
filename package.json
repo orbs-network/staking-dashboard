@@ -148,6 +148,7 @@
     "ts-mockito": "^2.5.0",
     "tsc-watch": "^1.1.35",
     "tslint": "^5.12.1",
+    "tslint-react-hooks": "^2.2.1",
     "typescript": "^3.5.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.28.4",

@@ -1,6 +1,6 @@
 {
   "defaultSeverity": "error",
-  "extends": ["tslint:recommended"],
+  "extends": ["tslint:recommended", "tslint-react-hooks"],
   "jsRules": {},
   "rules": {
     "eofline": false,
@@ -13,7 +13,8 @@
     "object-literal-key-quotes": false,
     "no-console": [false, "log", "error"],
     "no-var-requires": false,
-    "forin": false
+    "forin": false,
+    "react-hooks-nesting": "error"
   },
   "rulesDirectory": []
 }
