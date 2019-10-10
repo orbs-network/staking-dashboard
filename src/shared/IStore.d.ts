@@ -18,8 +18,13 @@ export interface ITokenStoreState {
   totalHolders: number;
 }
 
+export interface IPOIStoreState {
+  pointsOfInterest: any[];
+}
+
 export interface IStoreInitialData {
   posStoreState: IPOSStoreState;
   socialStoreState: ISocialStoreState;
   tokenStoreState: ITokenStoreState;
+  poiStoreState: IPOIStoreState;
 }

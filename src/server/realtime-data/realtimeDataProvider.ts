@@ -24,6 +24,9 @@ export class RealtimeDataProvider {
         token24HVolume: this.ethplorer.token24HVolume,
         totalHolders: this.ethplorer.totalHolders,
       },
+      poiStoreState: {
+        pointsOfInterest: [],
+      },
     };
   }
 }
