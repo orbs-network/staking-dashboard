@@ -14,6 +14,7 @@ export class DotsContainer3D extends Object3D {
   private activeDotIdx: number = 0;
   private dotsList: Dot3D[] = [];
   private dotsMap: Map<string, Dot3D> = new Map<string, Dot3D>();
+  private activeDotId: string = null;
 
   constructor(pois: IPoi[], globeRadius: number) {
     super();
@@ -30,26 +31,22 @@ export class DotsContainer3D extends Object3D {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 
-  public activateDot(dotId: string): Dot3D {
-    const dot = this.dotsMap.get(dotId);
+  public setActiveDotById(poiId: string) {
+    // Ensure dot with given id exists
+    if (this.dotsMap.has(poiId)) {
+      // Deactivates current dot
+      if (this.activeDotId) {
+        console.log('Deacivating id :', this.activeDotId);
+        this.dotsMap.get(this.activeDotId).unblink();
+      }
 
-    if (dot) {
-      dot.blink();
+      console.log('Activating id :', poiId);
+      // Activate the requested dot
+      this.dotsMap.get(poiId).blink();
+
+      // Sets the current active dot id
+      this.activeDotId = poiId;
     }
-
-    return dot;
-  }
-
-  public deactivateDot(dotId: string): void {
-    const dot = this.dotsMap.get(dotId);
-
-    if (dot) {
-      dot.unblink();
-    }
-  }
-
-  public getDotById(dotId: string): Dot3D {
-    return this.dotsMap.get(dotId);
   }
 
   private addDot(globeRadius: number, xRotation: number, yRotation: number, name: string, id: string): void {

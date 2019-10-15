@@ -16,7 +16,7 @@ function buildPOI(id, name, xRotation, yRotation): IPoi {
 
 // NOTE : O.L : These static POIs are only here untill we'll have a POI caching/generation mechanism.
 const staticPois: IPoi[] = [
-  buildPOI('', 'Israel', 5.68, 1.75), // Israel
+  buildPOI('IL', 'Israel', 5.68, 1.75), // Israel
   buildPOI('JP', 'Japan', 5.59, 3.58), // Japan
   {
     // Bulgaria

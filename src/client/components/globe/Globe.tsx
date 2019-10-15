@@ -28,7 +28,6 @@ import { PoiPopup } from './poiCard/PoiPopup';
 import { inject, observer } from 'mobx-react';
 import { POIStore } from '../../store/POIStore';
 
-const raycaster = new Raycaster();
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
 
@@ -198,7 +197,10 @@ export const GlobeFc = inject('poiStore')(
       animationFrameRef.current = requestAnimationFrame(animate);
     }, [clock, composer, animationFrameRef, handleHover, resizeRendererToDisplaySize]);
 
-    const animatePoiDisplay = useCallback(
+    /**
+     * Performs all of the required animations for the given location
+     */
+    const animateGlobeAndPopUpDisplay = useCallback(
       (rotation: { xRotation: number; yRotation: number }) => {
         const timeLine = new TimelineLite();
         timeLine.timeScale(ANIMATION_SPEED);
@@ -247,8 +249,8 @@ export const GlobeFc = inject('poiStore')(
       [camera, scene, popUpDivRef.current],
     );
 
-    const animateToNextPoi = useCallback(() => {
-      animatePoiDisplay({ xRotation: poiStore.nextPoi.xRotation, yRotation: poiStore.nextPoi.yRotation });
+    const animateGlobeAndPopUpDisplayForNextPoi = useCallback(() => {
+      animateGlobeAndPopUpDisplay({ xRotation: poiStore.nextPoi.xRotation, yRotation: poiStore.nextPoi.yRotation });
     }, [poiStore.nextPoi]);
 
     /**
@@ -256,11 +258,14 @@ export const GlobeFc = inject('poiStore')(
      */
     const onGlobClick = useCallback(() => {
       // Start animating to the next POI
-      animateToNextPoi();
+      animateGlobeAndPopUpDisplayForNextPoi();
+
+      // Activates the relevant poi-dot
+      dotsContainer.setActiveDotById(poiStore.nextPoi.id);
 
       // Actually switch to the next POI
       poiStore.nextCurrentPoi();
-    }, [animateToNextPoi]);
+    }, [animateGlobeAndPopUpDisplayForNextPoi, poiStore.nextPoi]);
 
     // Add the dots
     useEffect(() => {
@@ -294,7 +299,11 @@ export const GlobeFc = inject('poiStore')(
     useEffect(() => {
       const currentPoi = poiStore.currentPoi;
 
-      animatePoiDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
+      // Animate to the initial POI
+      animateGlobeAndPopUpDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
+
+      // Activates the poi dot
+      dotsContainer.setActiveDotById(currentPoi.id);
     }, []);
 
     return (
@@ -352,6 +361,7 @@ export class Globe extends React.Component<{}, IState> {
   private frameId: number;
   private mouse: Vector2 = new Vector2();
   private hoverdObject: Object3D;
+  private raycaster: Raycaster = new Raycaster();
 
   constructor(props) {
     super(props);
@@ -552,8 +562,8 @@ export class Globe extends React.Component<{}, IState> {
 
   private handleHover(): void {
     // TODO : ORL : This does not seem to do anything, ask about it.
-    raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = raycaster.intersectObjects(this.scene.children, true);
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+    const intersects = this.raycaster.intersectObjects(this.scene.children, true);
     if (intersects.length > 0) {
       const newIntersectedObject = intersects[0].object;
       if (this.hoverdObject !== newIntersectedObject) {
