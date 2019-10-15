@@ -100,7 +100,9 @@ export const GlobeFc = inject('poiStore')(
     // Animation frame id ref
     const animationFrameRef = useRef<number>(null);
 
-    const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(10), []);
+    const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
+      poiStore.pointsOfInterest,
+    ]);
 
     const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
 
@@ -263,6 +265,9 @@ export const GlobeFc = inject('poiStore')(
       resizeRendererToDisplaySize(true);
 
       setCurrentPoiName(dotsContainer.activeDot.name);
+
+      // TODO : ORL : Check how to prevent double adding of lights and effects
+      // }, [dotsContainer, scene, composer, camera, renderer, mountRef.current, setCurrentPoiName]);
     }, []);
 
     // Initiate Animation
@@ -380,7 +385,7 @@ export class Globe extends React.Component<{}, IState> {
     this.scene.add(this.globe3D.build());
 
     // Add the dots
-    this.dotsContainer = new DotsContainer3D(10);
+    this.dotsContainer = new DotsContainer3D([], 10);
     this.scene.add(this.dotsContainer);
 
     // Add the starfield

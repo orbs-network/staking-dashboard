@@ -1,3 +1,5 @@
+import { IPoi } from './IPoi';
+
 export interface IPOSStoreState {
   blockHeight: number;
   rewardsDistributed: number;
@@ -19,7 +21,7 @@ export interface ITokenStoreState {
 }
 
 export interface IPOIStoreState {
-  pointsOfInterest: any[];
+  pointsOfInterest: IPoi[];
 }
 
 export interface IStoreInitialData {
