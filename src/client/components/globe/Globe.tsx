@@ -76,6 +76,45 @@ const useGlobeAnimation = () => {
     return perspectiveCamera;
   }, []);
 
+  // Adding all of the scene effects, post processing and static 3d assets.
+  useEffect(() => {
+    // Add main light
+    const light = new AmbientLight(0xffffff, 0.7);
+    scene.add(light);
+
+    // Add secondary lights
+    const leftLight = new DirectionalLight(0xffffff, 0.8);
+    leftLight.position.set(-1, 0, 0);
+    scene.add(leftLight);
+
+    const rightLight = new DirectionalLight(0xffffff, 0.8);
+    rightLight.position.set(1, 0, 0);
+    scene.add(rightLight);
+
+    const topLight = new DirectionalLight(0xffffff, 0.8);
+    topLight.position.set(0, 1, 0);
+    scene.add(topLight);
+
+    const bottomLight = new DirectionalLight(0xffffff, 0.8);
+    bottomLight.position.set(0, -1, 0);
+    scene.add(bottomLight);
+
+    // Add effects
+    const effectPass = new EffectPass(camera, new BloomEffect(6));
+    effectPass.renderToScreen = true;
+
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(effectPass);
+
+    // Add the globe
+    const globe3D = new Globe3D(10);
+    scene.add(globe3D.build());
+
+    // Add the starfield
+    const starField = generateStarField(130, 200);
+    scene.add(starField);
+  }, [scene, composer]);
+
   return {
     clock,
     rayCaster,
@@ -121,6 +160,9 @@ export const GlobeFc = inject('poiStore')(
       });
     }, [renderer.domElement, setCenterOffset]);
 
+    /**
+     * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
+     */
     const resizeRendererToDisplaySize = useCallback(
       (forceResize: boolean = false) => {
         const canvas = renderer.domElement;
@@ -138,7 +180,7 @@ export const GlobeFc = inject('poiStore')(
           calculateAndSetCenterOffset();
         }
       },
-      [renderer.domElement, composer],
+      [renderer, composer, camera, renderer.domElement, composer, calculateAndSetCenterOffset],
     );
 
     const handleHover = useCallback(() => {
@@ -154,7 +196,7 @@ export const GlobeFc = inject('poiStore')(
 
       // Continue the animation in the next frame & keep reference to the frame id
       animationFrameRef.current = requestAnimationFrame(animate);
-    }, [handleHover]);
+    }, [clock, composer, animationFrameRef, handleHover, resizeRendererToDisplaySize]);
 
     /**
      * Animates transition to next point
@@ -213,62 +255,32 @@ export const GlobeFc = inject('poiStore')(
       setCurrentPoiName(dotsContainer.activeDot.name);
     }, []);
 
-    // Initialize the scene
+    // Add the dots
     useEffect(() => {
-      // Add main light
-      const light = new AmbientLight(0xffffff, 0.7);
-      scene.add(light);
-
-      // Add secondary lights
-      const leftLight = new DirectionalLight(0xffffff, 0.8);
-      leftLight.position.set(-1, 0, 0);
-      scene.add(leftLight);
-
-      const rightLight = new DirectionalLight(0xffffff, 0.8);
-      rightLight.position.set(1, 0, 0);
-      scene.add(rightLight);
-
-      const topLight = new DirectionalLight(0xffffff, 0.8);
-      topLight.position.set(0, 1, 0);
-      scene.add(topLight);
-
-      const bottomLight = new DirectionalLight(0xffffff, 0.8);
-      bottomLight.position.set(0, -1, 0);
-      scene.add(bottomLight);
-
-      // Add effects
-      const effectPass = new EffectPass(camera, new BloomEffect(6));
-      effectPass.renderToScreen = true;
-
-      composer.addPass(new RenderPass(scene, camera));
-      composer.addPass(effectPass);
-
-      // Add the globe
-      const globe3D = new Globe3D(10);
-      scene.add(globe3D.build());
-
-      // Add the dots
       scene.add(dotsContainer);
+    }, [scene, dotsContainer]);
 
-      // Add the starfield
-      const starField = generateStarField(130, 200);
-      scene.add(starField);
+    // Appends the renderer DOM element to its proper div
+    useEffect(() => {
+      mountRef.current.appendChild(renderer.domElement);
+    }, [renderer.domElement, mountRef.current]);
 
+    // Adjusts camera aspect and renderer size
+    useEffect(() => {
       const width = mountRef.current.clientWidth;
       const height = mountRef.current.clientHeight;
 
       camera.aspect = width / height;
       renderer.setSize(width, height, false);
 
-      mountRef.current.appendChild(renderer.domElement);
-
       resizeRendererToDisplaySize(true);
+    }, [mountRef.current, camera, renderer]);
 
+    // TODO : ORL : Remove this when moving to mobx base flow for the POI's
+    // Sets current POI name
+    useEffect(() => {
       setCurrentPoiName(dotsContainer.activeDot.name);
-
-      // TODO : ORL : Check how to prevent double adding of lights and effects
-      // }, [dotsContainer, scene, composer, camera, renderer, mountRef.current, setCurrentPoiName]);
-    }, []);
+    }, [dotsContainer, setCurrentPoiName]);
 
     // Initiate Animation
     useEffect(() => {
