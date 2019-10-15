@@ -36,11 +36,9 @@ export class DotsContainer3D extends Object3D {
     if (this.dotsMap.has(poiId)) {
       // Deactivates current dot
       if (this.activeDotId) {
-        console.log('Deacivating id :', this.activeDotId);
         this.dotsMap.get(this.activeDotId).unblink();
       }
 
-      console.log('Activating id :', poiId);
       // Activate the requested dot
       this.dotsMap.get(poiId).blink();
 
