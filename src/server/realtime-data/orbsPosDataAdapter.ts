@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import {  OrbsPOSDataService } from 'orbs-pos-data';
+import { OrbsPOSDataService } from 'orbs-pos-data';
 
 export class OrbsPosDataAdapter extends EventEmitter {
   public top3Guardians: string[] = [];
