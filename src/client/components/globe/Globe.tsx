@@ -21,6 +21,7 @@ import {
   Vector2,
   WebGLRenderer,
 } from 'three';
+import floatNumber from 'float';
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
@@ -126,10 +127,9 @@ const useGlobeAnimation = () => {
 
 export const GlobeFc = inject('poiStore')(
   observer(({ poiStore }: IProps) => {
-    const [rotationX, setRotationX] = useState(0);
-    const [rotationY, setRotationY] = useState(0);
+    // Component state
+    const [rotation, setRotation] = useState({ rotationX: 0, rotationY: 0 });
     const [centerOffset, setCenterOffset] = useState({ centerLeftOffset: 0, centerTopOffset: 0 });
-    const [currentPoiName, setCurrentPoiName] = useState('');
 
     // Dom elements refs
     const mountRef = useRef<HTMLDivElement>(null);
@@ -137,11 +137,14 @@ export const GlobeFc = inject('poiStore')(
 
     // Animation frame id ref
     const animationFrameRef = useRef<number>(null);
+    const animationTimelineRef = useRef<TimelineLite>(null);
 
+    // Builds the 3d dots container
     const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
       poiStore.pointsOfInterest,
     ]);
 
+    // Gets the Globe animations objects
     const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
 
     /**
@@ -186,6 +189,9 @@ export const GlobeFc = inject('poiStore')(
       // TODO : O.L : Add the 'handleHover' code when necessary
     }, []);
 
+    /**
+     * Calls all relevant animations functions and sets the animation for the next frame.
+     */
     const animate = useCallback(() => {
       handleHover();
       resizeRendererToDisplaySize();
@@ -201,11 +207,13 @@ export const GlobeFc = inject('poiStore')(
      * Performs all of the required animations for the given location
      */
     const animateGlobeAndPopUpDisplay = useCallback(
-      (rotation: { xRotation: number; yRotation: number }) => {
+      (poiRotation: { xRotation: number; yRotation: number }) => {
         const timeLine = new TimelineLite();
         timeLine.timeScale(ANIMATION_SPEED);
 
         const singleAnimationDuration = 1;
+
+        animationTimelineRef.current = timeLine;
 
         timeLine.add(
           TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
@@ -230,8 +238,8 @@ export const GlobeFc = inject('poiStore')(
         // This tween is responsible for rotating the scene to the appropriate active dot.
         timeLine.add(
           TweenMax.to(scene.rotation, singleAnimationDuration, {
-            x: -rotation.xRotation,
-            y: -rotation.yRotation,
+            x: -poiRotation.xRotation,
+            y: -poiRotation.yRotation,
             z: 0,
             ease: Power2.easeInOut,
           }),
@@ -245,18 +253,36 @@ export const GlobeFc = inject('poiStore')(
             autoAlpha: 1,
           }),
         );
+
+        timeLine.eventCallback('onComplete', () => {
+          // Sets the rotation values
+          setRotation({ rotationX: poiRotation.xRotation, rotationY: poiRotation.yRotation });
+        });
+
+        return timeLine;
       },
       [camera, scene, popUpDivRef.current],
     );
 
+    /**
+     * Performs all of the animations required for the transition between POIs.
+     */
     const animateGlobeAndPopUpDisplayForNextPoi = useCallback(() => {
-      animateGlobeAndPopUpDisplay({ xRotation: poiStore.nextPoi.xRotation, yRotation: poiStore.nextPoi.yRotation });
+      return animateGlobeAndPopUpDisplay({
+        xRotation: poiStore.nextPoi.xRotation,
+        yRotation: poiStore.nextPoi.yRotation,
+      });
     }, [poiStore.nextPoi]);
 
     /**
      * Animates transition to next point
      */
     const onGlobClick = useCallback(() => {
+      // Prevents multi-clicking until the current animation timeline is done.
+      if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
+        return;
+      }
+
       // Start animating to the next POI
       animateGlobeAndPopUpDisplayForNextPoi();
 
@@ -306,6 +332,26 @@ export const GlobeFc = inject('poiStore')(
       dotsContainer.setActiveDotById(currentPoi.id);
     }, []);
 
+    // Rotates the globe scene by changes to the rotation bars.
+    useEffect(() => {
+      if (
+        !floatNumber.equals(scene.rotation.x, -rotation.rotationX) ||
+        !floatNumber.equals(scene.rotation.y, -rotation.rotationY)
+      ) {
+        const timeLine = new TimelineLite();
+
+        timeLine.add(
+          TweenMax.to(scene.rotation, 0.01, {
+            x: -rotation.rotationX,
+            y: -rotation.rotationY,
+            z: 0,
+            ease: Power2.easeInOut,
+          }),
+          0,
+        );
+      }
+    }, [rotation]);
+
     return (
       <>
         <div
@@ -316,23 +362,27 @@ export const GlobeFc = inject('poiStore')(
           ref={mountRef}
         />
         <div style={{ position: 'absolute', left: 200, top: 900 }}>
-          <label style={{ color: 'white', display: 'block' }}>X: {rotationX}</label>
+          <label style={{ color: 'white', display: 'block' }}>X: {rotation.rotationX}</label>
           <input
             type='range'
             id='rotationX'
-            value={rotationX * 100}
+            value={rotation.rotationX * 100}
             min={0}
             max={Math.PI * 2 * 100}
-            onChange={e => setRotationX(parseInt(e.currentTarget.value, 10) / 100)}
+            onChange={e =>
+              setRotation({ rotationY: rotation.rotationY, rotationX: parseInt(e.currentTarget.value, 10) / 100 })
+            }
           />
-          <label style={{ color: 'white', display: 'block' }}>Y: {rotationY}</label>
+          <label style={{ color: 'white', display: 'block' }}>Y: {rotation.rotationY}</label>
           <input
             type='range'
             id='rotationY'
-            value={rotationY * 100}
+            value={rotation.rotationY * 100}
             min={0}
             max={Math.PI * 2 * 100}
-            onChange={e => setRotationY(parseInt(e.currentTarget.value, 10) / 100)}
+            onChange={e =>
+              setRotation({ rotationX: rotation.rotationX, rotationY: parseInt(e.currentTarget.value, 10) / 100 })
+            }
           />
         </div>
 
