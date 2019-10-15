@@ -198,62 +198,69 @@ export const GlobeFc = inject('poiStore')(
       animationFrameRef.current = requestAnimationFrame(animate);
     }, [clock, composer, animationFrameRef, handleHover, resizeRendererToDisplaySize]);
 
+    const animatePoiDisplay = useCallback(
+      (rotation: { xRotation: number; yRotation: number }) => {
+        const timeLine = new TimelineLite();
+        timeLine.timeScale(ANIMATION_SPEED);
+
+        const singleAnimationDuration = 1;
+
+        timeLine.add(
+          TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+            scale: 0.2,
+            autoAlpha: 0,
+            transformOrigin: 'top left',
+          }),
+          0,
+        );
+
+        // Creates the zoom out - zoom in when transitioning between dots.
+        timeLine.add(
+          TweenMax.to(camera.position, singleAnimationDuration / 2, {
+            z: CAMERA_POS * 1.25,
+            ease: Power2.easeInOut,
+            repeat: 1,
+            yoyo: true,
+          }),
+          0,
+        );
+
+        // This tween is responsible for rotating the scene to the appropriate active dot.
+        timeLine.add(
+          TweenMax.to(scene.rotation, singleAnimationDuration, {
+            x: -rotation.xRotation,
+            y: -rotation.yRotation,
+            z: 0,
+            ease: Power2.easeInOut,
+          }),
+          0,
+        );
+
+        // Display the node data "pop up"
+        timeLine.add(
+          TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+            scale: 1,
+            autoAlpha: 1,
+          }),
+        );
+      },
+      [camera, scene, popUpDivRef.current],
+    );
+
+    const animateToNextPoi = useCallback(() => {
+      animatePoiDisplay({ xRotation: poiStore.nextPoi.xRotation, yRotation: poiStore.nextPoi.yRotation });
+    }, [poiStore.nextPoi]);
+
     /**
      * Animates transition to next point
      */
     const onGlobClick = useCallback(() => {
-      // TODO : ORL :  Move this to an an outer 'current poi' store/state
-      dotsContainer.activeDot.unblink();
-      dotsContainer.nextActiveDot();
-      dotsContainer.activeDot.blink();
+      // Start animating to the next POI
+      animateToNextPoi();
 
-      const timeLine = new TimelineLite();
-      timeLine.timeScale(ANIMATION_SPEED);
-
-      const singleAnimationDuration = 1;
-
-      timeLine.add(
-        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
-          scale: 0.2,
-          autoAlpha: 0,
-          transformOrigin: 'top left',
-        }),
-        0,
-      );
-
-      // Creates the zoom out - zoom in when transitioning between dots.
-      timeLine.add(
-        TweenMax.to(camera.position, singleAnimationDuration / 2, {
-          z: CAMERA_POS * 1.25,
-          ease: Power2.easeInOut,
-          repeat: 1,
-          yoyo: true,
-        }),
-        0,
-      );
-
-      // This tween is responsible for rotating the scene to the appropriate active dot.
-      timeLine.add(
-        TweenMax.to(scene.rotation, singleAnimationDuration, {
-          x: -dotsContainer.activeDot.rotation.x,
-          y: -dotsContainer.activeDot.rotation.y,
-          z: 0,
-          ease: Power2.easeInOut,
-        }),
-        0,
-      );
-
-      // Display the node data "pop up"
-      timeLine.add(
-        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
-          scale: 1,
-          autoAlpha: 1,
-        }),
-      );
-
-      // TODO : ORL : Ensure re-rendering with a better method.
-      setCurrentPoiName(dotsContainer.activeDot.name);
-    }, []);
+      // Actually switch to the next POI
+      poiStore.nextCurrentPoi();
+    }, [animateToNextPoi]);
 
     // Add the dots
     useEffect(() => {
@@ -276,17 +283,18 @@ export const GlobeFc = inject('poiStore')(
       resizeRendererToDisplaySize(true);
     }, [mountRef.current, camera, renderer]);
 
-    // TODO : ORL : Remove this when moving to mobx base flow for the POI's
-    // Sets current POI name
-    useEffect(() => {
-      setCurrentPoiName(dotsContainer.activeDot.name);
-    }, [dotsContainer, setCurrentPoiName]);
-
     // Initiate Animation
     useEffect(() => {
       animationFrameRef.current = requestAnimationFrame(animate);
 
       return () => cancelAnimationFrame(animationFrameRef.current);
+    }, []);
+
+    // First time animating to first poi
+    useEffect(() => {
+      const currentPoi = poiStore.currentPoi;
+
+      animatePoiDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
     }, []);
 
     return (
@@ -323,7 +331,7 @@ export const GlobeFc = inject('poiStore')(
           ref={popUpDivRef}
           top={centerOffset.centerTopOffset}
           left={centerOffset.centerLeftOffset}
-          location={currentPoiName}
+          location={poiStore.currentPoi.name}
         />
       </>
     );
@@ -476,7 +484,6 @@ export class Globe extends React.Component<{}, IState> {
   }
 
   private onClick(): void {
-    // TODO : ORL :  Move this to an an outer 'current poi' store/state
     this.dotsContainer.activeDot.unblink();
     this.dotsContainer.nextActiveDot();
     this.dotsContainer.activeDot.blink();
@@ -525,7 +532,6 @@ export class Globe extends React.Component<{}, IState> {
       }),
     );
 
-    // TODO : ORL : Ensure re-rendering with a better method.
     this.forceUpdate();
   }
 

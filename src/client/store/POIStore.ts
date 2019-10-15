@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import { IPOIStoreState } from '../../shared/IStore';
 import { IPoi } from '../../shared/IPoi';
 
@@ -9,7 +9,7 @@ export const defaultSocialStoreState: Readonly<IPOIStoreState> = {
 export class POIStore implements IPOIStoreState {
   @observable public pointsOfInterest = defaultSocialStoreState.pointsOfInterest;
 
-  private currentPoiIndex: number = 0;
+  @observable private currentPoiIndex: number = 0;
 
   constructor(initialData?: IPOIStoreState) {
     if (initialData) {
@@ -18,15 +18,24 @@ export class POIStore implements IPOIStoreState {
   }
 
   @computed
-  public get currentPoi(): any {
+  public get currentPoi(): IPoi {
     return this.pointsOfInterest[this.currentPoiIndex];
+  }
+
+  @computed
+  public get nextPoi(): IPoi {
+    return this.pointsOfInterest[this.calculateNextPOIIndex()];
   }
 
   /**
    * Sets the new 'Current POI' in a cyclic manner.
    */
-  public nextCurrentPoi(): void {
-    this.currentPoiIndex = (this.currentPoiIndex + 1) % this.pointsOfInterest.length;
+  @action public nextCurrentPoi(): void {
+    this.currentPoiIndex = this.calculateNextPOIIndex();
+  }
+
+  private calculateNextPOIIndex(): number {
+    return (this.currentPoiIndex + 1) % this.pointsOfInterest.length;
   }
 
   public async init(): Promise<void> {}

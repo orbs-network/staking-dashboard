@@ -13,23 +13,50 @@ import { IPoi } from '../../../shared/IPoi';
 export class DotsContainer3D extends Object3D {
   private activeDotIdx: number = 0;
   private dotsList: Dot3D[] = [];
+  private dotsMap: Map<string, Dot3D> = new Map<string, Dot3D>();
 
   constructor(pois: IPoi[], globeRadius: number) {
     super();
-    pois.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name));
+    pois.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name, dot.id));
   }
 
+  // TODO : ORL : Fix this, use the map for the current one ?
   public get activeDot(): Dot3D {
     return this.dotsList[this.activeDotIdx];
   }
 
+  // TODO : ORL : Remove this when moving to mobx based flow
   public nextActiveDot(): void {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 
-  private addDot(globeRadius: number, xRotation: number, yRotation: number, name: string): void {
+  public activateDot(dotId: string): Dot3D {
+    const dot = this.dotsMap.get(dotId);
+
+    if (dot) {
+      dot.blink();
+    }
+
+    return dot;
+  }
+
+  public deactivateDot(dotId: string): void {
+    const dot = this.dotsMap.get(dotId);
+
+    if (dot) {
+      dot.unblink();
+    }
+  }
+
+  public getDotById(dotId: string): Dot3D {
+    return this.dotsMap.get(dotId);
+  }
+
+  private addDot(globeRadius: number, xRotation: number, yRotation: number, name: string, id: string): void {
     const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation, name);
     this.add(dot);
     this.dotsList.push(dot);
+
+    this.dotsMap.set(id, dot);
   }
 }
