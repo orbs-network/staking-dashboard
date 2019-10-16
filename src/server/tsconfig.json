@@ -9,6 +9,7 @@
     "rootDir": "..",
     "lib": ["esnext"],
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "types": ["node"]
   },
   "include": ["**/*.ts"],

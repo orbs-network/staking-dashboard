@@ -6,10 +6,10 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as express from 'express';
-import * as path from 'path';
-import * as winston from 'winston';
-import * as config from './config';
+import express from 'express';
+import path from 'path';
+import winston from 'winston';
+import config from './config';
 import { forceHttps } from './middlewares/ForceHttps';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
