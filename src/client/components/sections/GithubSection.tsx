@@ -8,9 +8,8 @@
 
 import React from 'react';
 import { SocialSection } from './SocialSection';
-import { inject, observer } from 'mobx-react';
-import { SocialStore } from '../../store/SocialStore';
 import { theme } from '../base/Theme';
+import { useSocialStore } from '../../store/storeHooks';
 
 const icon = (
   <svg width={theme.sizes.SIZE_LARGE_2} viewBox='0 0 24 23'>
@@ -22,14 +21,11 @@ const icon = (
   </svg>
 );
 
-interface IProps {
-  socialStore?: SocialStore;
-}
+// tslint:disable-next-line:no-empty-interface
+interface IProps {}
 
-export const GithubSection = inject('socialStore')(
-  observer(({ socialStore }: IProps) => {
-    return (
-      <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />
-    );
-  }),
-);
+export const GithubSection = (props: IProps) => {
+  const socialStore = useSocialStore();
+
+  return <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />;
+};

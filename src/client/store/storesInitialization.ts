@@ -11,13 +11,7 @@ import { TokenStore } from './TokenStore';
 import { POSStore } from './POSStore';
 import { IAppServices } from '../services/services';
 import { POIStore } from './POIStore';
-
-interface IStores {
-  socialStore: ISocialStoreState;
-  tokenStore: ITokenStoreState;
-  posStore: IPOSStoreState;
-  poiStore: IPOIStoreState;
-}
+import { IStores } from './stores';
 
 /**
  * Configures the mobx library. Should get called at App's initialization.
