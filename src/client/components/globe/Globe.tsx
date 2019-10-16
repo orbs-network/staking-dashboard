@@ -28,9 +28,15 @@ import { generateStarField } from './StarField';
 import { PoiPopup } from './poiCard/PoiPopup';
 import { inject, observer } from 'mobx-react';
 import { POIStore } from '../../store/POIStore';
+import styled from 'styled-components';
 
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
+
+const MountDiv = styled('div')({
+  width: '100%',
+  height: '200px',
+});
 
 const boxSizeForDev = {
   height: 100,
@@ -146,9 +152,6 @@ export const GlobeFc = inject('poiStore')(
     const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
       poiStore.pointsOfInterest,
     ]);
-
-    // Builds a Ray-caster instance for point selection
-    const rayCaster: Raycaster = useMemo(() => new Raycaster(), []);
 
     // Gets the Globe animations objects
     const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
@@ -371,13 +374,8 @@ export const GlobeFc = inject('poiStore')(
 
     return (
       <>
-        <div
-          id='mount'
-          style={{ width: '100%', height: '200px' }}
-          onMouseMove={onMouseMoveHandler}
-          onClick={onGlobClickHandler}
-          ref={mountRef}
-        />
+        <MountDiv id='mount' onMouseMove={onMouseMoveHandler} onClick={onGlobClickHandler} ref={mountRef} />
+        {/* TODO : FUTURE : Move this div to a separate component if we will still want it */}
         <div style={{ position: 'absolute', left: 200, top: 900 }}>
           <label style={{ color: 'white', display: 'block' }}>X: {rotation.rotationX}</label>
           <input
