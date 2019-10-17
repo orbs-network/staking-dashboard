@@ -10,6 +10,7 @@ import React from 'react';
 import { SocialSection } from './SocialSection';
 import { theme } from '../base/Theme';
 import { useSocialStore } from '../../store/storeHooks';
+import { observer } from 'mobx-react';
 
 const icon = (
   <svg width={theme.sizes.SIZE_LARGE_1} viewBox='0 0 22 18'>
@@ -24,8 +25,9 @@ const icon = (
 // tslint:disable-next-line:no-empty-interface
 interface IProps {}
 
-export const TwitterSection = (props: IProps) => {
+export const TwitterSection = observer((props: IProps) => {
+  // tslint:disable-next-line:react-hooks-nesting
   const socialStore = useSocialStore();
 
   return <SocialSection dataTestId='latest-tweet' icon={icon} title='Latest Tweets' text={socialStore.latestTweet} />;
-};
+});

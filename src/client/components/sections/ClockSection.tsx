@@ -10,24 +10,24 @@ import React from 'react';
 import styled from 'styled-components';
 import { theme } from '../base/Theme';
 import { Clock } from '../clock/Clock';
-import { inject, observer } from 'mobx-react';
-import { POSStore } from '../../store/POSStore';
+import { observer } from 'mobx-react';
+import { usePosStore } from '../../store/storeHooks';
 
 const Root = styled.div`
   margin-top: ${theme.sizes.SIZE_SMALL_2};
   margin-bottom: ${theme.sizes.SIZE_LARGE_4};
 `;
 
-interface IProps {
-  posStore?: POSStore;
-}
+// tslint:disable-next-line:no-empty-interface
+interface IProps {}
 
-export const ClockSection = inject('posStore')(
-  observer(({ posStore }: IProps) => {
-    return (
-      <Root>
-        <Clock targetTime={posStore.nextVotingTime} />
-      </Root>
-    );
-  }),
-);
+export const ClockSection = observer((props: IProps) => {
+  // tslint:disable-next-line:react-hooks-nesting
+  const posStore = usePosStore();
+
+  return (
+    <Root>
+      <Clock targetTime={posStore.nextVotingTime} />
+    </Root>
+  );
+});
