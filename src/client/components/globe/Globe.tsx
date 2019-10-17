@@ -29,6 +29,7 @@ import { PoiPopup } from './poiCard/PoiPopup';
 import { inject, observer } from 'mobx-react';
 import { POIStore } from '../../store/POIStore';
 import styled from 'styled-components';
+import { usePoiStore } from '../../store/storeHooks';
 
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
@@ -131,286 +132,289 @@ const useGlobeAnimation = () => {
   };
 };
 
-export const GlobeFc = inject('poiStore')(
-  observer(({ poiStore }: IProps) => {
-    // Component state
-    const [rotation, setRotation] = useState({ rotationX: 0, rotationY: 0 });
-    const [centerOffset, setCenterOffset] = useState({ centerLeftOffset: 0, centerTopOffset: 0 });
+export const GlobeFc = React.memo((props: IProps) => {
+  // Mobx stores
+  const poiStore = usePoiStore();
 
-    // Dom elements refs
-    const mountRef = useRef<HTMLDivElement>(null);
-    const popUpDivRef = useRef<HTMLDivElement>(null);
+  // Component state
+  const [rotation, setRotation] = useState({ rotationX: 0, rotationY: 0 });
+  const [centerOffset, setCenterOffset] = useState({ centerLeftOffset: 0, centerTopOffset: 0 });
 
-    // Animation frame id ref
-    const animationFrameRef = useRef<number>(null);
-    const animationTimelineRef = useRef<TimelineLite>(null);
+  // Dom elements refs
+  const mountRef = useRef<HTMLDivElement>(null);
+  const popUpDivRef = useRef<HTMLDivElement>(null);
 
-    // Mouse Ref
-    const mouseLocationRef = useRef<Vector2>(new Vector2());
+  // Animation frame id ref
+  const animationFrameRef = useRef<number>(null);
+  const animationTimelineRef = useRef<TimelineLite>(null);
 
-    // Builds the 3d dots container
-    const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
-      poiStore.pointsOfInterest,
-    ]);
+  // Mouse Ref
+  const mouseLocationRef = useRef<Vector2>(new Vector2());
 
-    // Gets the Globe animations objects
-    const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
+  // Builds the 3d dots container
+  const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
+    poiStore.pointsOfInterest,
+  ]);
 
-    /**
-     * Calculates and sets the state for the 'top' and 'left' offsets for the center of the globe.
-     */
-    const calculateAndSetCenterOffset = useCallback(() => {
-      const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = renderer.domElement;
+  // Gets the Globe animations objects
+  const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
 
-      const canvasHalfWidth = offsetWidth / 2;
-      const canvasHalfHeight = offsetHeight / 2;
+  /**
+   * Calculates and sets the state for the 'top' and 'left' offsets for the center of the globe.
+   */
+  const calculateAndSetCenterOffset = useCallback(() => {
+    const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = renderer.domElement;
 
-      setCenterOffset({
-        centerLeftOffset: canvasHalfWidth + offsetLeft,
-        centerTopOffset: canvasHalfHeight + offsetTop,
-      });
-    }, [renderer.domElement, setCenterOffset]);
+    const canvasHalfWidth = offsetWidth / 2;
+    const canvasHalfHeight = offsetHeight / 2;
 
-    /**
-     * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
-     */
-    const resizeRendererToDisplaySize = useCallback(
-      (forceResize: boolean = false) => {
-        const canvas = renderer.domElement;
-        const width = canvas.clientWidth;
+    setCenterOffset({
+      centerLeftOffset: canvasHalfWidth + offsetLeft,
+      centerTopOffset: canvasHalfHeight + offsetTop,
+    });
+  }, [renderer.domElement, setCenterOffset]);
 
-        // TODO : O.L : FUTURE : Ask why we are setting here widthxwidth
-        if (canvas.width !== width || forceResize) {
-          renderer.setSize(width, width, false);
-          composer.setSize();
-          canvas.removeAttribute('style');
-          camera.aspect = 1;
-          camera.updateProjectionMatrix();
+  /**
+   * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
+   */
+  const resizeRendererToDisplaySize = useCallback(
+    (forceResize: boolean = false) => {
+      const canvas = renderer.domElement;
+      const width = canvas.clientWidth;
 
-          // Calculates and sets the center of the canvas for the POI popup
-          calculateAndSetCenterOffset();
-        }
-      },
-      [renderer, composer, camera, renderer.domElement, composer, calculateAndSetCenterOffset],
-    );
+      // TODO : O.L : FUTURE : Ask why we are setting here widthxwidth
+      if (canvas.width !== width || forceResize) {
+        renderer.setSize(width, width, false);
+        composer.setSize();
+        canvas.removeAttribute('style');
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
 
-    const handleHover = useCallback(() => {
-      // TODO : O.L : Add the 'handleHover' code when necessary
-    }, []);
-
-    /**
-     * Calls all relevant animations functions and sets the animation for the next frame.
-     */
-    const animate = useCallback(() => {
-      handleHover();
-      resizeRendererToDisplaySize();
-
-      // Apply post-processing
-      composer.render(clock.getDelta());
-
-      // Continue the animation in the next frame & keep reference to the frame id
-      animationFrameRef.current = requestAnimationFrame(animate);
-    }, [clock, composer, animationFrameRef, handleHover, resizeRendererToDisplaySize]);
-
-    /**
-     * Performs all of the required animations for the given location
-     */
-    const animateGlobeAndPopUpDisplay = useCallback(
-      (poiRotation: { xRotation: number; yRotation: number }) => {
-        const timeLine = new TimelineLite();
-        timeLine.timeScale(ANIMATION_SPEED);
-
-        const singleAnimationDuration = 1;
-
-        animationTimelineRef.current = timeLine;
-
-        // Shrinks and hides the pop up.
-        timeLine.add(
-          TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
-            scale: 0.2,
-            autoAlpha: 0,
-            transformOrigin: 'top left',
-          }),
-          0,
-        );
-
-        // Creates the zoom out - zoom in when transitioning between dots.
-        timeLine.add(
-          TweenMax.to(camera.position, singleAnimationDuration / 2, {
-            z: CAMERA_POS * 1.25,
-            ease: Power2.easeInOut,
-            repeat: 1,
-            yoyo: true,
-          }),
-          0,
-        );
-
-        // This tween is responsible for rotating the scene to the appropriate active dot.
-        timeLine.add(
-          TweenMax.to(scene.rotation, singleAnimationDuration, {
-            x: -poiRotation.xRotation,
-            y: -poiRotation.yRotation,
-            z: 0,
-            ease: Power2.easeInOut,
-          }),
-          0,
-        );
-
-        // Display the node data "pop up"
-        timeLine.add(
-          TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
-            scale: 1,
-            autoAlpha: 1,
-          }),
-        );
-
-        timeLine.eventCallback('onComplete', () => {
-          // Sets the rotation values
-          setRotation({ rotationX: poiRotation.xRotation, rotationY: poiRotation.yRotation });
-        });
-
-        return timeLine;
-      },
-      [camera, scene, popUpDivRef.current],
-    );
-
-    /**
-     * Performs all of the animations required for the transition between POIs.
-     */
-    const animateGlobeAndPopUpDisplayForNextPoi = useCallback(() => {
-      return animateGlobeAndPopUpDisplay({
-        xRotation: poiStore.nextPoi.xRotation,
-        yRotation: poiStore.nextPoi.yRotation,
-      });
-    }, [poiStore.nextPoi]);
-
-    /**
-     * Animates transition to next point
-     */
-    const onGlobClickHandler = useCallback(() => {
-      // Prevents multi-clicking until the current animation timeline is done.
-      if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
-        return;
+        // Calculates and sets the center of the canvas for the POI popup
+        calculateAndSetCenterOffset();
       }
+    },
+    [renderer, composer, camera, renderer.domElement, composer, calculateAndSetCenterOffset],
+  );
 
-      // Start animating to the next POI
-      animateGlobeAndPopUpDisplayForNextPoi();
+  const handleHover = useCallback(() => {
+    // TODO : O.L : Add the 'handleHover' code when necessary
+  }, []);
 
-      // Activates the relevant poi-dot
-      dotsContainer.setActiveDotById(poiStore.nextPoi.id);
+  /**
+   * Calls all relevant animations functions and sets the animation for the next frame.
+   */
+  const animate = useCallback(() => {
+    handleHover();
+    resizeRendererToDisplaySize();
 
-      // Actually switch to the next POI
-      poiStore.nextCurrentPoi();
-    }, [animateGlobeAndPopUpDisplayForNextPoi, poiStore.nextPoi]);
+    // Apply post-processing
+    composer.render(clock.getDelta());
 
-    const onMouseMoveHandler = useCallback(
-      (e: React.MouseEvent) => {
-        const { nativeEvent } = e;
+    // Continue the animation in the next frame & keep reference to the frame id
+    animationFrameRef.current = requestAnimationFrame(animate);
+  }, [clock, composer, animationFrameRef, handleHover, resizeRendererToDisplaySize]);
 
-        mouseLocationRef.current.x = (nativeEvent.offsetX / mountRef.current.clientWidth) * 2 - 1;
-        mouseLocationRef.current.y = -(nativeEvent.offsetY / mountRef.current.clientHeight) * 2 + 1;
-      },
-      [mouseLocationRef, mountRef],
-    );
+  /**
+   * Performs all of the required animations for the given location
+   */
+  const animateGlobeAndPopUpDisplay = useCallback(
+    (poiRotation: { xRotation: number; yRotation: number }) => {
+      const timeLine = new TimelineLite();
+      timeLine.timeScale(ANIMATION_SPEED);
 
-    // Add the dots
-    useEffect(() => {
-      scene.add(dotsContainer);
-    }, [scene, dotsContainer]);
+      const singleAnimationDuration = 1;
 
-    // Appends the renderer DOM element to its proper div
-    useEffect(() => {
-      mountRef.current.appendChild(renderer.domElement);
-    }, [renderer.domElement, mountRef.current]);
+      animationTimelineRef.current = timeLine;
 
-    // Adjusts camera aspect and renderer size
-    useEffect(() => {
-      const width = mountRef.current.clientWidth;
-      const height = mountRef.current.clientHeight;
+      // Shrinks and hides the pop up.
+      timeLine.add(
+        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+          scale: 0.2,
+          autoAlpha: 0,
+          transformOrigin: 'top left',
+        }),
+        0,
+      );
 
-      camera.aspect = width / height;
-      renderer.setSize(width, height, false);
+      // Creates the zoom out - zoom in when transitioning between dots.
+      timeLine.add(
+        TweenMax.to(camera.position, singleAnimationDuration / 2, {
+          z: CAMERA_POS * 1.25,
+          ease: Power2.easeInOut,
+          repeat: 1,
+          yoyo: true,
+        }),
+        0,
+      );
 
-      resizeRendererToDisplaySize(true);
-    }, [mountRef.current, camera, renderer]);
+      // This tween is responsible for rotating the scene to the appropriate active dot.
+      timeLine.add(
+        TweenMax.to(scene.rotation, singleAnimationDuration, {
+          x: -poiRotation.xRotation,
+          y: -poiRotation.yRotation,
+          z: 0,
+          ease: Power2.easeInOut,
+        }),
+        0,
+      );
 
-    // Initiate Animation
-    useEffect(() => {
-      animationFrameRef.current = requestAnimationFrame(animate);
+      // Display the node data "pop up"
+      timeLine.add(
+        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+          scale: 1,
+          autoAlpha: 1,
+        }),
+      );
 
-      return () => cancelAnimationFrame(animationFrameRef.current);
-    }, []);
+      timeLine.eventCallback('onComplete', () => {
+        // Sets the rotation valueschh
+        setRotation({ rotationX: poiRotation.xRotation, rotationY: poiRotation.yRotation });
+      });
 
-    // First time animating to first poi
-    useEffect(() => {
-      const currentPoi = poiStore.currentPoi;
+      return timeLine;
+    },
+    [camera, scene, popUpDivRef.current],
+  );
 
-      // Animate to the initial POI
-      animateGlobeAndPopUpDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
+  /**
+   * Performs all of the animations required for the transition between POIs.
+   */
+  const animateGlobeAndPopUpDisplayForNextPoi = useCallback(() => {
+    return animateGlobeAndPopUpDisplay({
+      xRotation: poiStore.nextPoi.xRotation,
+      yRotation: poiStore.nextPoi.yRotation,
+    });
+  }, [poiStore.nextPoi]);
 
-      // Activates the poi dot
-      dotsContainer.setActiveDotById(currentPoi.id);
-    }, []);
+  /**
+   * Animates transition to next point
+   */
+  const onGlobClickHandler = useCallback(() => {
+    // Prevents multi-clicking until the current animation timeline is done.
+    if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
+      return;
+    }
 
-    // Rotates the globe scene by changes to the rotation bars.
-    useEffect(() => {
-      if (
-        !floatNumber.equals(scene.rotation.x, -rotation.rotationX) ||
-        !floatNumber.equals(scene.rotation.y, -rotation.rotationY)
-      ) {
-        const timeLine = new TimelineLite();
+    // Start animating to the next POI
+    animateGlobeAndPopUpDisplayForNextPoi();
 
-        timeLine.add(
-          TweenMax.to(scene.rotation, 0.01, {
-            x: -rotation.rotationX,
-            y: -rotation.rotationY,
-            z: 0,
-            ease: Power2.easeInOut,
-          }),
-          0,
-        );
-      }
-    }, [rotation]);
+    // Activates the relevant poi-dot
+    dotsContainer.setActiveDotById(poiStore.nextPoi.id);
 
-    return (
-      <>
-        <MountDiv id='mount' onMouseMove={onMouseMoveHandler} onClick={onGlobClickHandler} ref={mountRef} />
-        {/* TODO : FUTURE : Move this div to a separate component if we will still want it */}
-        <div style={{ position: 'absolute', left: 200, top: 900 }}>
-          <label style={{ color: 'white', display: 'block' }}>X: {rotation.rotationX}</label>
-          <input
-            type='range'
-            id='rotationX'
-            value={rotation.rotationX * 100}
-            min={0}
-            max={Math.PI * 2 * 100}
-            onChange={e =>
-              setRotation({ rotationY: rotation.rotationY, rotationX: parseInt(e.currentTarget.value, 10) / 100 })
-            }
-          />
-          <label style={{ color: 'white', display: 'block' }}>Y: {rotation.rotationY}</label>
-          <input
-            type='range'
-            id='rotationY'
-            value={rotation.rotationY * 100}
-            min={0}
-            max={Math.PI * 2 * 100}
-            onChange={e =>
-              setRotation({ rotationX: rotation.rotationX, rotationY: parseInt(e.currentTarget.value, 10) / 100 })
-            }
-          />
-        </div>
+    // Actually switch to the next POI
+    poiStore.nextCurrentPoi();
+  }, [animateGlobeAndPopUpDisplayForNextPoi, poiStore.nextPoi]);
 
-        <PoiPopup
-          ref={popUpDivRef}
-          top={centerOffset.centerTopOffset}
-          left={centerOffset.centerLeftOffset}
-          location={poiStore.currentPoi.name}
+  const onMouseMoveHandler = useCallback(
+    (e: React.MouseEvent) => {
+      const { nativeEvent } = e;
+
+      mouseLocationRef.current.x = (nativeEvent.offsetX / mountRef.current.clientWidth) * 2 - 1;
+      mouseLocationRef.current.y = -(nativeEvent.offsetY / mountRef.current.clientHeight) * 2 + 1;
+    },
+    [mouseLocationRef, mountRef],
+  );
+
+  // Add the dots
+  useEffect(() => {
+    scene.add(dotsContainer);
+  }, [scene, dotsContainer]);
+
+  // Appends the renderer DOM element to its proper div
+  useEffect(() => {
+    mountRef.current.appendChild(renderer.domElement);
+  }, [renderer.domElement, mountRef.current]);
+
+  // Adjusts camera aspect and renderer size
+  useEffect(() => {
+    const width = mountRef.current.clientWidth;
+    const height = mountRef.current.clientHeight;
+
+    camera.aspect = width / height;
+    renderer.setSize(width, height, false);
+
+    resizeRendererToDisplaySize(true);
+  }, [mountRef.current, camera, renderer]);
+
+  // Initiate Animation
+  useEffect(() => {
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameRef.current);
+  }, []);
+
+  // First time animating to first poi
+  useEffect(() => {
+    const currentPoi = poiStore.currentPoi;
+
+    // Animate to the initial POI
+    animateGlobeAndPopUpDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
+
+    // Activates the poi dot
+    dotsContainer.setActiveDotById(currentPoi.id);
+  }, []);
+
+  // Rotates the globe scene by changes to the rotation bars.
+  useEffect(() => {
+    if (
+      !floatNumber.equals(scene.rotation.x, -rotation.rotationX) ||
+      !floatNumber.equals(scene.rotation.y, -rotation.rotationY)
+    ) {
+      const timeLine = new TimelineLite();
+
+      // TODO : ORL : Continue from here : This seems to cause jumps in the animation when using the mobx hooks.
+      //  Figure out what to do with it.
+      // timeLine.add(
+      //   TweenMax.to(scene.rotation, 0.01, {
+      //     x: -rotation.rotationX,
+      //     y: -rotation.rotationY,
+      //     z: 0,
+      //     ease: Power2.easeInOut,
+      //   }),
+      //   0,
+      // );
+    }
+  }, [rotation]);
+
+  return (
+    <>
+      <MountDiv id='mount' onMouseMove={onMouseMoveHandler} onClick={onGlobClickHandler} ref={mountRef} />
+      {/* TODO : FUTURE : Move this div to a separate component if we will still want it */}
+      <div style={{ position: 'absolute', left: 200, top: 900 }}>
+        <label style={{ color: 'white', display: 'block' }}>X: {rotation.rotationX}</label>
+        <input
+          type='range'
+          id='rotationX'
+          value={rotation.rotationX * 100}
+          min={0}
+          max={Math.PI * 2 * 100}
+          onChange={e =>
+            setRotation({ rotationY: rotation.rotationY, rotationX: parseInt(e.currentTarget.value, 10) / 100 })
+          }
         />
-      </>
-    );
-  }),
-);
+        <label style={{ color: 'white', display: 'block' }}>Y: {rotation.rotationY}</label>
+        <input
+          type='range'
+          id='rotationY'
+          value={rotation.rotationY * 100}
+          min={0}
+          max={Math.PI * 2 * 100}
+          onChange={e =>
+            setRotation({ rotationX: rotation.rotationX, rotationY: parseInt(e.currentTarget.value, 10) / 100 })
+          }
+        />
+      </div>
+
+      <PoiPopup
+        ref={popUpDivRef}
+        top={centerOffset.centerTopOffset}
+        left={centerOffset.centerLeftOffset}
+        location={poiStore.currentPoi.name}
+      />
+    </>
+  );
+});
 
 export class Globe extends React.Component<{}, IState> {
   private clock: Clock = new Clock();
