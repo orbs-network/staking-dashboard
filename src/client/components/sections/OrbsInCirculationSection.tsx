@@ -9,17 +9,20 @@
 import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { TokenStore } from '../../store/TokenStore';
+import { observer } from 'mobx-react';
+import { useTokenStore } from '../../store/storeHooks';
 
-interface IProps {
-  tokenStore?: TokenStore;
-}
+// tslint:disable-next-line:no-empty-interface
+interface IProps {}
 
-export const OrbsInCirculationSection = inject('tokenStore')(({ tokenStore }: IProps) => {
+export const OrbsInCirculationSection = observer((props: IProps) => {
+  const tokenStore = useTokenStore();
+
   return (
     <Section title='Orbs In Circulation'>
-      <Typography variant='xx-large' dataTestId='orbs-in-circulation'>{Math.round(tokenStore.orbsInCirculation).toLocaleString()}</Typography>
+      <Typography variant='xx-large' dataTestId='orbs-in-circulation'>
+        {Math.round(tokenStore.orbsInCirculation).toLocaleString()}
+      </Typography>
     </Section>
   );
 });

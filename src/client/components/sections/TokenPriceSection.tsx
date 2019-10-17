@@ -9,20 +9,23 @@
 import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { TokenStore } from '../../store/TokenStore';
+import { observer } from 'mobx-react';
+import { useTokenStore } from '../../store/storeHooks';
 
 export interface IProps {
   className?: string;
-  tokenStore?: TokenStore;
 }
 
 const formatPrice = price => Math.round(price * 10_000) / 10_000;
 
-export const TokenPriceSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
+export const TokenPriceSection = observer(({ className }: IProps) => {
+  const tokenStore = useTokenStore();
+
   return (
     <Section title='Token Price' className={className}>
-      <Typography variant='xx-large' dataTestId='token-price'>${formatPrice(tokenStore.tokenPrice)}</Typography>
+      <Typography variant='xx-large' dataTestId='token-price'>
+        ${formatPrice(tokenStore.tokenPrice)}
+      </Typography>
     </Section>
   );
 });

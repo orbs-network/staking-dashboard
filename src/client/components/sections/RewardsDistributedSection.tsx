@@ -9,17 +9,23 @@
 import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { POSStore } from '../../store/POSStore';
+import { observer } from 'mobx-react';
+import { usePosStore } from '../../store/storeHooks';
 
-interface IProps {
-  posStore?: POSStore;
-}
+// tslint:disable-next-line:no-empty-interface
+interface IProps {}
 
-export const RewardsDistributedSection = inject('posStore')(({ posStore }: IProps) => {
+export const RewardsDistributedSection = observer((props: IProps) => {
+  const posStore = usePosStore();
+
   return (
-    <Section title='Rewards distributed' helpText='Total Orbs tokens rewarded to delegators, guardians and validators for securing the network'>
-      <Typography variant='xx-large' dataTestId='rewards-distributed'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
+    <Section
+      title='Rewards distributed'
+      helpText='Total Orbs tokens rewarded to delegators, guardians and validators for securing the network'
+    >
+      <Typography variant='xx-large' dataTestId='rewards-distributed'>
+        ${posStore.rewardsDistributed.toLocaleString()}
+      </Typography>
     </Section>
   );
 });

@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { Globe, GlobeFc } from './globe/Globe';
+import { GlobeFc } from './globe/Globe';
 import styled, { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { StylesProvider } from '@material-ui/core';
 import { theme } from './base/Theme';

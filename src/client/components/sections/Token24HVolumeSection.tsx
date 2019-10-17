@@ -9,20 +9,23 @@
 import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { TokenStore } from '../../store/TokenStore';
+import { observer } from 'mobx-react';
 import { formatLargeNumber } from '../../utils/LargeNumbersFormatter';
+import { useTokenStore } from '../../store/storeHooks';
 
 export interface IProps {
   className?: string;
-  tokenStore?: TokenStore;
 }
 
-export const Token24HVolumeSection = inject('tokenStore')(({ tokenStore, className }: IProps) => {
+export const Token24HVolumeSection = observer(({ className }: IProps) => {
+  const tokenStore = useTokenStore();
+
   const bigPrice = tokenStore.token24HVolume;
   return (
     <Section title='24H Volume' className={className}>
-      <Typography variant='xx-large' dataTestId='24h-volume'>${formatLargeNumber(bigPrice)}</Typography>
+      <Typography variant='xx-large' dataTestId='24h-volume'>
+        ${formatLargeNumber(bigPrice)}
+      </Typography>
     </Section>
   );
 });

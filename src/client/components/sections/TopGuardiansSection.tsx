@@ -10,9 +10,9 @@ import React from 'react';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
 import styled from 'styled-components';
-import { inject } from 'mobx-react';
-import { POSStore } from '../../store/POSStore';
 import { theme } from '../base/Theme';
+import { observer } from 'mobx-react';
+import { usePosStore } from '../../store/storeHooks';
 
 const ListContainer = styled.ul`
   color: ${theme.darkTextColor};
@@ -24,17 +24,23 @@ const ListItem = styled.li`
   padding-bottom: ${theme.sizes.SIZE_SMALL_2};
 `;
 
-interface IProps {
-  posStore?: POSStore;
-}
+// tslint:disable-next-line:no-empty-interface
+interface IProps {}
 
-export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => {
+export const TopGuardiansSection = observer((props: IProps) => {
+  const posStore = usePosStore();
+
   return (
-    <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='The top 3 Guardians with biggest amount of Orbs tokens delegated to them'>
+    <Section
+      title={`Top ${posStore.topGuardians.length} guardians`}
+      helpText='The top 3 Guardians with biggest amount of Orbs tokens delegated to them'
+    >
       <ListContainer>
         {posStore.topGuardians.map((g, idx) => (
           <ListItem key={g}>
-            <Typography variant='x-small' dataTestId={`guardian-${idx}`}>{g}</Typography>
+            <Typography variant='x-small' dataTestId={`guardian-${idx}`}>
+              {g}
+            </Typography>
           </ListItem>
         ))}
       </ListContainer>
