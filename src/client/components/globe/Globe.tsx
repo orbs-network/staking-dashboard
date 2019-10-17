@@ -132,7 +132,7 @@ const useGlobeAnimation = () => {
   };
 };
 
-export const GlobeFc = React.memo((props: IProps) => {
+export const GlobeFc = observer((props: IProps) => {
   // Mobx stores
   const poiStore = usePoiStore();
 
@@ -288,14 +288,9 @@ export const GlobeFc = React.memo((props: IProps) => {
   }, [poiStore.nextPoi]);
 
   /**
-   * Animates transition to next point
+   * Handles both store updates and animations for the transitioning to the next POI.
    */
-  const onGlobClickHandler = useCallback(() => {
-    // Prevents multi-clicking until the current animation timeline is done.
-    if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
-      return;
-    }
-
+  const performTransitionToNextPoi = useCallback(() => {
     // Start animating to the next POI
     animateGlobeAndPopUpDisplayForNextPoi();
 
@@ -304,7 +299,20 @@ export const GlobeFc = React.memo((props: IProps) => {
 
     // Actually switch to the next POI
     poiStore.nextCurrentPoi();
-  }, [animateGlobeAndPopUpDisplayForNextPoi, poiStore.nextPoi]);
+  }, [animateGlobeAndPopUpDisplayForNextPoi, dotsContainer, poiStore]);
+
+  /**
+   * Animates transition to next point
+   */
+  const onGlobClickHandler = useCallback(() => {
+    // Prevents multi-clicking until the current animation timeline is done.
+    if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
+      return;
+    }
+
+    // Perform the transition to the next POI
+    performTransitionToNextPoi();
+  }, [performTransitionToNextPoi]);
 
   const onMouseMoveHandler = useCallback(
     (e: React.MouseEvent) => {
@@ -405,7 +413,6 @@ export const GlobeFc = React.memo((props: IProps) => {
           }
         />
       </div>
-
       <PoiPopup
         ref={popUpDivRef}
         top={centerOffset.centerTopOffset}
