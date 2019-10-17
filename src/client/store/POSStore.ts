@@ -36,6 +36,6 @@ export class POSStore implements IPOSStore {
   }
 
   private fakeBlockHeight() {
-    setInterval(this.increaseBlockHeight, 3_000);
+    setInterval(this.increaseBlockHeight.bind(this), 3_000);
   }
 }
