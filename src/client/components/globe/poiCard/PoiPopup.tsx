@@ -42,22 +42,24 @@ const StyledCardContent = styled(CardContent)(props => ({
   paddingTop: 0,
 }));
 
-export const PoiPopup = forwardRef<Ref, IProps>((props, ref) => {
-  const { top, left, location } = props;
+export const PoiPopup = React.memo(
+  forwardRef<Ref, IProps>((props, ref) => {
+    const { top, left, location } = props;
 
-  // TODO : FUTURE : O.L : Decide on a data structure for the POI's and take this information as a prop
-  const name = 'Andrey Tarantinov';
-  const profileImageUrl = 'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg';
-  const role = 'Guardian';
+    // TODO : FUTURE : O.L : Decide on a data structure for the POI's and take this information as a prop
+    const name = 'Andrey Tarantinov';
+    const profileImageUrl = 'https://www.orbs.com/wp-content/uploads/2019/02/Andrey-Dulkin-Orbs.jpg';
+    const role = 'Guardian';
 
-  return (
-    <PopUpCard top={top} left={left} ref={ref}>
-      <PoiCardHeader name={name} imageUrl={profileImageUrl} location={location} role={role} />
-      <StyledCardContent>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-        <StyledDivider />
-        <PoiCardFooter rank={9} totalStake={28000} activeSince={2018} />
-      </StyledCardContent>
-    </PopUpCard>
-  );
-});
+    return (
+      <PopUpCard top={top} left={left} ref={ref}>
+        <PoiCardHeader name={name} imageUrl={profileImageUrl} location={location} role={role} />
+        <StyledCardContent>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          <StyledDivider />
+          <PoiCardFooter rank={9} totalStake={28000} activeSince={2018} />
+        </StyledCardContent>
+      </PopUpCard>
+    );
+  }),
+);
