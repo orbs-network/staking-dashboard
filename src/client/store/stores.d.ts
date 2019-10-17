@@ -1,8 +1,11 @@
-import { IPOIStoreState, IPOSStoreState, ISocialStoreState, ITokenStoreState } from '../../shared/IStore';
+import { ISocialStore } from './SocialStore';
+import { IPOIStore } from './POIStore';
+import { ITokenStore } from './TokenStore';
+import { IPOSStore } from './POSStore';
 
 interface IStores {
-  socialStore: ISocialStoreState;
-  tokenStore: ITokenStoreState;
-  posStore: IPOSStoreState;
-  poiStore: IPOIStoreState;
+  socialStore: ISocialStore;
+  tokenStore: ITokenStore;
+  posStore: IPOSStore;
+  poiStore: IPOIStore;
 }
