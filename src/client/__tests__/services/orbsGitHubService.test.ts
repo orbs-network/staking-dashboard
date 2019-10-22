@@ -2,6 +2,7 @@ import { anyString, instance, mock, when } from 'ts-mockito';
 import GitHub from 'github-api';
 import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { buildGetRepositoryResponse } from '../testKits/apis/GithubApi';
+import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 
 const TEST_CONSTANTS = {
   repoOwner: 'orbs-network',
@@ -29,7 +30,11 @@ describe('Orbs-GitHub service functionality', () => {
     const lastCommitGist = await gitHubService.getRepoLastCommitGist();
 
     // We expect the returned value to be in the proper form + have the proper value
-    expect(lastCommitGist).toEqual({ message: expectedLastCommit });
+    const expectedCommitGist: IGitHubCommitGist = {
+      commitText: expectedLastCommit,
+      commitUrl: '',
+    };
+    expect(lastCommitGist.commitText).toBe(expectedCommitGist.commitText);
   });
 });
 
