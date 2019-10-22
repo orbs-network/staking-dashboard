@@ -2,17 +2,26 @@
 import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
 import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
 import { defaultPosStoreState, POSStore } from '../../store/POSStore';
-import { IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState } from '../../../shared/IStore';
+import { defaultPoiStoreState } from '../../store/POIStore';
+import {
+  IPOIStoreState,
+  IPOSStoreState,
+  ISocialStoreState,
+  IStoreInitialData,
+  ITokenStoreState,
+} from '../../../shared/IStore';
 
 export class AppHydration implements IStoreInitialData {
   private _socialStoreState: ISocialStoreState;
   private _tokenStoreState: ITokenStoreState;
   private _posStoreState: IPOSStoreState;
+  private _poiStoreState: IPOIStoreState;
 
   constructor(stateHydration?: IStoreInitialData) {
     this._socialStoreState = stateHydration ? stateHydration.socialStoreState : defaultSocialStoreState;
     this._tokenStoreState = stateHydration ? stateHydration.tokenStoreState : defaultTokenStoreState;
     this._posStoreState = stateHydration ? stateHydration.posStoreState : defaultPosStoreState;
+    this._poiStoreState = stateHydration ? stateHydration.poiStoreState : defaultPoiStoreState;
   }
 
   get socialStoreState(): ISocialStoreState {
@@ -25,6 +34,10 @@ export class AppHydration implements IStoreInitialData {
 
   get posStoreState(): IPOSStoreState {
     return this._posStoreState;
+  }
+
+  get poiStoreState(): IPOIStoreState {
+    return this._poiStoreState;
   }
 
   // POS data
@@ -55,12 +68,12 @@ export class AppHydration implements IStoreInitialData {
   }
 
   public withLatestTweet(value: string): this {
-    this._socialStoreState.latestTweet = value;
+    this._socialStoreState.latestTweetGist.tweetText = value;
     return this;
   }
 
   public withLatestCommit(value: string): this {
-    this._socialStoreState.latestCommit = value;
+    this._socialStoreState.latestCommitGist.commitText = value;
     return this;
   }
 

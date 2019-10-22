@@ -2,7 +2,7 @@ import { observable, computed, action } from 'mobx';
 import { IPOIStoreState } from '../../shared/IStore';
 import { IPoi } from '../../shared/IPoi';
 
-export const defaultSocialStoreState: Readonly<IPOIStoreState> = {
+export const defaultPoiStoreState: Readonly<IPOIStoreState> = {
   pointsOfInterest: [],
 };
 
@@ -16,7 +16,7 @@ interface IPOIStoreActions {
 export interface IPOIStore extends IPOIStoreState, IPOIStoreActions {}
 
 export class POIStore implements IPOIStore {
-  @observable public pointsOfInterest = defaultSocialStoreState.pointsOfInterest;
+  @observable public pointsOfInterest = defaultPoiStoreState.pointsOfInterest;
 
   @observable private currentPoiIndex: number = 0;
 
