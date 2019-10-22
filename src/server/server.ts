@@ -17,6 +17,7 @@ import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
 import { OrbsPosDataAdapter } from './realtime-data/orbsPosDataAdapter';
 import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
 import { buildOrbsPOSDataService } from './factories';
+import { buildProductionAppServices, IServerServices } from './services/services';
 
 export function initServer(logger: winston.Logger) {
   const app = express();
@@ -24,6 +25,8 @@ export function initServer(logger: winston.Logger) {
   if (config.FORCE_HTTPS) {
     app.use(forceHttps);
   }
+
+  const serverServices: IServerServices = buildProductionAppServices();
 
   const orbsPOSDataService = buildOrbsPOSDataService();
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);

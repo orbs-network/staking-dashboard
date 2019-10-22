@@ -2,6 +2,7 @@ import { IStoreInitialData } from '../../shared/IStore';
 import { EthplorerAdapter } from './ethplorerAdapter';
 import { OrbsPosDataAdapter } from './orbsPosDataAdapter';
 import { IPoi } from '../../shared/IPoi';
+import { IOrbsTwitterService } from '../services/orbsTwitterService';
 
 function buildPOI(id, name, xRotation, yRotation): IPoi {
   const poi: IPoi = {
@@ -133,7 +134,11 @@ const staticPois: IPoi[] = [
 ];
 
 export class RealtimeDataProvider {
-  constructor(private ethplorer: EthplorerAdapter, private orbsPosDataAdapter: OrbsPosDataAdapter) {}
+  constructor(
+    private ethplorer: EthplorerAdapter,
+    private orbsPosDataAdapter: OrbsPosDataAdapter,
+    private orbsTwitterService: IOrbsTwitterService,
+  ) {}
 
   public getStoreInitialData(): IStoreInitialData {
     return {
@@ -144,7 +149,8 @@ export class RealtimeDataProvider {
         topGuardians: this.orbsPosDataAdapter.top3Guardians,
       },
       socialStoreState: {
-        latestTweet: '#SUMMIT2019 #LIVECRYPTO #KEYWORD #TALKINGABOUTIT #GITHUB #SOCIALIMPACT #GUARDIANS',
+        // latestTweet: '#SUMMIT2019 #LIVECRYPTO #KEYWORD #TALKINGABOUTIT #GITHUB #SOCIALIMPACT #GUARDIANS',
+        latestTweet: this.orbsTwitterService.getLatestTweet().message,
         latestCommit: 'orbs-network/orbs-network-go',
         recentUpdate: '25.6.2019 Latest Blog Update',
       },
