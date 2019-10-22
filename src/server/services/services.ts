@@ -1,6 +1,8 @@
 import { IOrbsTwitterService, OrbsTwitterService } from './orbsTwitterService';
 import Twitter from 'twitter';
 
+import config from '../config';
+
 export interface IServerServices {
   orbsTwitterService: IOrbsTwitterService;
 }
@@ -14,10 +16,10 @@ export interface IServerServicesDependencies {
  */
 export function buildProductionAppServices(): IServerServices {
   const twitterClient = new Twitter({
-    consumer_key: '',
-    consumer_secret: '',
-    access_token_key: '',
-    access_token_secret: '',
+    consumer_key: config.TWITTER.consumerKey,
+    consumer_secret: config.TWITTER.consumerSecret,
+    access_token_key: config.TWITTER.tokenKey,
+    access_token_secret: config.TWITTER.tokenSecret,
   });
 
   // Build production dependencies

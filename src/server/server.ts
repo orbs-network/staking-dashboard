@@ -31,7 +31,11 @@ export function initServer(logger: winston.Logger) {
   const orbsPOSDataService = buildOrbsPOSDataService();
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
-  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(ethplorerAdapter, orbsPosDataAdapter);
+  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(
+    ethplorerAdapter,
+    orbsPosDataAdapter,
+    serverServices.orbsTwitterService,
+  );
   orbsPosDataAdapter.init();
   ethplorerAdapter.init();
 
