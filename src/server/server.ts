@@ -19,7 +19,7 @@ import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
 import { buildOrbsPOSDataService } from './factories';
 import { buildProductionAppServices, IServerServices } from './services/services';
 
-export function initServer(logger: winston.Logger) {
+export async function initServer(logger: winston.Logger) {
   const app = express();
 
   if (config.FORCE_HTTPS) {
@@ -27,6 +27,8 @@ export function initServer(logger: winston.Logger) {
   }
 
   const serverServices: IServerServices = buildProductionAppServices();
+
+  await serverServices.orbsTwitterService.init();
 
   const orbsPOSDataService = buildOrbsPOSDataService();
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);
