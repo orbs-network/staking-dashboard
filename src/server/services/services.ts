@@ -35,7 +35,10 @@ export function buildProductionAppServices(): IServerServices {
  * Builds all of the app services with the given dependencies implementations.
  */
 export function buildAppServices(serverServicesDependencies: IServerServicesDependencies): IServerServices {
-  const orbsTwitterService: IOrbsTwitterService = new OrbsTwitterService(serverServicesDependencies.twitterClient);
+  const orbsTwitterService: IOrbsTwitterService = new OrbsTwitterService(
+    serverServicesDependencies.twitterClient,
+    config.TWITTER.orbsTwitterScreenName,
+  );
 
   return {
     orbsTwitterService,

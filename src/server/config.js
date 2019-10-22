@@ -52,6 +52,7 @@ module.exports = {
   WEBPACK_PORT,
 
   TWITTER: {
+    orbsTwitterScreenName: 'orbs_network',
     consumerKey: TWITTER_CONSUMER_KEY,
     consumerSecret: TWITTER_CONSUMER_SECRET,
     tokenKey: TWITTER_TOKEN_KEY,

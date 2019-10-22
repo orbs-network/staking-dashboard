@@ -12,7 +12,7 @@ export interface IOrbsTwitterService extends IServerService {
 export class OrbsTwitterService implements IOrbsTwitterService {
   private latestTweetGist: ITwitGist = null;
 
-  constructor(private twitterClient: Twitter) {}
+  constructor(private twitterClient: Twitter, private screenName: string) {}
 
   public getCachedLatestTweetGist(): ITwitGist {
     return this.latestTweetGist;
@@ -24,7 +24,7 @@ export class OrbsTwitterService implements IOrbsTwitterService {
 
   private async fetchFreshLatestTweet(): Promise<ITwitGist> {
     const params: Twitter.RequestParams = {
-      screen_name: 'orbs_network', // TODO : ORL : Take this from the config
+      screen_name: this.screenName,
       exclude_replies: true, // No need for replies
       include_rts: false, // No need for re-tweets
     };
