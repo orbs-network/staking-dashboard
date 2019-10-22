@@ -20,9 +20,11 @@ const Title = styled(Typography)`
   text-transform: uppercase;
 `;
 
-const TitleContainer = styled.div`
-  color: ${theme.darkTextColor};
-`;
+const TitleContainer = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+  color: theme.darkTextColor,
+});
 
 const TextContainer = styled(Typography)`
   padding-top: ${theme.sizes.SIZE_SMALL_1};
@@ -44,7 +46,9 @@ export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, te
         {icon}
         <Title variant='x-small'>{title}</Title>
       </TitleContainer>
-      <TextContainer dataTestId={dataTestId} variant='small'>{text}</TextContainer>
+      <TextContainer dataTestId={dataTestId} variant='small'>
+        {text}
+      </TextContainer>
     </Root>
   );
 };
