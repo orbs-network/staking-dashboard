@@ -1,14 +1,17 @@
 import { observable, action, runInAction } from 'mobx';
 import { ISocialStoreState } from '../../shared/IStore';
 import { IOrbsGithubService } from '../services/OrbsGitHubService';
-import { ITwitGist } from '../../shared/IStoreTypes';
+import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 
 export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
   latestTweetGist: {
     tweetUrl: '',
     tweetText: '',
   },
-  latestCommit: '',
+  latestCommitGist: {
+    commitText: '',
+    commitUrl: '',
+  },
   recentUpdate: '',
 };
 
@@ -19,7 +22,7 @@ export interface ISocialStore extends ISocialStoreState, ISocialStoreActions {}
 
 export class SocialStore implements ISocialStore {
   @observable public latestTweetGist: ITwitGist = defaultSocialStoreState.latestTweetGist;
-  @observable public latestCommit: string = defaultSocialStoreState.latestCommit;
+  @observable public latestCommitGist: IGitHubCommitGist = defaultSocialStoreState.latestCommitGist;
   @observable public recentUpdate: string = defaultSocialStoreState.recentUpdate;
 
   // Services
@@ -30,7 +33,7 @@ export class SocialStore implements ISocialStore {
 
     if (initialData) {
       this.latestTweetGist = initialData.latestTweetGist;
-      this.latestCommit = initialData.latestCommit;
+      this.latestCommitGist = initialData.latestCommitGist;
       this.recentUpdate = initialData.recentUpdate;
     }
   }
@@ -43,6 +46,6 @@ export class SocialStore implements ISocialStore {
     const latestCommitSummary = await this.orbsGithubService.getRepoLastCommitGist();
 
     // Update the latest commit message
-    runInAction('Set Latest commit', () => (this.latestCommit = latestCommitSummary.message));
+    runInAction('Set Latest commit', () => (this.latestCommitGist = latestCommitSummary));
   }
 }

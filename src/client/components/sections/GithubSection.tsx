@@ -29,5 +29,15 @@ export const GithubSection = observer((props: IProps) => {
   // tslint:disable-next-line:react-hooks-nesting
   const socialStore = useSocialStore();
 
-  return <SocialSection icon={icon} dataTestId='latest-commit' title='Latest Commit' text={socialStore.latestCommit} />;
+  console.log(socialStore.latestCommitGist.commitUrl);
+
+  return (
+    <SocialSection
+      icon={icon}
+      dataTestId='latest-commit'
+      title='Latest Commit'
+      socialLink={socialStore.latestCommitGist.commitUrl}
+      text={socialStore.latestCommitGist.commitText}
+    />
+  );
 });
