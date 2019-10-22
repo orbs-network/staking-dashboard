@@ -1,12 +1,8 @@
 import Twitter from 'twitter';
+import { ITwitGist } from '../../shared/IStoreTypes';
 
 interface IServerService {
   init: () => Promise<void>;
-}
-
-interface ITwitGist {
-  message: string;
-  linkForTweet: string;
 }
 
 export interface IOrbsTwitterService extends IServerService {
@@ -28,7 +24,7 @@ export class OrbsTwitterService implements IOrbsTwitterService {
 
   private async fetchFreshLatestTweet(): Promise<ITwitGist> {
     const params: Twitter.RequestParams = {
-      screen_name: 'orbs_network',
+      screen_name: 'orbs_network', // TODO : ORL : Take this from the config
       exclude_replies: true, // No need for replies
       include_rts: false, // No need for re-tweets
     };
@@ -38,15 +34,16 @@ export class OrbsTwitterService implements IOrbsTwitterService {
     // The first tweet is the latest
     const latestTweet = res[0];
 
-    const { id, text, created_at, entities } = latestTweet;
+    // Get the tweet URL
+    const { entities } = latestTweet;
     const { urls } = entities;
     const tweetUrl = urls[0].url;
 
-    const message = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetUrl]);
-    console.log('Final Message: ', message);
+    const tweetText = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetUrl]);
+
     return {
-      message,
-      linkForTweet: tweetUrl,
+      tweetText,
+      tweetUrl,
     };
   }
 }

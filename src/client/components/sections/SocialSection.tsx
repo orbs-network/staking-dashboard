@@ -10,15 +10,17 @@ import React from 'react';
 import styled from 'styled-components';
 import { Typography } from '../base/Typography';
 import { theme } from '../base/Theme';
+import { Link } from '@material-ui/core';
 
 const Root = styled.div`
   padding-top: ${theme.sizes.SIZE_LARGE_2};
 `;
 
-const Title = styled(Typography)`
-  padding-left: ${theme.sizes.SIZE_SMALL_2};
-  text-transform: uppercase;
-`;
+const Title = styled(Typography)({
+  paddingLeft: theme.sizes.SIZE_SMALL_2,
+  textTransform: 'uppercase',
+  cursor: 'pointer',
+});
 
 const TitleContainer = styled.div({
   display: 'flex',
@@ -36,15 +38,20 @@ export interface IProps {
   icon: React.ReactNode;
   title: string;
   text: string;
+  socialLink: string;
   dataTestId?: string;
 }
 
-export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, text, dataTestId }) => {
+export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, text, socialLink, dataTestId }) => {
   return (
     <Root>
       <TitleContainer>
         {icon}
-        <Title variant='x-small'>{title}</Title>
+        <Title variant='x-small'>
+          <Link href={socialLink} color={'inherit'}>
+            {title}
+          </Link>
+        </Title>
       </TitleContainer>
       <TextContainer dataTestId={dataTestId} variant='small'>
         {text}

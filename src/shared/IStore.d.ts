@@ -1,4 +1,5 @@
 import { IPoi } from './IPoi';
+import { ITwitGist } from './IStoreTypes';
 
 export interface IPOSStoreState {
   blockHeight: number;
@@ -8,7 +9,7 @@ export interface IPOSStoreState {
 }
 
 export interface ISocialStoreState {
-  latestTweet: string;
+  latestTweetGist: ITwitGist;
   latestCommit: string;
   recentUpdate: string;
 }

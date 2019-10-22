@@ -150,7 +150,7 @@ export class RealtimeDataProvider {
       },
       socialStoreState: {
         // latestTweet: '#SUMMIT2019 #LIVECRYPTO #KEYWORD #TALKINGABOUTIT #GITHUB #SOCIALIMPACT #GUARDIANS',
-        latestTweet: this.orbsTwitterService.getCachedLatestTweetGist().message,
+        latestTweetGist: this.orbsTwitterService.getCachedLatestTweetGist(),
         latestCommit: 'orbs-network/orbs-network-go',
         recentUpdate: '25.6.2019 Latest Blog Update',
       },

@@ -1,9 +1,13 @@
 import { observable, action, runInAction } from 'mobx';
 import { ISocialStoreState } from '../../shared/IStore';
 import { IOrbsGithubService } from '../services/OrbsGitHubService';
+import { ITwitGist } from '../../shared/IStoreTypes';
 
 export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
-  latestTweet: '',
+  latestTweetGist: {
+    tweetUrl: '',
+    tweetText: '',
+  },
   latestCommit: '',
   recentUpdate: '',
 };
@@ -14,7 +18,7 @@ interface ISocialStoreActions {}
 export interface ISocialStore extends ISocialStoreState, ISocialStoreActions {}
 
 export class SocialStore implements ISocialStore {
-  @observable public latestTweet: string = defaultSocialStoreState.latestTweet;
+  @observable public latestTweetGist: ITwitGist = defaultSocialStoreState.latestTweetGist;
   @observable public latestCommit: string = defaultSocialStoreState.latestCommit;
   @observable public recentUpdate: string = defaultSocialStoreState.recentUpdate;
 
@@ -25,7 +29,7 @@ export class SocialStore implements ISocialStore {
     this.orbsGithubService = orbsGitHubService;
 
     if (initialData) {
-      this.latestTweet = initialData.latestTweet;
+      this.latestTweetGist = initialData.latestTweetGist;
       this.latestCommit = initialData.latestCommit;
       this.recentUpdate = initialData.recentUpdate;
     }

@@ -29,5 +29,13 @@ export const TwitterSection = observer((props: IProps) => {
   // tslint:disable-next-line:react-hooks-nesting
   const socialStore = useSocialStore();
 
-  return <SocialSection dataTestId='latest-tweet' icon={icon} title='Latest Tweets' text={socialStore.latestTweet} />;
+  return (
+    <SocialSection
+      dataTestId='latest-tweet'
+      icon={icon}
+      title='Latest Tweet'
+      socialLink={socialStore.latestTweetGist.tweetUrl}
+      text={socialStore.latestTweetGist.tweetText}
+    />
+  );
 });
