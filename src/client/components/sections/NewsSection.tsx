@@ -27,5 +27,13 @@ interface IProps {}
 export const NewsSection = (props: IProps) => {
   const socialStore = useSocialStore();
 
-  return <SocialSection dataTestId='recent-update' icon={icon} title='Recent Update' text={socialStore.recentUpdate} />;
+  return (
+    <SocialSection
+      dataTestId='recent-update'
+      icon={icon}
+      title='Recent Update'
+      socialLink={''}
+      text={socialStore.recentUpdate}
+    />
+  );
 };
