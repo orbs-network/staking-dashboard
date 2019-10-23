@@ -7,6 +7,7 @@ interface IServerService {
 
 export interface IOrbsTwitterService extends IServerService {
   getCachedLatestTweetGist(): ITwitGist;
+  fetchAndCacheLatestTweetGist(): void;
 }
 
 export class OrbsTwitterService implements IOrbsTwitterService {
@@ -19,6 +20,13 @@ export class OrbsTwitterService implements IOrbsTwitterService {
   }
 
   public async init() {
+    await this.fetchAndCacheLatestTweetGist();
+  }
+
+  /**
+   * Fetched the latest tweet gist from Twitter and replaces the current cached one.
+   */
+  public async fetchAndCacheLatestTweetGist(): Promise<void> {
     this.latestTweetGist = await this.fetchFreshLatestTweet();
   }
 

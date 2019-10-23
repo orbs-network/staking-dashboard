@@ -14,27 +14,39 @@ describe('Orbs-Twitter service (server) functionality', () => {
     twitterClientTestKit = new TwitterClientTestKit();
   });
 
-  it('Should extract the latest tweet gist properly', async () => {
-    const expectedLastTweetText = 'This is the latest tweet';
-    const expectedLastTweetUrl = 'https://twitter.com/stam';
+  it('Should extract the latest tweet gist properly on init and on re-fetch', async () => {
+    const tweetGistForInit: ITwitGist = {
+      tweetText: 'This is the latest tweet foor init',
+      tweetUrl: 'https://twitter.com/tweetForInit',
+    };
+    const expectedTweetGistAfterInit: ITwitGist = Object.assign({}, tweetGistForInit);
 
-    // Assign the values for the 'real world' mocking
-    twitterClientTestKit.withLatestTweetText(expectedLastTweetText);
-    twitterClientTestKit.withLatestTweetUrl(expectedLastTweetUrl);
+    const tweetGistForAfterChange: ITwitGist = {
+      tweetText: 'This is the latest tweet after some time',
+      tweetUrl: 'https://twitter.com/tweetAfterChange',
+    };
+    const expectedTweetGistAfterChange: ITwitGist = Object.assign({}, tweetGistForAfterChange);
+
+    // 1) Assign the values for the 'real world' mocking
+    twitterClientTestKit.withLatestTweetGist(tweetGistForInit);
 
     // Built with mocks + init
     const tweeterService = buildWithMocks(twitterClientTestKit.buildMockedInstance());
     await tweeterService.init();
 
-    const lastCommitGist = await tweeterService.getCachedLatestTweetGist();
+    // We expect the returned value to have the proper form and values
+    const lastCommitGist = tweeterService.getCachedLatestTweetGist();
+    expect(lastCommitGist).toStrictEqual(expectedTweetGistAfterInit);
 
-    // We expect the returned value to be in the proper form + have the proper value
-    const expectedTweetGist: ITwitGist = {
-      tweetText: expectedLastTweetText,
-      tweetUrl: expectedLastTweetUrl,
-    };
+    // 2) Change the 'real world' latest tweet values
+    twitterClientTestKit.withLatestTweetGist(tweetGistForAfterChange);
 
-    expect(lastCommitGist).toStrictEqual(expectedTweetGist);
+    // Ask the service to re-fetch the latest tweet gist
+    await tweeterService.fetchAndCacheLatestTweetGist();
+
+    // We expect the returned value to have the proper form and values
+    const lastCommitGistAfterChange = tweeterService.getCachedLatestTweetGist();
+    expect(lastCommitGistAfterChange).toStrictEqual(expectedTweetGistAfterChange);
   });
 });
 

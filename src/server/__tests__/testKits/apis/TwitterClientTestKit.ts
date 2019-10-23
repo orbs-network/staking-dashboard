@@ -2,6 +2,7 @@ import GitHub from 'github-api';
 import { anyString, anything, instance, mock, when } from 'ts-mockito';
 import Twitter from 'twitter';
 import { IServerApiTestClass } from './IServerApiTestClass';
+import { ITwitGist } from '../../../../shared/IStoreTypes';
 
 export class TwitterClientTestKit implements IServerApiTestClass<Twitter> {
   private latestTweetText: string;
@@ -15,15 +16,22 @@ export class TwitterClientTestKit implements IServerApiTestClass<Twitter> {
   public buildMockedInstance(): Twitter {
     const mockedTwitterClient = mock(Twitter);
 
-    // Build the mocked response for 'getRepo
-    const mockedRepositoryResponse = this.buildGetStatusesUserTimelineResponse();
-
     // @ts-ignore (no types for library)
-    when(mockedTwitterClient.get('statuses/user_timeline', anything())).thenReturn(mockedRepositoryResponse);
+    when(mockedTwitterClient.get('statuses/user_timeline', anything())).thenCall(
+      this.buildGetStatusesUserTimelineResponse.bind(this), // Always returning a freshly built response
+    );
 
     const twitterClient = instance(mockedTwitterClient);
 
     return twitterClient;
+  }
+
+  /**
+   * Combines all of the tweet gist's state variables in one method.
+   */
+  public withLatestTweetGist(tweetGist: ITwitGist) {
+    this.withLatestTweetText(tweetGist.tweetText);
+    this.withLatestTweetUrl(tweetGist.tweetUrl);
   }
 
   public withLatestTweetText(tweetText: string) {
