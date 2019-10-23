@@ -1,48 +1,48 @@
 import { anyString, instance, mock, when } from 'ts-mockito';
 import { IOrbsTwitterService, OrbsTwitterService } from '../../services/orbsTwitterService';
 import Twitter from 'twitter';
+import { TwitterClientTestKit } from '../testKits/apis/TwitterClientTestKit';
+import { ITwitGist } from '../../../shared/IStoreTypes';
 
 describe('Orbs-Twitter service (server) functionality', () => {
-  let mockedGitHubApi: Twitter;
+  let mockedTweeterClient: Twitter;
+  let twitterClientTestKit: TwitterClientTestKit = null;
 
-  // Initialize a new mock
+  // Initialize a new mock and test kit
   beforeEach(() => {
-    mockedGitHubApi = mock(Twitter);
+    mockedTweeterClient = mock(Twitter);
+    twitterClientTestKit = new TwitterClientTestKit();
   });
 
-  it('Should extract the last commit message properly', async () => {});
+  it('Should extract the latest tweet gist properly', async () => {
+    const expectedLastTweetText = 'This is the latest tweet';
+    const expectedLastTweetUrl = 'https://twitter.com/stam';
 
-  // it('Should extract the last commit message properly', async () => {
-  //   const expectedLastCommitText = 'This is the latest commit';
-  //   const expectedLastCommitUrl = 'https://github.com/stam';
-  //
-  //   // Build the mocked response
-  //   const mockedGetRepoResponse = buildGetRepositoryResponse(expectedLastCommitText, expectedLastCommitUrl);
-  //
-  //   // Assign the mocked value for 'getRepo'
-  //   when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedGetRepoResponse);
-  //
-  //   const gitHubService = buildWithMocks(mockedGitHubApi);
-  //
-  //   const lastCommitGist = await gitHubService.getRepoLastCommitGist();
-  //
-  //   // We expect the returned value to be in the proper form + have the proper value
-  //   const expectedCommitGist: IGitHubCommitGist = {
-  //     commitText: expectedLastCommitText,
-  //     commitUrl: expectedLastCommitUrl,
-  //   };
-  //
-  //   expect(lastCommitGist).toStrictEqual(expectedCommitGist);
-  // });
+    // Assign the values for the 'real world' mocking
+    twitterClientTestKit.withLatestTweetText(expectedLastTweetText);
+    twitterClientTestKit.withLatestTweetUrl(expectedLastTweetUrl);
+
+    // Built with mocks + init
+    const tweeterService = buildWithMocks(twitterClientTestKit.buildMockedInstance());
+    await tweeterService.init();
+
+    const lastCommitGist = await tweeterService.getCachedLatestTweetGist();
+
+    // We expect the returned value to be in the proper form + have the proper value
+    const expectedTweetGist: ITwitGist = {
+      tweetText: expectedLastTweetText,
+      tweetUrl: expectedLastTweetUrl,
+    };
+
+    expect(lastCommitGist).toStrictEqual(expectedTweetGist);
+  });
 });
 
 /**
  * Builds an instance of the service with mocked dependencies
  */
-function buildWithMocks(mockedTwitterClient: Twitter): IOrbsTwitterService {
-  const twitterClient = instance(mockedTwitterClient);
-
-  const githubService: IOrbsTwitterService = new OrbsTwitterService(twitterClient, 'screenName');
+function buildWithMocks(mockedTwitterClientInstance: Twitter): IOrbsTwitterService {
+  const githubService: IOrbsTwitterService = new OrbsTwitterService(mockedTwitterClientInstance, 'screenName');
 
   return githubService;
 }
