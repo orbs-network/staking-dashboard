@@ -46,8 +46,21 @@ export async function initServer(logger: winston.Logger) {
   app.use(staticsRouter());
   app.use(pagesRouter(realtimeDataProvider));
 
+  startServicesTimers(serverServices);
+
   const server = app.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
   });
   return server;
+}
+
+/**
+ * Initiates all of the required intervals for routinely update of our services.
+ * TODO : FUTURE : O.L : We an make the timers managing into its own service once it will grow more.
+ */
+function startServicesTimers(serverServices: IServerServices) {
+  const oneMinute = 1000 * 60;
+
+  // Starts an interval for updating the twitter service (Every 5 Minutes)
+  setInterval(serverServices.orbsTwitterService.fetchAndCacheLatestTweetGist, oneMinute * 1);
 }
