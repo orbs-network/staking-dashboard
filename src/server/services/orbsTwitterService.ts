@@ -37,9 +37,10 @@ export class OrbsTwitterService implements IOrbsTwitterService {
     // Get the tweet URL (Using the expanded_url allows the user to get to the twitter page directly without getting redirected)
     const { entities } = latestTweet;
     const { urls } = entities;
+    const tweetInTextUrl = urls[0].url; // This minified url is added to the end of each tweet message. we would like to remove it.
     const tweetUrl = urls[0].expanded_url;
 
-    const tweetText = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetUrl]);
+    const tweetText = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetInTextUrl]);
 
     return {
       tweetText,

@@ -371,7 +371,7 @@ export const GlobeFc = observer((props: IProps) => {
     ) {
       const timeLine = new TimelineLite();
 
-      // TODO : ORL : Continue from here : This seems to cause jumps in the animation when using the mobx hooks.
+      // TODO : O.L : FUTURE : This seems to cause jumps in the animation when using the mobx hooks.
       //  Figure out what to do with it.
       // timeLine.add(
       //   TweenMax.to(scene.rotation, 0.01, {
