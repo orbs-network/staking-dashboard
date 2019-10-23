@@ -24,11 +24,11 @@ describe('Social Data in the app', () => {
   it('should display the "Latest commit" from the hydrated hydrated Social store', async () => {
     const hydrationCommitGist: IGitHubCommitGist = {
       commitText: 'Hydration Commit text',
-      commitUrl: 'Hydration Commit Url',
+      commitUrl: 'http://localhost/hydrationCommit',
     };
     const apiCommitGist: IGitHubCommitGist = {
       commitText: 'Api Commit text',
-      commitUrl: 'Api Commit url',
+      commitUrl: 'http://localhost/apiCommit',
     };
 
     // Set the commit for the hydration
@@ -39,25 +39,29 @@ describe('Social Data in the app', () => {
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
     expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommitGist.commitText);
+    expect(getByTestId('latest-commit_link')).toHaveProperty('href', hydrationCommitGist.commitUrl);
 
     await appDriver.initApp();
     expect(getByTestId('latest-commit')).toHaveTextContent(apiCommitGist.commitText);
+    expect(getByTestId('latest-commit_link')).toHaveProperty('href', apiCommitGist.commitUrl);
   });
 
   it('should display the "Latest tweet" from the hydrated hydrated Social store', async () => {
     const hydrationTweetGist: ITwitGist = {
       tweetText: 'Latest tweet',
-      tweetUrl: '',
+      tweetUrl: 'http://localhost/hydrationTweet',
     };
 
     appHydration.withLatestTweetGist(hydrationTweetGist);
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
     expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
+    expect(getByTestId('latest-tweet_link')).toHaveProperty('href', hydrationTweetGist.tweetUrl);
 
     // DEV_NOTE : We expect no change after init.
     await appDriver.initApp();
     expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
+    expect(getByTestId('latest-tweet_link')).toHaveProperty('href', hydrationTweetGist.tweetUrl);
   });
 
   it('should display the "Recent Update" from the hydrated hydrated Social store', async () => {

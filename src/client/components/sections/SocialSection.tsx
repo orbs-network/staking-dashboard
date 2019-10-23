@@ -48,7 +48,7 @@ export const SocialSection: React.FunctionComponent<IProps> = ({ icon, title, te
       <TitleContainer>
         {icon}
         <Title variant='x-small'>
-          <Link href={socialLink} target={'_blank'} color={'inherit'}>
+          <Link href={socialLink} target={'_blank'} color={'inherit'} data-testid={`${dataTestId}_link`}>
             {title}
           </Link>
         </Title>
