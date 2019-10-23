@@ -46,6 +46,9 @@ export class POIStore implements IPOIStore {
   // tslint:disable-next-line:no-empty
   public async init(): Promise<void> {}
 
+  /**
+   * Returns the next poi index in a cyclic manner.
+   */
   private calculateNextPOIIndex(): number {
     return (this.currentPoiIndex + 1) % this.pointsOfInterest.length;
   }
