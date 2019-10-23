@@ -34,10 +34,10 @@ export class OrbsTwitterService implements IOrbsTwitterService {
     // The first tweet is the latest
     const latestTweet = res[0];
 
-    // Get the tweet URL
+    // Get the tweet URL (Using the expanded_url allows the user to get to the twitter page directly without getting redirected)
     const { entities } = latestTweet;
     const { urls } = entities;
-    const tweetUrl = urls[0].url;
+    const tweetUrl = urls[0].expanded_url;
 
     const tweetText = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetUrl]);
 
