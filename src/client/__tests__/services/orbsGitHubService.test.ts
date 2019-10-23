@@ -18,12 +18,14 @@ describe('Orbs-GitHub service functionality', () => {
   });
 
   it('Should extract the last commit message properly', async () => {
-    const expectedLastCommit = 'This is the latest commit';
+    const expectedLastCommitText = 'This is the latest commit';
+    const expectedLastCommitUrl = 'https://github.com/stam';
 
     // Build the mocked response
-    const mockedRepositoryResponse = buildGetRepositoryResponse(expectedLastCommit);
+    const mockedGetRepoResponse = buildGetRepositoryResponse(expectedLastCommitText, expectedLastCommitUrl);
 
-    when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedRepositoryResponse);
+    // Assign the mocked value for 'getRepo'
+    when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedGetRepoResponse);
 
     const gitHubService = buildWithMocks(mockedGitHubApi);
 
@@ -31,10 +33,11 @@ describe('Orbs-GitHub service functionality', () => {
 
     // We expect the returned value to be in the proper form + have the proper value
     const expectedCommitGist: IGitHubCommitGist = {
-      commitText: expectedLastCommit,
-      commitUrl: '',
+      commitText: expectedLastCommitText,
+      commitUrl: expectedLastCommitUrl,
     };
-    expect(lastCommitGist.commitText).toBe(expectedCommitGist.commitText);
+
+    expect(lastCommitGist).toStrictEqual(expectedCommitGist);
   });
 });
 

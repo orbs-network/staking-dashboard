@@ -10,6 +10,7 @@ import {
   IStoreInitialData,
   ITokenStoreState,
 } from '../../../shared/IStore';
+import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
 
 export class AppHydration implements IStoreInitialData {
   private _socialStoreState: ISocialStoreState;
@@ -67,13 +68,13 @@ export class AppHydration implements IStoreInitialData {
     return this;
   }
 
-  public withLatestTweet(value: string): this {
-    this._socialStoreState.latestTweetGist.tweetText = value;
+  public withLatestTweetGist(value: ITwitGist): this {
+    this._socialStoreState.latestTweetGist = value;
     return this;
   }
 
-  public withLatestCommit(value: string): this {
-    this._socialStoreState.latestCommitGist.commitText = value;
+  public withLatestCommitGist(value: IGitHubCommitGist): this {
+    this._socialStoreState.latestCommitGist = value;
     return this;
   }
 

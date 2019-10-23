@@ -20,6 +20,8 @@ import { buildAppServices, IServicesDependencies } from '../../services/services
 import GitHub from 'github-api';
 import { anyString, instance, mock, when } from 'ts-mockito';
 import { ApiDependenciesKit } from './apis/ApiDependenciesKit';
+import { defaultPoiStoreState } from '../../store/POIStore';
+import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 
 export class AppDriver {
   public readonly outerWorldState: OuterWorldState;
@@ -52,6 +54,7 @@ export class AppDriver {
       socialStoreState: defaultSocialStoreState,
       posStoreState: defaultPosStoreState,
       tokenStoreState: defaultTokenStoreState,
+      poiStoreState: defaultPoiStoreState,
     };
 
     const initialStoresState = stateHydration || defaultInitialStoresState;
@@ -93,7 +96,8 @@ class OuterWorldState {
     return this.apiDependenciesKit.buildAppDependencies();
   }
 
-  public setLastGitHubCommitMessage(lastCommitMessage: string): void {
-    this.apiDependenciesKit.gitHubApiTestKit.withLastCommitMessage(lastCommitMessage);
+  public setLastGitHubCommitGist(lastCommitGist: IGitHubCommitGist): void {
+    this.apiDependenciesKit.gitHubApiTestKit.withLastCommitMessage(lastCommitGist.commitText);
+    this.apiDependenciesKit.gitHubApiTestKit.withLastCommitUrl(lastCommitGist.commitUrl);
   }
 }

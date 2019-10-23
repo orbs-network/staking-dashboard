@@ -10,6 +10,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
 import { AppHydration } from './testKits/AppHydration';
 import { ApiDependenciesKit } from './testKits/apis/ApiDependenciesKit';
+import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;
@@ -21,30 +22,42 @@ describe('Social Data in the app', () => {
   });
 
   it('should display the "Latest commit" from the hydrated hydrated Social store', async () => {
-    const hydrationCommit = 'Hydration Commit';
-    const apiCommit = 'Api Commit';
+    const hydrationCommitGist: IGitHubCommitGist = {
+      commitText: 'Hydration Commit text',
+      commitUrl: 'Hydration Commit Url',
+    };
+    const apiCommitGist: IGitHubCommitGist = {
+      commitText: 'Api Commit text',
+      commitUrl: 'Api Commit url',
+    };
 
     // Set the commit for the hydration
-    appHydration.withLatestCommit(hydrationCommit);
+    appHydration.withLatestCommitGist(hydrationCommitGist);
 
     // Set the commit for the 'real world'
-    appDriver.outerWorldState.setLastGitHubCommitMessage(apiCommit);
+    appDriver.outerWorldState.setLastGitHubCommitGist(apiCommitGist);
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
-    expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommit);
+    expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommitGist.commitText);
 
     await appDriver.initApp();
-    expect(getByTestId('latest-commit')).toHaveTextContent(apiCommit);
+    expect(getByTestId('latest-commit')).toHaveTextContent(apiCommitGist.commitText);
   });
 
   it('should display the "Latest tweet" from the hydrated hydrated Social store', async () => {
-    appHydration.withLatestTweet('Latest tweet');
+    const hydrationTweetGist: ITwitGist = {
+      tweetText: 'Latest tweet',
+      tweetUrl: '',
+    };
+
+    appHydration.withLatestTweetGist(hydrationTweetGist);
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
-    expect(getByTestId('latest-tweet')).toHaveTextContent('Latest tweet');
+    expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
 
+    // DEV_NOTE : We expect no change after init.
     await appDriver.initApp();
-    expect(getByTestId('latest-tweet')).toHaveTextContent('Latest tweet');
+    expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
   });
 
   it('should display the "Recent Update" from the hydrated hydrated Social store', async () => {

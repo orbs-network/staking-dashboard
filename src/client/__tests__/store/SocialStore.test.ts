@@ -19,11 +19,11 @@ describe('Social store functionality', () => {
       recentUpdate: 'recentUpdate',
       latestCommitGist: {
         commitText: 'latestCommit',
-        commitUrl: '',
+        commitUrl: 'latestCommitUrl',
       },
       latestTweetGist: {
         tweetText: 'latestTweet',
-        tweetUrl: '',
+        tweetUrl: 'latestTweetUrl',
       },
     };
 
