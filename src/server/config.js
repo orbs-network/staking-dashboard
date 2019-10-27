@@ -12,6 +12,7 @@ const findUp = require('find-up');
 
 if (IS_DEV) {
   require('dotenv').config({ path: findUp.sync('.env') });
+  require('dotenv').config({ path: findUp.sync('.env-secrets') });
 }
 
 const { version } = require(findUp.sync('package.json'));
@@ -34,10 +35,10 @@ const FORCE_HTTPS = process.env.FORCE_HTTPS === 'true'; // default: false
 const ROLLBAR_ACCESS_TOKEN_SERVER = process.env.ROLLBAR_ACCESS_TOKEN_SERVER;
 
 // 3rd Party keys
-const TWITTER_CONSUMER_KEY = '';
-const TWITTER_CONSUMER_SECRET = '';
-const TWITTER_TOKEN_KEY = '';
-const TWITTER_TOKEN_SECRET = '';
+const TWITTER_CONSUMER_KEY =  process.env.TWITTER_CONSUMER_KEY;
+const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
+const TWITTER_TOKEN_KEY =  process.env.TWITTER_TOKEN_KEY;
+const TWITTER_TOKEN_SECRET = process.env.TWITTER_TOKEN_SECRET;
 
 module.exports = {
   APP_VERSION,
