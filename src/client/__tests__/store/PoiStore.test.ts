@@ -22,10 +22,6 @@ describe('POI store functionality', () => {
     expect(poiStore.pointsOfInterest).toStrictEqual(hydratingState.pointsOfInterest);
   });
 
-  // Currently 'init' does nothing
-  // tslint:disable-next-line:no-empty
-  it('Init works properly', async () => {});
-
   it('Defined getters properly', () => {
     const hydratingState: IPOIStoreState = {
       pointsOfInterest: pois,
