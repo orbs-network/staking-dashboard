@@ -13,6 +13,7 @@ import styled from 'styled-components';
 import { theme } from '../base/Theme';
 import { observer } from 'mobx-react';
 import { usePosStore } from '../../store/storeHooks';
+import { Link } from '@material-ui/core';
 
 const ListContainer = styled.ul`
   color: ${theme.darkTextColor};
@@ -37,9 +38,11 @@ export const TopGuardiansSection = observer((props: IProps) => {
     >
       <ListContainer>
         {posStore.topGuardians.map((g, idx) => (
-          <ListItem key={g}>
+          <ListItem key={g.id}>
             <Typography variant='x-small' dataTestId={`guardian-${idx}`}>
-              {g}
+              <Link href={g.homePage} target={'_blank'} color={'inherit'} data-testid={`guardian-link-${idx}`}>
+                {g.displayName}
+              </Link>
             </Typography>
           </ListItem>
         ))}

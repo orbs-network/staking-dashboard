@@ -1,8 +1,10 @@
 import { EventEmitter } from 'events';
 import { OrbsPOSDataService } from 'orbs-pos-data';
+import { IGuardianDisplayGist } from '../../shared/IGuardian';
+import { IGuardianInfo } from 'orbs-pos-data/dist/orbs-pos-data-service';
 
 export class OrbsPosDataAdapter extends EventEmitter {
-  public top3Guardians: string[] = [];
+  public top3Guardians: IGuardianDisplayGist[] = [];
 
   constructor(private orbsPOSDataService: OrbsPOSDataService) {
     super();
@@ -20,6 +22,20 @@ export class OrbsPosDataAdapter extends EventEmitter {
       guardiansInfo.push(guardianInfo);
     }
     const sortedGuardians = guardiansInfo.sort((a, b) => b.stake - a.stake);
-    this.top3Guardians = [sortedGuardians[0].name, sortedGuardians[1].name, sortedGuardians[2].name];
+    this.top3Guardians = [
+      guardianInfoToDisplayGist(sortedGuardians[0]),
+      guardianInfoToDisplayGist(sortedGuardians[1]),
+      guardianInfoToDisplayGist(sortedGuardians[2]),
+    ];
   }
+}
+
+function guardianInfoToDisplayGist(guardianInfo: IGuardianInfo): IGuardianDisplayGist {
+  const guardianDisplayGist: IGuardianDisplayGist = {
+    id: guardianInfo.name,
+    displayName: guardianInfo.name,
+    homePage: guardianInfo.website,
+  };
+
+  return guardianDisplayGist;
 }

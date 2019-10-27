@@ -9,6 +9,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
 import { AppHydration } from './testKits/AppHydration';
+import { IGuardianDisplayGist } from '../../shared/IGuardian';
 
 describe('POS Data in the app', () => {
   let appHydration: AppHydration;
@@ -20,18 +21,43 @@ describe('POS Data in the app', () => {
   });
 
   it('should display the "Top Guardians" from the Token store', async () => {
-    appHydration.withTopGuardians(['guardian 0', 'guardian 1', 'guardian 2']);
+    const guardian1: IGuardianDisplayGist = {
+      id: 'g1',
+      homePage: 'http://g1.comn',
+      displayName: 'guardian 1',
+    };
+
+    const guardian2: IGuardianDisplayGist = {
+      id: 'g2',
+      homePage: 'http://g2.comn',
+      displayName: 'guardian 2',
+    };
+
+    const guardian3: IGuardianDisplayGist = {
+      id: 'g3',
+      homePage: 'http://g3.comn',
+      displayName: 'guardian 3',
+    };
+
+    appHydration.withTopGuardians([guardian1, guardian2, guardian3]);
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
 
-    expect(getByTestId('guardian-0')).toHaveTextContent('guardian 0');
-    expect(getByTestId('guardian-1')).toHaveTextContent('guardian 1');
-    expect(getByTestId('guardian-2')).toHaveTextContent('guardian 2');
+    expect(getByTestId('guardian-link-0')).toHaveTextContent(guardian1.displayName);
+    expect(getByTestId('guardian-link-0')).toHaveAttribute('href', guardian1.homePage);
+    expect(getByTestId('guardian-link-1')).toHaveTextContent(guardian2.displayName);
+    expect(getByTestId('guardian-link-1')).toHaveAttribute('href', guardian2.homePage);
+    expect(getByTestId('guardian-link-2')).toHaveTextContent(guardian3.displayName);
+    expect(getByTestId('guardian-link-2')).toHaveAttribute('href', guardian3.homePage);
 
+    // The service init should not have no effect for now
     await appDriver.initApp();
-    expect(getByTestId('guardian-0')).toHaveTextContent('guardian 0');
-    expect(getByTestId('guardian-1')).toHaveTextContent('guardian 1');
-    expect(getByTestId('guardian-2')).toHaveTextContent('guardian 2');
+    expect(getByTestId('guardian-link-0')).toHaveTextContent(guardian1.displayName);
+    expect(getByTestId('guardian-link-0')).toHaveAttribute('href', guardian1.homePage);
+    expect(getByTestId('guardian-link-1')).toHaveTextContent(guardian2.displayName);
+    expect(getByTestId('guardian-link-1')).toHaveAttribute('href', guardian2.homePage);
+    expect(getByTestId('guardian-link-2')).toHaveTextContent(guardian3.displayName);
+    expect(getByTestId('guardian-link-2')).toHaveAttribute('href', guardian3.homePage);
   });
 
   it('should display the "Rewards Distributed" from the hydrated Token store', async () => {

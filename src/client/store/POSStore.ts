@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { IPOSStoreState } from '../../shared/IStore';
+import { IGuardianDisplayGist } from '../../shared/IGuardian';
 
 export const defaultPosStoreState: IPOSStoreState = {
   blockHeight: 0,
@@ -17,7 +18,7 @@ export class POSStore implements IPOSStore {
   @observable public blockHeight: number;
   @observable public rewardsDistributed: number;
   @observable public nextVotingTime: number;
-  @observable public topGuardians: string[];
+  @observable public topGuardians: IGuardianDisplayGist[];
 
   constructor(initialData: IPOSStoreState) {
     this.blockHeight = initialData.blockHeight;

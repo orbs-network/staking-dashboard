@@ -1,11 +1,12 @@
 import { IPoi } from './IPoi';
 import { ITwitGist, IGitHubCommitGist } from './IStoreTypes';
+import { IGuardianDisplayGist } from './IGuardian';
 
 export interface IPOSStoreState {
   blockHeight: number;
   rewardsDistributed: number;
   nextVotingTime: number;
-  topGuardians: string[];
+  topGuardians: IGuardianDisplayGist[];
 }
 
 export interface ISocialStoreState {

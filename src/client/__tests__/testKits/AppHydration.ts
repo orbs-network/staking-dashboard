@@ -11,6 +11,7 @@ import {
   ITokenStoreState,
 } from '../../../shared/IStore';
 import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
+import { IGuardianDisplayGist } from '../../../shared/IGuardian';
 
 export class AppHydration implements IStoreInitialData {
   private _socialStoreState: ISocialStoreState;
@@ -52,7 +53,7 @@ export class AppHydration implements IStoreInitialData {
     return this;
   }
 
-  public withTopGuardians(value: string[]): this {
+  public withTopGuardians(value: IGuardianDisplayGist[]): this {
     this._posStoreState.topGuardians = value;
     return this;
   }
