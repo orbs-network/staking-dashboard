@@ -1,9 +1,11 @@
 import React, { forwardRef, MouseEvent } from 'react';
 import styled from 'styled-components';
+import Color from 'color';
 
 import { Card, CardContent, Divider } from '@material-ui/core';
 import { PoiCardFooter } from './PoiCardFooter';
 import { PoiCardHeader } from './PoiCardHeader';
+import { theme } from '../../base/Theme';
 
 interface IProps {
   location: string;
@@ -15,7 +17,10 @@ export const POI_CARD_WIDTH_IN_PX = 400;
 
 const PopUpCard = styled(Card)(props => ({
   width: POI_CARD_WIDTH_IN_PX,
-  backgroundColor: 'rgba(20, 20, 20, 0.6)',
+  backgroundColor: Color(theme.poiCardBackgroundColor)
+    .alpha(theme.poiCardBackgroundAlpha)
+    .rgb()
+    .toString(),
 }));
 
 const StyledDivider = styled(Divider)({
