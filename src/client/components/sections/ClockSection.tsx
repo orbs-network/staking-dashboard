@@ -18,11 +18,7 @@ const Root = styled.div`
   margin-bottom: ${theme.sizes.SIZE_LARGE_4};
 `;
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const ClockSection = observer((props: IProps) => {
-  // tslint:disable-next-line:react-hooks-nesting
+export const ClockSection = observer(() => {
   const posStore = usePosStore();
 
   return (

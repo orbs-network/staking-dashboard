@@ -87,9 +87,7 @@ export class AppDriver {
 /**
  * Helps us set the state of the 'Real world' (Anything outside of our application, usually gets read vi api calls)
  */
-// tslint:disable-next-line:max-classes-per-file
 class OuterWorldState {
-  // tslint:disable-next-line:variable-name
   constructor(private apiDependenciesKit: ApiDependenciesKit) {}
 
   get appApisDependencies(): IServicesDependencies {

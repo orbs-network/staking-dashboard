@@ -21,10 +21,7 @@ const icon = (
   </svg>
 );
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const NewsSection = (props: IProps) => {
+export const NewsSection = () => {
   const socialStore = useSocialStore();
 
   return (

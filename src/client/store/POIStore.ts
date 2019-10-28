@@ -6,14 +6,12 @@ export const defaultPoiStoreState: Readonly<IPOIStoreState> = {
   pointsOfInterest: [],
 };
 
-interface IPOIStoreActions {
+export interface IPOIStore extends IPOIStoreState {
   currentPoi: IPoi;
   nextPoi: IPoi;
 
   nextCurrentPoi(): void;
 }
-
-export interface IPOIStore extends IPOIStoreState, IPOIStoreActions {}
 
 export class POIStore implements IPOIStore {
   @observable public pointsOfInterest = defaultPoiStoreState.pointsOfInterest;
@@ -43,7 +41,6 @@ export class POIStore implements IPOIStore {
     this.currentPoiIndex = this.calculateNextPOIIndex();
   }
 
-  // tslint:disable-next-line:no-empty
   public async init(): Promise<void> {}
 
   /**

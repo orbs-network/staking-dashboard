@@ -1,11 +1,11 @@
-import { ISocialStore } from './SocialStore';
+import { TSocialStore } from './SocialStore';
 import { IPOIStore } from './POIStore';
-import { ITokenStore } from './TokenStore';
-import { IPOSStore } from './POSStore';
+import { TTokenStore } from './TokenStore';
+import { TPOSStore } from './POSStore';
 
 interface IStores {
-  socialStore: ISocialStore;
-  tokenStore: ITokenStore;
-  posStore: IPOSStore;
+  socialStore: TSocialStore;
+  tokenStore: TTokenStore;
+  posStore: TPOSStore;
   poiStore: IPOIStore;
 }

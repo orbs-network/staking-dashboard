@@ -6,18 +6,13 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
-import { POSStore } from '../../store/POSStore';
-import { Blockchain } from '../blockchain/Blockchain';
-import { inject, observer } from 'mobx-react';
-import { Section } from './Section';
 import { usePosStore } from '../../store/storeHooks';
+import { Blockchain } from '../blockchain/Blockchain';
+import { Section } from './Section';
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const BlockchainGraphSection = observer((props: IProps) => {
-  // tslint:disable-next-line:react-hooks-nesting
+export const BlockchainGraphSection = observer(() => {
   const posStore = usePosStore();
 
   const title = (

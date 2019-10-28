@@ -1,4 +1,3 @@
-/* tslint:disable:react-hooks-nesting */
 /**
  * Copyright 2019 the staking-dashboard authors
  * This file is part of the staking-dashboard library in the Orbs project.

@@ -1,4 +1,3 @@
-/* tslint:disable:variable-name */
 import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
 import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
 import { defaultPosStoreState, POSStore } from '../../store/POSStore';
