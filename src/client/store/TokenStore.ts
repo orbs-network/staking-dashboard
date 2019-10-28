@@ -8,12 +8,9 @@ export const defaultTokenStoreState: Readonly<ITokenStoreState> = {
   totalHolders: 0,
 };
 
-// tslint:disable-next-line:no-empty-interface
-interface ITokenStoreActions {}
+export type TTokenStore = ITokenStoreState;
 
-export interface ITokenStore extends ITokenStoreState, ITokenStoreActions {}
-
-export class TokenStore implements ITokenStore {
+export class TokenStore implements TTokenStore {
   @observable public orbsInCirculation: number;
   @observable public tokenPrice: number;
   @observable public token24HVolume: number;

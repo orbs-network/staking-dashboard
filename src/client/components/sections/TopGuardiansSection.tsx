@@ -6,14 +6,14 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { Link } from '@material-ui/core';
+import { observer } from 'mobx-react';
 import React from 'react';
+import styled from 'styled-components';
+import { usePosStore } from '../../store/storeHooks';
+import { theme } from '../base/Theme';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import styled from 'styled-components';
-import { theme } from '../base/Theme';
-import { observer } from 'mobx-react';
-import { usePosStore } from '../../store/storeHooks';
-import { Link } from '@material-ui/core';
 
 const ListContainer = styled.ul`
   color: ${theme.darkTextColor};
@@ -25,10 +25,7 @@ const ListItem = styled.li`
   padding-bottom: ${theme.sizes.SIZE_SMALL_2};
 `;
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const TopGuardiansSection = observer((props: IProps) => {
+export const TopGuardiansSection = observer(() => {
   const posStore = usePosStore();
 
   return (

@@ -6,11 +6,11 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import React from 'react';
-import { SocialSection } from './SocialSection';
-import { theme } from '../base/Theme';
-import { useSocialStore } from '../../store/storeHooks';
 import { observer } from 'mobx-react';
+import React from 'react';
+import { useSocialStore } from '../../store/storeHooks';
+import { theme } from '../base/Theme';
+import { SocialSection } from './SocialSection';
 
 const icon = (
   <svg width={theme.sizes.SIZE_LARGE_2} viewBox='0 0 24 23'>
@@ -22,11 +22,7 @@ const icon = (
   </svg>
 );
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const GithubSection = observer((props: IProps) => {
-  // tslint:disable-next-line:react-hooks-nesting
+export const GithubSection = observer(() => {
   const socialStore = useSocialStore();
 
   console.log(socialStore.latestCommitGist.commitUrl);

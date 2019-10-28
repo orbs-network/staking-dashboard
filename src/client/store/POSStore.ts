@@ -9,12 +9,9 @@ export const defaultPosStoreState: IPOSStoreState = {
   topGuardians: [],
 };
 
-// tslint:disable-next-line:no-empty-interface
-interface IPOSStoreActions {}
+export type TPOSStore = IPOSStoreState;
 
-export interface IPOSStore extends IPOSStoreState, IPOSStoreActions {}
-
-export class POSStore implements IPOSStore {
+export class POSStore implements TPOSStore {
   @observable public blockHeight: number;
   @observable public rewardsDistributed: number;
   @observable public nextVotingTime: number;

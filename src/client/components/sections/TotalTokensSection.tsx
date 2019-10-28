@@ -6,16 +6,13 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
+import { useTokenStore } from '../../store/storeHooks';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { observer } from 'mobx-react';
-import { useTokenStore } from '../../store/storeHooks';
 
-// tslint:disable-next-line:no-empty-interface
-interface IProps {}
-
-export const TotalTokensSection = observer((props: IProps) => {
+export const TotalTokensSection = observer(() => {
   const tokenStore = useTokenStore();
 
   return (

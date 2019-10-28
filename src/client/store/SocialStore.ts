@@ -15,12 +15,9 @@ export const defaultSocialStoreState: Readonly<ISocialStoreState> = {
   recentUpdate: '',
 };
 
-// tslint:disable-next-line:no-empty-interface
-interface ISocialStoreActions {}
+export type TSocialStore = ISocialStoreState;
 
-export interface ISocialStore extends ISocialStoreState, ISocialStoreActions {}
-
-export class SocialStore implements ISocialStore {
+export class SocialStore implements TSocialStore {
   @observable public latestTweetGist: ITwitGist = defaultSocialStoreState.latestTweetGist;
   @observable public latestCommitGist: IGitHubCommitGist = defaultSocialStoreState.latestCommitGist;
   @observable public recentUpdate: string = defaultSocialStoreState.recentUpdate;
