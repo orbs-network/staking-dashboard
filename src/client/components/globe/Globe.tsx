@@ -34,8 +34,8 @@ const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
 
 const MountDiv = styled('div')({
+  position: 'relative', // Ensures that we can center the pop up with HTML
   width: '100%',
-  height: '200px',
 });
 
 const boxSizeForDev = {
@@ -136,8 +136,6 @@ export const GlobeFc = observer((props: IProps) => {
   const poiStore = usePoiStore();
 
   // Component state
-  const [rotation, setRotation] = useState({ rotationX: 0, rotationY: 0 });
-  const [centerOffset, setCenterOffset] = useState({ centerLeftOffset: 0, centerTopOffset: 0 });
 
   // Dom elements refs
   const mountRef = useRef<HTMLDivElement>(null);
@@ -156,21 +154,6 @@ export const GlobeFc = observer((props: IProps) => {
   const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
 
   /**
-   * Calculates and sets the state for the 'top' and 'left' offsets for the center of the globe.
-   */
-  const calculateAndSetCenterOffset = useCallback(() => {
-    const { offsetWidth, offsetHeight, offsetTop, offsetLeft } = renderer.domElement;
-
-    const canvasHalfWidth = offsetWidth / 2;
-    const canvasHalfHeight = offsetHeight / 2;
-
-    setCenterOffset({
-      centerLeftOffset: canvasHalfWidth + offsetLeft,
-      centerTopOffset: canvasHalfHeight + offsetTop,
-    });
-  }, [renderer.domElement, setCenterOffset]);
-
-  /**
    * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
    */
   const resizeRendererToDisplaySize = useCallback(
@@ -178,19 +161,15 @@ export const GlobeFc = observer((props: IProps) => {
       const canvas = renderer.domElement;
       const width = canvas.clientWidth;
 
-      // TODO : O.L : FUTURE : Ask why we are setting here widthxwidth
       if (canvas.width !== width || forceResize) {
         renderer.setSize(width, width, false);
         composer.setSize();
         canvas.removeAttribute('style');
         camera.aspect = 1;
         camera.updateProjectionMatrix();
-
-        // Calculates and sets the center of the canvas for the POI popup
-        calculateAndSetCenterOffset();
       }
     },
-    [renderer, composer, camera, renderer.domElement, composer, calculateAndSetCenterOffset],
+    [renderer, composer, camera, renderer.domElement, composer],
   );
 
   /**
@@ -223,7 +202,7 @@ export const GlobeFc = observer((props: IProps) => {
         TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
           scale: 0.2,
           autoAlpha: 0,
-          transformOrigin: 'top left',
+          transformOrigin: 'top center',
         }),
         0,
       );
@@ -257,11 +236,6 @@ export const GlobeFc = observer((props: IProps) => {
           autoAlpha: 1,
         }),
       );
-
-      timeLine.eventCallback('onComplete', () => {
-        // Sets the rotation valueschh
-        setRotation({ rotationX: poiRotation.xRotation, rotationY: poiRotation.yRotation });
-      });
 
       return timeLine;
     },
@@ -346,38 +320,9 @@ export const GlobeFc = observer((props: IProps) => {
 
   return (
     <>
-      <MountDiv id='mount' onClick={onGlobClickHandler} ref={mountRef} />
-      {/* TODO : FUTURE : Move this div to a separate component if we will still want it */}
-      <div style={{ position: 'absolute', left: 200, top: 900 }}>
-        <label style={{ color: 'white', display: 'block' }}>X: {rotation.rotationX}</label>
-        <input
-          type='range'
-          id='rotationX'
-          value={rotation.rotationX * 100}
-          min={0}
-          max={Math.PI * 2 * 100}
-          onChange={e =>
-            setRotation({ rotationY: rotation.rotationY, rotationX: parseInt(e.currentTarget.value, 10) / 100 })
-          }
-        />
-        <label style={{ color: 'white', display: 'block' }}>Y: {rotation.rotationY}</label>
-        <input
-          type='range'
-          id='rotationY'
-          value={rotation.rotationY * 100}
-          min={0}
-          max={Math.PI * 2 * 100}
-          onChange={e =>
-            setRotation({ rotationX: rotation.rotationX, rotationY: parseInt(e.currentTarget.value, 10) / 100 })
-          }
-        />
-      </div>
-      <PoiPopup
-        ref={popUpDivRef}
-        top={centerOffset.centerTopOffset}
-        left={centerOffset.centerLeftOffset}
-        location={poiStore.currentPoi.name}
-      />
+      <MountDiv id='mount' onClick={onGlobClickHandler} ref={mountRef}>
+        <PoiPopup ref={popUpDivRef} location={poiStore.currentPoi.name} />
+      </MountDiv>
     </>
   );
 });
