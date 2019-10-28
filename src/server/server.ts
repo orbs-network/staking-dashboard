@@ -62,5 +62,5 @@ function startServicesTimers(serverServices: IServerServices) {
   const oneMinute = 1000 * 60;
 
   // Starts an interval for updating the twitter service (Every 5 Minutes)
-  setInterval(serverServices.orbsTwitterService.fetchAndCacheLatestTweetGist, oneMinute * 1);
+  setInterval(() => serverServices.orbsTwitterService.fetchAndCacheLatestTweetGist(), oneMinute * 1);
 }
