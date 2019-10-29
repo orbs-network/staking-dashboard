@@ -7,6 +7,7 @@ import { PoiCardHeader } from './PoiCardHeader';
 import { theme } from '../../base/Theme';
 import { PoiCardFooterSelf } from './PoiCardFooterSelf';
 import { PoiCardHeaderSelf } from './PoiCardHeaderSelf';
+import { Typography } from '../../base/Typography';
 
 interface IProps {
   location: string;
@@ -22,6 +23,7 @@ const PopUpCard = styled('div')({
     .alpha(theme.poiCardBackgroundAlpha)
     .rgb()
     .toString(),
+  padding: 16,
 });
 
 const StyledDivider = styled('div')({
@@ -34,8 +36,6 @@ const StyledDivider = styled('div')({
 
 const StyledCardContent = styled('div')(props => ({
   color: props.theme.textColor,
-  padding: 16,
-  paddingTop: 0,
 }));
 
 export const PoiCardSelf = React.memo(
@@ -50,12 +50,21 @@ export const PoiCardSelf = React.memo(
     return (
       // Containing click events inside the card
       <PopUpCard ref={ref} onClick={stopEventPropagation}>
+        {/* Header */}
         <PoiCardHeaderSelf name={name} imageUrl={profileImageUrl} location={location} role={role} />
+
+        {/* Content */}
         <StyledCardContent>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          <StyledDivider />
-          <PoiCardFooterSelf rank={9} totalStake={28000} activeSince={2018} />
+          <Typography variant={'medium'}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          </Typography>
         </StyledCardContent>
+
+        {/* Divider  */}
+        <StyledDivider />
+
+        {/* Footer */}
+        <PoiCardFooterSelf rank={9} totalStake={28000} activeSince={2018} />
       </PopUpCard>
     );
   }),

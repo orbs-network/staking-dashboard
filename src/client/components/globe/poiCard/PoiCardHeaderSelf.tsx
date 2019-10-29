@@ -16,7 +16,7 @@ interface IProps {
 
 const StyledCardHeader = styled('div')(props => ({
   color: props.theme.textColor,
-  padding: 16,
+  paddingBottom: 16,
 
   display: 'flex',
   flexDirection: 'row',
@@ -32,6 +32,11 @@ const StyledAvatar = styled(Avatar)(props => ({
   borderWidth: 2,
   borderColor: props.theme.textColor,
   borderStyle: 'solid',
+}));
+
+const HeaderTypography = styled(Typography)(props => ({
+  fontWeight: 'bold',
+  color: props.theme.textColor,
 }));
 
 const SubHeaderTypography = styled(Typography)(props => ({
@@ -72,7 +77,7 @@ export const PoiCardHeaderSelf: React.FC<IProps> = props => {
       <StyledAvatar src={imageUrl} />
       <StyledTitlesArea>
         {/* Title */}
-        <Typography variant={'large'}>{name}</Typography>
+        <HeaderTypography variant={'small'}>{name}</HeaderTypography>
         {/* Sub Header */}
         <SubHeaderTypography variant={'small'}>
           <Room />
