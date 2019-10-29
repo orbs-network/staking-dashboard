@@ -61,11 +61,14 @@ const StyledPopUpDiv = styled('div')({
     borderStyle: 'solid',
     borderColor: 'rgba(0, 0, 0, 0)',
 
-    // Should match the popup border **background** color
+    // Should match the popup border **background** color (with the same alpha value)
+    // DEV_NOTE : we reduce the alpha value in order to compensate about the fact that the
+    //  inner triangle is sitting upon the outer one, which makes the final result more opaque.
     borderBottomColor: Color(theme.poiCardBackgroundColor)
-      .alpha(theme.poiCardBackgroundAlpha)
+      .alpha(theme.poiCardBackgroundAlpha * 0.8)
       .rgb()
       .toString(),
+    // borderBottomColor: 'rgba(20, 20, 20, 0.6)',
 
     // Size and margin fix to ensure proper centering.
     borderWidth: POP_UP_INNER_ARROW_WIDTH,
@@ -79,7 +82,11 @@ const StyledPopUpDiv = styled('div')({
     borderColor: 'rgba(0, 0, 0, 0)',
 
     // Should match the popup border **border** color
-    borderBottomColor: theme.poiPopUpBorderColor,
+    // DEV_NOTE: Reducing alpha value for same reason as for the inner triangle.
+    borderBottomColor: Color(theme.poiPopUpBorderColor)
+      .alpha(0.5)
+      .rgb()
+      .toString(),
 
     // Size and margin fix to ensure proper centering.
     borderWidth: POP_UP_OUTER_ARROW_WIDTH,
