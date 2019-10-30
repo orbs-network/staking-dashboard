@@ -32,6 +32,10 @@ const sizes = {
   SIZE_SMALL_6: `${scaleDown(6)}em`, // 0.262em  4.19px
 };
 
+const cardTheme = {
+  padding: 16,
+};
+
 const poppersBorderColor = '#3d3d3d';
 
 const primaryColor = '#ededed';
@@ -56,8 +60,13 @@ export const theme = {
   poiCardBackgroundColor,
   poiCardBackgroundAlpha,
 
+  mainColor: 'rgb(96, 125, 131)',
+  textColor: 'rgb(156, 156, 156)',
+
   buttonColor: '#030616',
   lightTextColor: primaryColor,
   darkTextColor: '#8a8a8a',
   sizes,
+
+  cardTheme,
 };

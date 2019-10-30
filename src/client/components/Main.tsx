@@ -71,18 +71,13 @@ const Right = styled.div`
   width: 20em;
 `;
 
-const mainTheme = {
-  mainColor: 'rgb(96, 125, 131)',
-  textColor: 'rgb(156, 156, 156)',
-};
-
 interface IProps {
   disableCanvas: boolean;
 }
 export const Main: React.FunctionComponent<IProps> = ({ disableCanvas }) => {
   return (
     <StylesProvider injectFirst>
-      <ThemeProvider theme={mainTheme}>
+      <ThemeProvider theme={theme}>
         <Root>
           <GlobalStyle />
           <Container>
