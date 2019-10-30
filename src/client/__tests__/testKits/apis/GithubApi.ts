@@ -4,9 +4,11 @@ import { IApiTestClass } from './IApiTestClass';
 
 export class GitHubApiTestKit implements IApiTestClass<GitHub> {
   private lastCommitMessage: string;
+  private lastCommitUrl: string;
 
   constructor() {
     this.lastCommitMessage = 'default last commit message';
+    this.lastCommitUrl = 'default last commit url';
   }
 
   public buildMockedInstance(): GitHub {
@@ -27,15 +29,22 @@ export class GitHubApiTestKit implements IApiTestClass<GitHub> {
     this.lastCommitMessage = commitMessage;
   }
 
+  public withLastCommitUrl(commitUrl: string) {
+    this.lastCommitUrl = commitUrl;
+  }
+
   /**
    * Used to mimic the response of 'getRepo'
    */
   private buildGetRepositoryResponse() {
-    return buildGetRepositoryResponse(this.lastCommitMessage);
+    return buildGetRepositoryResponse(this.lastCommitMessage, this.lastCommitUrl);
   }
 }
 
-export function buildGetRepositoryResponse(lastCommitMessage: string) {
+/**
+ * Builds the response object for the 'getRepo' function.
+ */
+export function buildGetRepositoryResponse(lastCommitMessage: string, lastCommitUrl: string) {
   const mockedRepositoryResponse = {
     listCommits: async () => {
       return {
@@ -44,6 +53,7 @@ export function buildGetRepositoryResponse(lastCommitMessage: string) {
             commit: {
               message: lastCommitMessage,
             },
+            html_url: lastCommitUrl,
           },
         ],
       };

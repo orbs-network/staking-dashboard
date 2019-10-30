@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action, observable } from 'mobx';
 import { ITokenStoreState } from '../../shared/IStore';
 
 export const defaultTokenStoreState: Readonly<ITokenStoreState> = {
@@ -8,7 +8,9 @@ export const defaultTokenStoreState: Readonly<ITokenStoreState> = {
   totalHolders: 0,
 };
 
-export class TokenStore {
+export type TTokenStore = ITokenStoreState;
+
+export class TokenStore implements TTokenStore {
   @observable public orbsInCirculation: number;
   @observable public tokenPrice: number;
   @observable public token24HVolume: number;

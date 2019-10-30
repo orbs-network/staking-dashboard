@@ -75,67 +75,73 @@ export interface IProps {
   className?: string;
   dataTestId?: string;
   variant?: 'xxx-small' | 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large';
+
+  // Allows for any other properties to be passed
+  [p: string]: any;
 }
 
-export const Typography: React.FunctionComponent<IProps> = ({
+export const Typography: React.FunctionComponent<IProps & React.HTMLAttributes<HTMLSpanElement>> = ({
   variant = 'medium',
   dataTestId,
   className,
   children,
+
+  // Allows for passing of all normal props
+  ...dynamicProps
 }) => {
   switch (variant) {
     case 'xxx-small':
       return (
-        <XXXSmall className={className} data-testid={dataTestId}>
+        <XXXSmall className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </XXXSmall>
       );
 
     case 'xx-small':
       return (
-        <XXSmall className={className} data-testid={dataTestId}>
+        <XXSmall className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </XXSmall>
       );
 
     case 'x-small':
       return (
-        <XSmall className={className} data-testid={dataTestId}>
+        <XSmall className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </XSmall>
       );
 
     case 'small':
       return (
-        <Small className={className} data-testid={dataTestId}>
+        <Small className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </Small>
       );
 
     case 'medium':
       return (
-        <Medium className={className} data-testid={dataTestId}>
+        <Medium className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </Medium>
       );
 
     case 'large':
       return (
-        <Large className={className} data-testid={dataTestId}>
+        <Large className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </Large>
       );
 
     case 'x-large':
       return (
-        <XLarge className={className} data-testid={dataTestId}>
+        <XLarge className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </XLarge>
       );
 
     case 'xx-large':
       return (
-        <XXLarge className={className} data-testid={dataTestId}>
+        <XXLarge className={className} data-testid={dataTestId} {...dynamicProps}>
           {children}
         </XXLarge>
       );

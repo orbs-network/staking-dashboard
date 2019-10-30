@@ -6,28 +6,28 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
-import { POSStore } from '../../store/POSStore';
+import { usePosStore } from '../../store/storeHooks';
 import { Blockchain } from '../blockchain/Blockchain';
-import { inject, observer } from 'mobx-react';
 import { Section } from './Section';
 
-interface IProps {
-  posStore?: POSStore;
-}
+export const BlockchainGraphSection = observer(() => {
+  const posStore = usePosStore();
 
-export const BlockchainGraphSection = inject('posStore')(
-  observer(({ posStore }: IProps) => {
-    const title = (
-      <>
-        {'Total blocks created: '}
-        <strong data-testid='total-blocks'>{posStore.blockHeight.toLocaleString()}</strong>
-      </>
-    );
-    return (
-      <Section title={title} helpPlacement='bottom' helpText='Total blocks created, for more information please visit Orbs Block Explorer'>
-        <Blockchain blockHeight={posStore.blockHeight} />
-      </Section>
-    );
-  }),
-);
+  const title = (
+    <>
+      {'Total blocks created: '}
+      <strong data-testid='total-blocks'>{posStore.blockHeight.toLocaleString()}</strong>
+    </>
+  );
+  return (
+    <Section
+      title={title}
+      helpPlacement='bottom'
+      helpText='Total blocks created, for more information please visit Orbs Block Explorer'
+    >
+      <Blockchain blockHeight={posStore.blockHeight} />
+    </Section>
+  );
+});

@@ -6,11 +6,11 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
-import { SocialSection } from './SocialSection';
-import { inject } from 'mobx-react';
-import { SocialStore } from '../../store/SocialStore';
+import { useSocialStore } from '../../store/storeHooks';
 import { theme } from '../base/Theme';
+import { SocialSection } from './SocialSection';
 
 const icon = (
   <svg width={theme.sizes.SIZE_LARGE_1} viewBox='0 0 22 18'>
@@ -22,10 +22,16 @@ const icon = (
   </svg>
 );
 
-interface IProps {
-  socialStore?: SocialStore;
-}
+export const TwitterSection = observer(() => {
+  const socialStore = useSocialStore();
 
-export const TwitterSection = inject('socialStore')(({ socialStore }: IProps) => {
-  return <SocialSection dataTestId='latest-tweet' icon={icon} title='Latest Tweets' text={socialStore.latestTweet} />;
+  return (
+    <SocialSection
+      dataTestId='latest-tweet'
+      icon={icon}
+      title='Latest Tweet'
+      socialLink={socialStore.latestTweetGist.tweetUrl}
+      text={socialStore.latestTweetGist.tweetText}
+    />
+  );
 });

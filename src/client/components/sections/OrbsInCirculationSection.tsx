@@ -6,20 +6,20 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
+import { useTokenStore } from '../../store/storeHooks';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { TokenStore } from '../../store/TokenStore';
 
-interface IProps {
-  tokenStore?: TokenStore;
-}
+export const OrbsInCirculationSection = observer(() => {
+  const tokenStore = useTokenStore();
 
-export const OrbsInCirculationSection = inject('tokenStore')(({ tokenStore }: IProps) => {
   return (
     <Section title='Orbs In Circulation'>
-      <Typography variant='xx-large' dataTestId='orbs-in-circulation'>{Math.round(tokenStore.orbsInCirculation).toLocaleString()}</Typography>
+      <Typography variant='xx-large' dataTestId='orbs-in-circulation'>
+        {Math.round(tokenStore.orbsInCirculation).toLocaleString()}
+      </Typography>
     </Section>
   );
 });

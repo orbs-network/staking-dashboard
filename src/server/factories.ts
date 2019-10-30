@@ -1,6 +1,6 @@
 import { Client, NetworkType } from 'orbs-client-sdk';
 import { orbsPOSDataServiceFactory } from 'orbs-pos-data';
-import * as Web3 from 'web3';
+import Web3 from 'web3';
 
 const ETHEREUM_PROVIDER_URL = 'https://mainnet.infura.io/v3/3fe9b03bd8374639809addf2164f7287';
 const ORBS_VIRTUAL_CHAIN_ID = 1_100_000; // The virtual chain Id on the Orbs network

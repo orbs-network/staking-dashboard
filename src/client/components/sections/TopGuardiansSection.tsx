@@ -6,13 +6,14 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { Link } from '@material-ui/core';
+import { observer } from 'mobx-react';
 import React from 'react';
+import styled from 'styled-components';
+import { usePosStore } from '../../store/storeHooks';
+import { theme } from '../base/Theme';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import styled from 'styled-components';
-import { inject } from 'mobx-react';
-import { POSStore } from '../../store/POSStore';
-import { theme } from '../base/Theme';
 
 const ListContainer = styled.ul`
   color: ${theme.darkTextColor};
@@ -24,17 +25,22 @@ const ListItem = styled.li`
   padding-bottom: ${theme.sizes.SIZE_SMALL_2};
 `;
 
-interface IProps {
-  posStore?: POSStore;
-}
+export const TopGuardiansSection = observer(() => {
+  const posStore = usePosStore();
 
-export const TopGuardiansSection = inject('posStore')(({ posStore }: IProps) => {
   return (
-    <Section title={`Top ${posStore.topGuardians.length} guardians`} helpText='The top 3 Guardians with biggest amount of Orbs tokens delegated to them'>
+    <Section
+      title={`Top ${posStore.topGuardians.length} guardians`}
+      helpText='The top 3 Guardians with biggest amount of Orbs tokens delegated to them'
+    >
       <ListContainer>
         {posStore.topGuardians.map((g, idx) => (
-          <ListItem key={g}>
-            <Typography variant='x-small' dataTestId={`guardian-${idx}`}>{g}</Typography>
+          <ListItem key={g.id}>
+            <Typography variant='x-small' dataTestId={`guardian-${idx}`}>
+              <Link href={g.homePage} target={'_blank'} color={'inherit'} data-testid={`guardian-link-${idx}`}>
+                {g.displayName}
+              </Link>
+            </Typography>
           </ListItem>
         ))}
       </ListContainer>

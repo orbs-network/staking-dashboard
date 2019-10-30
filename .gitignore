@@ -1,3 +1,6 @@
 dist
 .idea
 node_modules
+
+# Secretes passed by env
+.env-secrets

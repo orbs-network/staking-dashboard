@@ -17,11 +17,7 @@ async function main() {
   console.log(`config: ${JSON.stringify(config, null, 2)}`);
   console.log(`*******************************************`);
 
-  const {
-    LOG_TO_CONSOLE,
-    LOG_TO_FILE,
-    LOG_TO_ROLLBAR,
-  } = config;
+  const { LOG_TO_CONSOLE, LOG_TO_FILE, LOG_TO_ROLLBAR } = config;
   const logger: winston.Logger = genLogger(LOG_TO_CONSOLE, LOG_TO_FILE, LOG_TO_ROLLBAR);
 
   initServer(logger);

@@ -6,241 +6,308 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Power2, TimelineLite, TweenMax } from 'gsap';
+import styled from 'styled-components';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
-import React from 'react';
-import {
-  AmbientLight,
-  Clock,
-  DirectionalLight,
-  Object3D,
-  PerspectiveCamera,
-  Raycaster,
-  Scene,
-  Vector2,
-  WebGLRenderer,
-} from 'three';
+import { AmbientLight, Clock, DirectionalLight, PerspectiveCamera, Raycaster, Scene, WebGLRenderer } from 'three';
+import { observer } from 'mobx-react';
+
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
+import { PoiPopup } from './poiCard/PoiPopup';
+import { usePoiStore } from '../../store/storeHooks';
+import { useTheme } from '../base/themeHooks';
 
-const raycaster = new Raycaster();
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
 
-interface IState {
-  rotationX: number;
-  rotationY: number;
-}
-export class Globe extends React.Component<{}, IState> {
-  private clock: Clock = new Clock();
-  private globe3D: Globe3D;
-  private starField: Object3D;
-  private dotsContainer: DotsContainer3D;
-  private scene: Scene;
-  private mount: HTMLDivElement;
-  private camera: PerspectiveCamera;
-  private renderer: WebGLRenderer;
-  private composer: EffectComposer;
-  private frameId: number;
-  private mouse: Vector2 = new Vector2();
-  private hoverdObject: Object3D;
+const MountDiv = styled('div')({
+  position: 'relative', // Ensures that we can center the pop up with HTML
+  width: '100%',
+});
 
-  constructor(props) {
-    super(props);
-    this.state = { rotationX: 0, rotationY: 0 };
-  }
+const useGlobeAnimation = () => {
+  const clock: Clock = useMemo(() => new Clock(), []);
 
-  public componentWillMount() {
-    // ADD SCENE
-    this.scene = new Scene();
+  const rayCaster: Raycaster = useMemo(() => new Raycaster(), []);
 
-    // Add light
+  const scene: Scene = useMemo(() => new Scene(), []);
+
+  const renderer: WebGLRenderer = useMemo(() => {
+    // ADD RENDERER
+    const wegGLRenderer = new WebGLRenderer({ antialias: true, alpha: true });
+    wegGLRenderer.setClearColor(0x000000, 0.0);
+    wegGLRenderer.setPixelRatio(window.devicePixelRatio);
+
+    return wegGLRenderer;
+  }, [window.devicePixelRatio]);
+
+  const composer: EffectComposer = useMemo(() => {
+    return new EffectComposer(renderer);
+  }, [renderer]);
+
+  const camera: PerspectiveCamera = useMemo(() => {
+    const perspectiveCamera = new PerspectiveCamera(50, 0.5, 0.1, 1000);
+    perspectiveCamera.position.z = CAMERA_POS;
+
+    return perspectiveCamera;
+  }, []);
+
+  // Adding all of the scene effects, post processing and static 3d assets.
+  useEffect(() => {
+    // Add main light
     const light = new AmbientLight(0xffffff, 0.7);
-    this.scene.add(light);
+    scene.add(light);
 
-    // another light
+    // Add secondary lights
     const leftLight = new DirectionalLight(0xffffff, 0.8);
     leftLight.position.set(-1, 0, 0);
-    this.scene.add(leftLight);
+    scene.add(leftLight);
 
     const rightLight = new DirectionalLight(0xffffff, 0.8);
     rightLight.position.set(1, 0, 0);
-    this.scene.add(rightLight);
+    scene.add(rightLight);
 
     const topLight = new DirectionalLight(0xffffff, 0.8);
     topLight.position.set(0, 1, 0);
-    this.scene.add(topLight);
+    scene.add(topLight);
 
     const bottomLight = new DirectionalLight(0xffffff, 0.8);
     bottomLight.position.set(0, -1, 0);
-    this.scene.add(bottomLight);
-
-    // ADD CAMERA
-    this.camera = new PerspectiveCamera(50, 0.5, 0.1, 1000);
-    this.camera.position.z = CAMERA_POS;
-
-    // ADD RENDERER
-    this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
-    this.renderer.setClearColor(0x000000, 0);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
+    scene.add(bottomLight);
 
     // Add effects
-    this.composer = new EffectComposer(this.renderer);
-    const effectPass = new EffectPass(this.camera, new BloomEffect(6));
+    const effectPass = new EffectPass(camera, new BloomEffect(6));
     effectPass.renderToScreen = true;
 
-    this.composer.addPass(new RenderPass(this.scene, this.camera));
-    this.composer.addPass(effectPass);
+    composer.addPass(new RenderPass(scene, camera));
+    composer.addPass(effectPass);
 
     // Add the globe
-    this.globe3D = new Globe3D(10);
-    this.scene.add(this.globe3D.build());
-
-    // Add the dots
-    this.dotsContainer = new DotsContainer3D(10);
-    this.scene.add(this.dotsContainer);
+    const globe3D = new Globe3D(10);
+    scene.add(globe3D.build());
 
     // Add the starfield
-    this.starField = generateStarField(130, 200);
-    this.scene.add(this.starField);
-  }
+    const starField = generateStarField(130, 200);
+    scene.add(starField);
+  }, [scene, composer]);
 
-  public componentDidMount() {
-    const width = this.mount.clientWidth;
-    const height = this.mount.clientHeight;
+  return {
+    clock,
+    rayCaster,
+    scene,
+    renderer,
+    composer,
+    camera,
+  };
+};
 
-    this.camera.aspect = width / height;
-    this.renderer.setSize(width, height, false);
+export const GlobeFc = observer(() => {
+  // Mobx stores
+  const poiStore = usePoiStore();
 
-    this.mount.appendChild(this.renderer.domElement);
+  // Theme
+  const theme = useTheme();
 
-    this.resizeRendererToDisplaySize(true);
-    this.startAnimation();
-  }
+  // Dom elements refs
+  const mountRef = useRef<HTMLDivElement>(null);
+  const popUpDivRef = useRef<HTMLDivElement>(null);
 
-  public componentWillUnmount() {
-    this.stopAnimation();
-    this.mount.removeChild(this.renderer.domElement);
-  }
+  // Animation refs
+  const animationFrameRef = useRef<number>(null);
+  const animationTimelineRef = useRef<TimelineLite>(null);
 
-  public render() {
-    // this.dotsContainer.activeDot.rotation.set(this.state.rotationX, this.state.rotationY, 0, 'YXZ');
-    // this.scene.rotation.set(-this.state.rotationX, -this.state.rotationY, 0);
-    return (
-      <>
-        <div
-          id='mount'
-          style={{ width: '100%', height: '200px' }}
-          onMouseMove={e => this.onDocumentMouseMove(e)}
-          onClick={e => this.onClick()}
-          ref={mount => (this.mount = mount)}
-        />
-        <div style={{ position: 'absolute', left: 200, top: 900 }}>
-          <label style={{ color: 'white', display: 'block' }}>X: {this.state.rotationX}</label>
-          <input
-            type='range'
-            id='rotationX'
-            value={this.state.rotationX * 100}
-            min={0}
-            max={Math.PI * 2 * 100}
-            onChange={e => this.setState({ rotationX: parseInt(e.currentTarget.value, 10) / 100 })}
-          />
-          <label style={{ color: 'white', display: 'block' }}>Y: {this.state.rotationY}</label>
-          <input
-            type='range'
-            id='rotationY'
-            value={this.state.rotationY * 100}
-            min={0}
-            max={Math.PI * 2 * 100}
-            onChange={e => this.setState({ rotationY: parseInt(e.currentTarget.value, 10) / 100 })}
-          />
-        </div>
-      </>
-    );
-  }
+  // Builds the 3d dots container
+  const dotsContainer: DotsContainer3D = useMemo(() => new DotsContainer3D(poiStore.pointsOfInterest, 10), [
+    poiStore.pointsOfInterest,
+  ]);
 
-  private onClick(): void {
-    this.dotsContainer.activeDot.unblink();
-    this.dotsContainer.nextActiveDot();
-    this.dotsContainer.activeDot.blink();
+  // Gets the Globe animations objects
+  const { renderer, composer, camera, clock, scene } = useGlobeAnimation();
 
-    const timeLine = new TimelineLite();
-    timeLine.timeScale(ANIMATION_SPEED);
-    timeLine.add(
-      TweenMax.to(this.camera.position, 0.5, {
-        z: CAMERA_POS * 1.25,
-        ease: Power2.easeInOut,
-      }),
-    );
-    timeLine.add(
-      TweenMax.to(this.camera.position, 0.5, {
-        z: CAMERA_POS,
-        ease: Power2.easeInOut,
-      }),
-    );
-    timeLine.add(
-      TweenMax.to(this.scene.rotation, 1, {
-        x: -this.dotsContainer.activeDot.rotation.x,
-        y: -this.dotsContainer.activeDot.rotation.y,
-        z: 0,
-        ease: Power2.easeInOut,
-      }),
-      0,
-    );
-  }
+  /**
+   * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
+   */
+  const resizeRendererToDisplaySize = useCallback(
+    (forceResize: boolean = false) => {
+      const canvas = renderer.domElement;
+      const width = canvas.clientWidth;
 
-  private onDocumentMouseMove(e: React.MouseEvent): void {
-    this.mouse.x = (e.nativeEvent.offsetX / this.mount.clientWidth) * 2 - 1;
-    this.mouse.y = -(e.nativeEvent.offsetY / this.mount.clientHeight) * 2 + 1;
-  }
-
-  private startAnimation() {
-    if (!this.frameId) {
-      this.frameId = requestAnimationFrame(() => this.animate());
-    }
-  }
-
-  private stopAnimation() {
-    cancelAnimationFrame(this.frameId);
-  }
-
-  private handleHover(): void {
-    raycaster.setFromCamera(this.mouse, this.camera);
-    const intersects = raycaster.intersectObjects(this.scene.children, true);
-    if (intersects.length > 0) {
-      const newIntersectedObject = intersects[0].object;
-      if (this.hoverdObject !== newIntersectedObject) {
-        this.globe3D.handleHoverOut(this.hoverdObject);
+      if (canvas.width !== width || forceResize) {
+        renderer.setSize(width, width, false);
+        composer.setSize();
+        canvas.removeAttribute('style');
+        camera.aspect = 1;
+        camera.updateProjectionMatrix();
       }
-      this.hoverdObject = intersects[0].object;
-      this.globe3D.handleHover(this.hoverdObject);
-    } else {
-      if (this.hoverdObject) {
-        this.globe3D.handleHoverOut(this.hoverdObject);
+    },
+    [renderer, composer, camera, renderer.domElement, composer],
+  );
+
+  /**
+   * Calls all relevant animations functions and sets the animation for the next frame.
+   */
+  const animate = useCallback(() => {
+    resizeRendererToDisplaySize();
+
+    // Apply post-processing
+    composer.render(clock.getDelta());
+
+    // Continue the animation in the next frame & keep reference to the frame id
+    animationFrameRef.current = requestAnimationFrame(animate);
+  }, [clock, composer, animationFrameRef, resizeRendererToDisplaySize]);
+
+  /**
+   * Performs all of the required animations for the given location
+   */
+  const animateGlobeAndPopUpDisplay = useCallback(
+    (poiRotation: { xRotation: number; yRotation: number }, onPopUpHidden?: () => void) => {
+      const timeLine = new TimelineLite();
+      timeLine.timeScale(ANIMATION_SPEED);
+
+      const singleAnimationDuration = 1;
+
+      animationTimelineRef.current = timeLine;
+
+      // Shrinks and hides the pop up.
+      const popUpHidingTween = TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+        scale: 0.2,
+        autoAlpha: 0,
+        transformOrigin: `center -${theme.popup.marginFromOriginInEm}em`,
+        ease: Power2.easeIn,
+      });
+
+      // Do we have a on hidden callback ?
+      if (onPopUpHidden) {
+        popUpHidingTween.eventCallback('onComplete', () => onPopUpHidden());
       }
+
+      timeLine.add(popUpHidingTween, 0);
+
+      // Creates the zoom out - zoom in when transitioning between dots.
+      timeLine.add(
+        TweenMax.to(camera.position, singleAnimationDuration / 2, {
+          z: CAMERA_POS * 1.25,
+          ease: Power2.easeInOut,
+          repeat: 1,
+          yoyo: true,
+        }),
+        0,
+      );
+
+      // This tween is responsible for rotating the scene to the appropriate active dot.
+      timeLine.add(
+        TweenMax.to(scene.rotation, singleAnimationDuration, {
+          x: -poiRotation.xRotation,
+          y: -poiRotation.yRotation,
+          z: 0,
+          ease: Power2.easeInOut,
+        }),
+        0,
+      );
+
+      // Display the node data "pop up"
+      timeLine.add(
+        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 3, {
+          scale: 1,
+          autoAlpha: 1,
+          ease: Power2.easeOut,
+        }),
+      );
+
+      return timeLine;
+    },
+    [camera, scene, popUpDivRef.current, theme.popup.marginFromOriginInEm],
+  );
+
+  /**
+   * Performs all of the animations required for the transition between POIs.
+   */
+  const animateGlobeAndPopUpDisplayForNextPoi = useCallback(
+    (onPopUpHidden?: () => void) => {
+      return animateGlobeAndPopUpDisplay(
+        {
+          xRotation: poiStore.nextPoi.xRotation,
+          yRotation: poiStore.nextPoi.yRotation,
+        },
+        onPopUpHidden,
+      );
+    },
+    [poiStore.nextPoi],
+  );
+
+  /**
+   * Handles both store updates and animations for the transitioning to the next POI.
+   */
+  const performTransitionToNextPoi = useCallback(() => {
+    // Start animating to the next POI
+    animateGlobeAndPopUpDisplayForNextPoi(() => poiStore.nextCurrentPoi());
+
+    // Activates the relevant poi-dot
+    dotsContainer.setActiveDotById(poiStore.nextPoi.id);
+
+    // Actually switch to the next POI
+  }, [animateGlobeAndPopUpDisplayForNextPoi, dotsContainer, poiStore]);
+
+  /**
+   * Animates transition to next point
+   */
+  const onGlobClickHandler = useCallback(() => {
+    // Prevents multi-clicking until the current animation timeline is done.
+    if (animationTimelineRef.current && animationTimelineRef.current.isActive()) {
+      return;
     }
-  }
 
-  private resizeRendererToDisplaySize(forceResize: boolean = false) {
-    const canvas = this.renderer.domElement;
-    const width = canvas.clientWidth;
-    if (canvas.width !== width || forceResize) {
-      this.renderer.setSize(width, width, false);
-      this.composer.setSize();
-      canvas.removeAttribute('style');
-      this.camera.aspect = 1;
-      this.camera.updateProjectionMatrix();
-    }
-  }
+    // Perform the transition to the next POI
+    performTransitionToNextPoi();
+  }, [performTransitionToNextPoi]);
 
-  private animate() {
-    // this.globe3D.animate();
-    this.handleHover();
-    this.resizeRendererToDisplaySize();
+  // Add the dots
+  useEffect(() => {
+    scene.add(dotsContainer);
+  }, [scene, dotsContainer]);
 
-    this.composer.render(this.clock.getDelta());
-    // this.renderer.render(this.scene, this.camera);
-    this.frameId = requestAnimationFrame(() => this.animate());
-  }
-}
+  // Appends the renderer DOM element to its proper div
+  useEffect(() => {
+    mountRef.current.appendChild(renderer.domElement);
+  }, [renderer.domElement, mountRef.current]);
+
+  // Adjusts camera aspect and renderer size
+  useEffect(() => {
+    const width = mountRef.current.clientWidth;
+    const height = mountRef.current.clientHeight;
+
+    camera.aspect = width / height;
+    renderer.setSize(width, height, false);
+
+    resizeRendererToDisplaySize(true);
+  }, [mountRef.current, camera, renderer]);
+
+  // Initiate Animation
+  useEffect(() => {
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrameRef.current);
+  }, []);
+
+  // First time animating to first poi
+  useEffect(() => {
+    const currentPoi = poiStore.currentPoi;
+
+    // Animate to the initial POI
+    animateGlobeAndPopUpDisplay({ xRotation: currentPoi.xRotation, yRotation: currentPoi.yRotation });
+
+    // Activates the poi dot
+    dotsContainer.setActiveDotById(currentPoi.id);
+  }, []);
+
+  return (
+    <>
+      <MountDiv id='mount' onClick={onGlobClickHandler} ref={mountRef}>
+        <PoiPopup ref={popUpDivRef} location={poiStore.currentPoi.name} />
+      </MountDiv>
+    </>
+  );
+});
