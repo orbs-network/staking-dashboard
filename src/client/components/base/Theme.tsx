@@ -38,6 +38,10 @@ const cardTheme = {
   paddingInEm: 1,
 };
 
+const popupTheme = {
+  marginFromOriginInEm: 1,
+};
+
 const poppersBorderColor = '#3d3d3d';
 
 const primaryColor = '#ededed';
@@ -70,5 +74,6 @@ export const theme = {
   darkTextColor: '#8a8a8a',
   sizes,
 
-  cardTheme,
+  poiCard: cardTheme,
+  popup: popupTheme,
 };

@@ -175,7 +175,7 @@ export const GlobeFc = observer(() => {
       const popUpHidingTween = TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
         scale: 0.2,
         autoAlpha: 0,
-        transformOrigin: `center -${theme.cardTheme.paddingInEm}em`,
+        transformOrigin: `center -${theme.popup.marginFromOriginInEm}em`,
         ease: Power2.easeIn,
       });
 
@@ -210,7 +210,7 @@ export const GlobeFc = observer(() => {
 
       // Display the node data "pop up"
       timeLine.add(
-        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 3, {
           scale: 1,
           autoAlpha: 1,
           ease: Power2.easeOut,
@@ -219,7 +219,7 @@ export const GlobeFc = observer(() => {
 
       return timeLine;
     },
-    [camera, scene, popUpDivRef.current, theme.cardTheme.paddingInEm],
+    [camera, scene, popUpDivRef.current, theme.popup.marginFromOriginInEm],
   );
 
   /**

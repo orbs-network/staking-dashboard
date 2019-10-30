@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
-import { Avatar, Button, CardHeader, Typography } from '@material-ui/core';
+import React from 'react';
 import styled from 'styled-components';
 import { Link, Room } from '@material-ui/icons';
-import { TypographyProps } from '@material-ui/core/Typography/Typography';
+import { Typography } from '../../base/Typography';
+import { Button } from '../../base/Button';
+import { Avatar } from './Avatar';
 
 // TODO : O.L : FUTURE: Change these props to match a complex data type
 //  once deciding how to design the POIs
@@ -13,77 +14,95 @@ interface IProps {
   location: string;
 }
 
-const StyledCardHeader = styled(CardHeader)(props => ({
+const StyledCardHeader = styled('div')(props => ({
   color: props.theme.textColor,
+  paddingBottom: `${props.theme.poiCard.paddingInEm}em`,
 
-  '.MuiCardHeader-action': {
-    // Prevents 'lifting' of button
-    marginTop: 0,
-    marginRight: 0,
-  },
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
 }));
 
+const TitlesArea = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  flex: 3,
+});
+
+const AvatarArea = styled('div')({
+  flex: 1,
+});
+
+const ActionButtonArea = styled('div')({
+  flex: 1,
+});
+
 const StyledAvatar = styled(Avatar)(props => ({
+  // Adds a nice border to the avatar
   borderWidth: 2,
   borderColor: props.theme.textColor,
   borderStyle: 'solid',
+
+  // Ensures responsive dimensions
+  width: '3em',
+  height: '3em',
 }));
 
-const SubHeaderTypography = styled(Typography)({
+const HeaderTypography = styled(Typography)(props => ({
+  fontWeight: 'bold',
+  color: props.theme.textColor,
+}));
+
+const SubHeaderTypography = styled(Typography)(props => ({
   display: 'flex',
   alignItems: 'center',
-});
+  color: props.theme.textColor,
+}));
 
 const StyledButton = styled(Button)(props => ({
   color: props.theme.mainColor,
   borderColor: props.theme.mainColor,
 
-  // Gives the icon an angle
-  '.MuiButton-startIcon': {
-    transform: 'rotate(-45deg)',
-  },
+  display: 'flex',
+  alignItems: 'center',
+
+  maxHeight: '5em',
 }));
 
-const subheaderTypographyProps: Partial<TypographyProps> = { color: 'inherit' };
+const StyledLinkIcon = styled(Link)(props => ({
+  transform: 'rotate(-45deg)',
+}));
 
 export const PoiCardHeader: React.FC<IProps> = props => {
   const { name, role, imageUrl, location } = props;
 
-  // Alt avatar (just first letter)
-  const avatarAlt = useMemo(() => name.charAt(0).toUpperCase(), [name]);
-
-  // The avatar
-  const poiAvatar = useMemo(() => <StyledAvatar alt={'A'} src={imageUrl} />, [imageUrl, avatarAlt]);
-
-  // Role action button
-  const buttonAction = useMemo(
-    () => (
-      <StyledButton variant='outlined' size='small' autoCapitalize={'false'} startIcon={<Link />}>
-        {role}
-      </StyledButton>
-    ),
-    [role],
-  );
-
-  // Title and sub-header
-  const title = useMemo(() => <Typography variant={'h6'}>{name}</Typography>, [name]);
-  const subHeader = useMemo(
-    () => (
-      <SubHeaderTypography variant={'caption'}>
-        <Room />
-        {location}
-      </SubHeaderTypography>
-    ),
-    [location],
-  );
-
+  // return <StyledCardHeader avatar={poiAvatar} title={title} subheader={subHeader} action={buttonAction} />;
   return (
-    <StyledCardHeader
-      avatar={poiAvatar}
-      title={title}
-      subheader={subHeader}
-      action={buttonAction}
-      subheaderTypographyProps={subheaderTypographyProps}
-    />
+    <StyledCardHeader>
+      {/* Avatar */}
+      <AvatarArea>
+        <StyledAvatar src={imageUrl} />
+      </AvatarArea>
+
+      {/* Titles */}
+      <TitlesArea>
+        {/* header */}
+        <HeaderTypography variant={'small'}>{name}</HeaderTypography>
+        {/* Sub Header */}
+        <SubHeaderTypography variant={'small'}>
+          <Room />
+          {location}
+        </SubHeaderTypography>
+      </TitlesArea>
+
+      {/* Action button */}
+      <ActionButtonArea>
+        <StyledButton>
+          <StyledLinkIcon />
+          <Typography variant={'medium'}>{role.toLocaleUpperCase()}</Typography>
+        </StyledButton>
+      </ActionButtonArea>
+    </StyledCardHeader>
   );
 };

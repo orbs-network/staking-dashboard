@@ -2,10 +2,10 @@ import React, { forwardRef, MouseEvent } from 'react';
 import styled from 'styled-components';
 import Color from 'color';
 
-import { Card, CardContent, Divider } from '@material-ui/core';
+import { theme } from '../../base/Theme';
 import { PoiCardFooter } from './PoiCardFooter';
 import { PoiCardHeader } from './PoiCardHeader';
-import { theme } from '../../base/Theme';
+import { Typography } from '../../base/Typography';
 
 interface IProps {
   location: string;
@@ -13,27 +13,25 @@ interface IProps {
 
 type Ref = HTMLDivElement;
 
-export const POI_CARD_WIDTH_IN_PX = 400;
-
-const PopUpCard = styled(Card)(props => ({
-  width: POI_CARD_WIDTH_IN_PX,
+const PopUpCard = styled('div')(props => ({
+  width: `${props.theme.poiCard.widthInEm}em`,
   backgroundColor: Color(theme.poiCardBackgroundColor)
     .alpha(theme.poiCardBackgroundAlpha)
     .rgb()
     .toString(),
+  padding: `${props.theme.poiCard.paddingInEm}em`,
 }));
 
-const StyledDivider = styled(Divider)({
+const StyledDivider = styled('div')(props => ({
   height: 2,
-  backgroundColor: 'gray',
   borderRadius: 2,
-  marginTop: 10,
-  marginBottom: 10,
-});
+  backgroundColor: 'gray',
+  marginTop: `${props.theme.poiCard.paddingInEm * 0.75}em`,
+  marginBottom: `${props.theme.poiCard.paddingInEm * 0.75}em`,
+}));
 
-const StyledCardContent = styled(CardContent)(props => ({
+const StyledCardContent = styled('div')(props => ({
   color: props.theme.textColor,
-  paddingTop: 0,
 }));
 
 export const PoiCard = React.memo(
@@ -48,12 +46,21 @@ export const PoiCard = React.memo(
     return (
       // Containing click events inside the card
       <PopUpCard ref={ref} onClick={stopEventPropagation}>
+        {/* Header */}
         <PoiCardHeader name={name} imageUrl={profileImageUrl} location={location} role={role} />
+
+        {/* Content */}
         <StyledCardContent>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          <StyledDivider />
-          <PoiCardFooter rank={9} totalStake={28000} activeSince={2018} />
+          <Typography variant={'medium'}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          </Typography>
         </StyledCardContent>
+
+        {/* Divider  */}
+        <StyledDivider />
+
+        {/* Footer */}
+        <PoiCardFooter rank={9} totalStake={28000} activeSince={2018} />
       </PopUpCard>
     );
   }),

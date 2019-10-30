@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
-import { Typography } from '@material-ui/core';
+import React, { ReactNode, useMemo } from 'react';
 import format from 'format-number';
 import styled from 'styled-components';
-import { TypographyProps } from '@material-ui/core/Typography';
+import { Typography } from '../../base/Typography';
 
 interface IProps {
   rank: number;
@@ -17,9 +16,11 @@ const FooterContainer = styled('div')({
   display: 'flex',
 });
 
-const StyledTypography = styled(({ emphasised, ...typographyProps }: TypographyProps & { emphasised?: boolean }) => (
-  <Typography variant='caption' align='center' display='inline' {...typographyProps} />
-))(props => ({
+const StyledTypography = styled(
+  ({ emphasised, ...typographyProps }: { emphasised?: boolean } & { children?: ReactNode }) => (
+    <Typography variant='small' {...typographyProps} />
+  ),
+)(props => ({
   color: props.emphasised ? props.theme.mainColor : props.theme.textColor,
 }));
 
@@ -31,10 +32,15 @@ export const PoiCardFooter: React.FC<IProps> = props => {
 
   return (
     <FooterContainer>
+      {/* Rank */}
       <StyledTypography emphasised>Rank #{formattedRank}</StyledTypography>
+
+      {/* Total stake */}
       <StyledTypography>
         Total Stake: <StyledTypography emphasised>{formattedStake} Orbs</StyledTypography>
       </StyledTypography>
+
+      {/* Active since */}
       <StyledTypography>Active since: {activeSince}</StyledTypography>
     </FooterContainer>
   );
