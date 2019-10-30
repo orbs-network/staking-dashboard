@@ -163,7 +163,7 @@ export const GlobeFc = observer(() => {
    * Performs all of the required animations for the given location
    */
   const animateGlobeAndPopUpDisplay = useCallback(
-    (poiRotation: { xRotation: number; yRotation: number }) => {
+    (poiRotation: { xRotation: number; yRotation: number }, onPopUpHidden?: () => void) => {
       const timeLine = new TimelineLite();
       timeLine.timeScale(ANIMATION_SPEED);
 
@@ -172,15 +172,19 @@ export const GlobeFc = observer(() => {
       animationTimelineRef.current = timeLine;
 
       // Shrinks and hides the pop up.
-      timeLine.add(
-        TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
-          scale: 0.2,
-          autoAlpha: 0,
-          transformOrigin: `center -${theme.cardTheme.paddingInEm}em`,
-          ease: Power2.easeInOut,
-        }),
-        0,
-      );
+      const popUpHidingTween = TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
+        scale: 0.2,
+        autoAlpha: 0,
+        transformOrigin: `center -${theme.cardTheme.paddingInEm}em`,
+        ease: Power2.easeIn,
+      });
+
+      // Do we have a on hidden callback ?
+      if (onPopUpHidden) {
+        popUpHidingTween.eventCallback('onComplete', () => onPopUpHidden());
+      }
+
+      timeLine.add(popUpHidingTween, 0);
 
       // Creates the zoom out - zoom in when transitioning between dots.
       timeLine.add(
@@ -209,6 +213,7 @@ export const GlobeFc = observer(() => {
         TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
           scale: 1,
           autoAlpha: 1,
+          ease: Power2.easeOut,
         }),
       );
 
@@ -220,25 +225,30 @@ export const GlobeFc = observer(() => {
   /**
    * Performs all of the animations required for the transition between POIs.
    */
-  const animateGlobeAndPopUpDisplayForNextPoi = useCallback(() => {
-    return animateGlobeAndPopUpDisplay({
-      xRotation: poiStore.nextPoi.xRotation,
-      yRotation: poiStore.nextPoi.yRotation,
-    });
-  }, [poiStore.nextPoi]);
+  const animateGlobeAndPopUpDisplayForNextPoi = useCallback(
+    (onPopUpHidden?: () => void) => {
+      return animateGlobeAndPopUpDisplay(
+        {
+          xRotation: poiStore.nextPoi.xRotation,
+          yRotation: poiStore.nextPoi.yRotation,
+        },
+        onPopUpHidden,
+      );
+    },
+    [poiStore.nextPoi],
+  );
 
   /**
    * Handles both store updates and animations for the transitioning to the next POI.
    */
   const performTransitionToNextPoi = useCallback(() => {
     // Start animating to the next POI
-    animateGlobeAndPopUpDisplayForNextPoi();
+    animateGlobeAndPopUpDisplayForNextPoi(() => poiStore.nextCurrentPoi());
 
     // Activates the relevant poi-dot
     dotsContainer.setActiveDotById(poiStore.nextPoi.id);
 
     // Actually switch to the next POI
-    poiStore.nextCurrentPoi();
   }, [animateGlobeAndPopUpDisplayForNextPoi, dotsContainer, poiStore]);
 
   /**
