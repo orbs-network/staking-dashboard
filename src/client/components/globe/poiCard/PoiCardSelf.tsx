@@ -2,8 +2,6 @@ import React, { forwardRef, MouseEvent } from 'react';
 import styled from 'styled-components';
 import Color from 'color';
 
-import { PoiCardFooter } from './PoiCardFooter';
-import { PoiCardHeader } from './PoiCardHeader';
 import { theme } from '../../base/Theme';
 import { PoiCardFooterSelf } from './PoiCardFooterSelf';
 import { PoiCardHeaderSelf } from './PoiCardHeaderSelf';
@@ -15,24 +13,22 @@ interface IProps {
 
 type Ref = HTMLDivElement;
 
-export const POI_CARD_WIDTH_IN_PX = 400;
-
-const PopUpCard = styled('div')({
-  width: POI_CARD_WIDTH_IN_PX,
+const PopUpCard = styled('div')(props => ({
+  width: `${props.theme.cardTheme.widthInEm}em`,
   backgroundColor: Color(theme.poiCardBackgroundColor)
     .alpha(theme.poiCardBackgroundAlpha)
     .rgb()
     .toString(),
-  padding: 16,
-});
+  padding: `${props.theme.cardTheme.paddingInEm}em`,
+}));
 
-const StyledDivider = styled('div')({
+const StyledDivider = styled('div')(props => ({
   height: 2,
   borderRadius: 2,
   backgroundColor: 'gray',
-  marginTop: 10,
-  marginBottom: 10,
-});
+  marginTop: `${props.theme.cardTheme.paddingInEm * 0.75}em`,
+  marginBottom: `${props.theme.cardTheme.paddingInEm * 0.75}em`,
+}));
 
 const StyledCardContent = styled('div')(props => ({
   color: props.theme.textColor,

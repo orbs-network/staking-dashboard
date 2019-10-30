@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link, Room } from '@material-ui/icons';
 import { Typography } from '../../base/Typography';
@@ -16,22 +16,37 @@ interface IProps {
 
 const StyledCardHeader = styled('div')(props => ({
   color: props.theme.textColor,
-  paddingBottom: 16,
+  paddingBottom: `${props.theme.cardTheme.paddingInEm}em`,
 
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
 }));
 
-const StyledTitlesArea = styled('div')({
+const TitlesArea = styled('div')({
   display: 'flex',
   flexDirection: 'column',
+  justifyContent: 'center',
+  flex: 3,
+});
+
+const AvatarArea = styled('div')({
+  flex: 1,
+});
+
+const ActionButtonArea = styled('div')({
+  flex: 1,
 });
 
 const StyledAvatar = styled(Avatar)(props => ({
+  // Adds a nice border to the avatar
   borderWidth: 2,
   borderColor: props.theme.textColor,
   borderStyle: 'solid',
+
+  // Ensures responsive dimensions
+  width: '3em',
+  height: '3em',
 }));
 
 const HeaderTypography = styled(Typography)(props => ({
@@ -51,6 +66,8 @@ const StyledButton = styled(Button)(props => ({
 
   display: 'flex',
   alignItems: 'center',
+
+  maxHeight: '5em',
 }));
 
 const StyledLinkIcon = styled(Link)(props => ({
@@ -60,31 +77,32 @@ const StyledLinkIcon = styled(Link)(props => ({
 export const PoiCardHeaderSelf: React.FC<IProps> = props => {
   const { name, role, imageUrl, location } = props;
 
-  // Role action button
-  const buttonAction = useMemo(
-    () => (
-      <StyledButton>
-        <StyledLinkIcon />
-        <Typography variant={'medium'}>{role.toLocaleUpperCase()}</Typography>
-      </StyledButton>
-    ),
-    [role],
-  );
-
   // return <StyledCardHeader avatar={poiAvatar} title={title} subheader={subHeader} action={buttonAction} />;
   return (
     <StyledCardHeader>
-      <StyledAvatar src={imageUrl} />
-      <StyledTitlesArea>
-        {/* Title */}
+      {/* Avatar */}
+      <AvatarArea>
+        <StyledAvatar src={imageUrl} />
+      </AvatarArea>
+
+      {/* Titles */}
+      <TitlesArea>
+        {/* header */}
         <HeaderTypography variant={'small'}>{name}</HeaderTypography>
         {/* Sub Header */}
         <SubHeaderTypography variant={'small'}>
           <Room />
           {location}
         </SubHeaderTypography>
-      </StyledTitlesArea>
-      {buttonAction}
+      </TitlesArea>
+
+      {/* Action button */}
+      <ActionButtonArea>
+        <StyledButton>
+          <StyledLinkIcon />
+          <Typography variant={'medium'}>{role.toLocaleUpperCase()}</Typography>
+        </StyledButton>
+      </ActionButtonArea>
     </StyledCardHeader>
   );
 };

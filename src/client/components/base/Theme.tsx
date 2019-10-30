@@ -34,6 +34,8 @@ const sizes = {
 
 const cardTheme = {
   padding: 16,
+  widthInEm: 25,
+  paddingInEm: 1,
 };
 
 const poppersBorderColor = '#3d3d3d';
