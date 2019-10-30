@@ -6,29 +6,19 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Power2, TimelineLite, TweenMax } from 'gsap';
+import styled from 'styled-components';
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  AmbientLight,
-  Clock,
-  DirectionalLight,
-  Object3D,
-  PerspectiveCamera,
-  Raycaster,
-  Scene,
-  Vector2,
-  WebGLRenderer,
-} from 'three';
-import floatNumber from 'float';
+import { AmbientLight, Clock, DirectionalLight, PerspectiveCamera, Raycaster, Scene, WebGLRenderer } from 'three';
+import { observer } from 'mobx-react';
+
 import { DotsContainer3D } from './DotsContainer3D';
 import { Globe3D } from './Globe3D';
 import { generateStarField } from './StarField';
 import { PoiPopup } from './poiCard/PoiPopup';
-import { inject, observer } from 'mobx-react';
-import { POIStore } from '../../store/POIStore';
-import styled from 'styled-components';
 import { usePoiStore } from '../../store/storeHooks';
+import { useTheme } from '../base/themeHooks';
 
 const CAMERA_POS = 35;
 const ANIMATION_SPEED = 0.8;
@@ -37,23 +27,6 @@ const MountDiv = styled('div')({
   position: 'relative', // Ensures that we can center the pop up with HTML
   width: '100%',
 });
-
-const boxSizeForDev = {
-  height: 100,
-  width: 200,
-};
-
-interface IState {
-  rotationX: number;
-  rotationY: number;
-
-  centerLeftOffset: number;
-  centerTopOffset: number;
-}
-
-interface IProps {
-  poiStore?: POIStore;
-}
 
 const useGlobeAnimation = () => {
   const clock: Clock = useMemo(() => new Clock(), []);
@@ -131,17 +104,18 @@ const useGlobeAnimation = () => {
   };
 };
 
-export const GlobeFc = observer((props: IProps) => {
+export const GlobeFc = observer(() => {
   // Mobx stores
   const poiStore = usePoiStore();
 
-  // Component state
+  // Theme
+  const theme = useTheme();
 
   // Dom elements refs
   const mountRef = useRef<HTMLDivElement>(null);
   const popUpDivRef = useRef<HTMLDivElement>(null);
 
-  // Animation frame id ref
+  // Animation refs
   const animationFrameRef = useRef<number>(null);
   const animationTimelineRef = useRef<TimelineLite>(null);
 
@@ -202,7 +176,8 @@ export const GlobeFc = observer((props: IProps) => {
         TweenMax.to(popUpDivRef.current, singleAnimationDuration / 4, {
           scale: 0.2,
           autoAlpha: 0,
-          transformOrigin: 'top center',
+          transformOrigin: `center -${theme.cardTheme.paddingInEm}em`,
+          ease: Power2.easeInOut,
         }),
         0,
       );
@@ -239,7 +214,7 @@ export const GlobeFc = observer((props: IProps) => {
 
       return timeLine;
     },
-    [camera, scene, popUpDivRef.current],
+    [camera, scene, popUpDivRef.current, theme.cardTheme.paddingInEm],
   );
 
   /**
