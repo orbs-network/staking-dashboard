@@ -4,7 +4,7 @@
   "description": "Orbs, Stacking dashboard",
   "main": "index.js",
   "engines": {
-    "node": ">=10.6.0"
+    "node": "10.17.0"
   },
   "scripts": {
     "publish": "node release.js",
