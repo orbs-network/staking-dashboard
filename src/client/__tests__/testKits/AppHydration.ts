@@ -1,18 +1,28 @@
-/* tslint:disable:variable-name */
 import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
 import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
 import { defaultPosStoreState, POSStore } from '../../store/POSStore';
-import { IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState } from '../../../shared/IStore';
+import { defaultPoiStoreState } from '../../store/POIStore';
+import {
+  IPOIStoreState,
+  IPOSStoreState,
+  ISocialStoreState,
+  IStoreInitialData,
+  ITokenStoreState,
+} from '../../../shared/IStore';
+import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
+import { IGuardianDisplayGist } from '../../../shared/IGuardian';
 
 export class AppHydration implements IStoreInitialData {
   private _socialStoreState: ISocialStoreState;
   private _tokenStoreState: ITokenStoreState;
   private _posStoreState: IPOSStoreState;
+  private _poiStoreState: IPOIStoreState;
 
   constructor(stateHydration?: IStoreInitialData) {
     this._socialStoreState = stateHydration ? stateHydration.socialStoreState : defaultSocialStoreState;
     this._tokenStoreState = stateHydration ? stateHydration.tokenStoreState : defaultTokenStoreState;
     this._posStoreState = stateHydration ? stateHydration.posStoreState : defaultPosStoreState;
+    this._poiStoreState = stateHydration ? stateHydration.poiStoreState : defaultPoiStoreState;
   }
 
   get socialStoreState(): ISocialStoreState {
@@ -27,6 +37,10 @@ export class AppHydration implements IStoreInitialData {
     return this._posStoreState;
   }
 
+  get poiStoreState(): IPOIStoreState {
+    return this._poiStoreState;
+  }
+
   // POS data
   public withBlockHeight(value: number): this {
     this._posStoreState.blockHeight = value;
@@ -38,7 +52,7 @@ export class AppHydration implements IStoreInitialData {
     return this;
   }
 
-  public withTopGuardians(value: string[]): this {
+  public withTopGuardians(value: IGuardianDisplayGist[]): this {
     this._posStoreState.topGuardians = value;
     return this;
   }
@@ -54,13 +68,13 @@ export class AppHydration implements IStoreInitialData {
     return this;
   }
 
-  public withLatestTweet(value: string): this {
-    this._socialStoreState.latestTweet = value;
+  public withLatestTweetGist(value: ITwitGist): this {
+    this._socialStoreState.latestTweetGist = value;
     return this;
   }
 
-  public withLatestCommit(value: string): this {
-    this._socialStoreState.latestCommit = value;
+  public withLatestCommitGist(value: IGitHubCommitGist): this {
+    this._socialStoreState.latestCommitGist = value;
     return this;
   }
 

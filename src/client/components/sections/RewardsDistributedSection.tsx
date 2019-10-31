@@ -6,20 +6,23 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import { observer } from 'mobx-react';
 import React from 'react';
+import { usePosStore } from '../../store/storeHooks';
 import { Typography } from '../base/Typography';
 import { Section } from './Section';
-import { inject } from 'mobx-react';
-import { POSStore } from '../../store/POSStore';
 
-interface IProps {
-  posStore?: POSStore;
-}
+export const RewardsDistributedSection = observer(() => {
+  const posStore = usePosStore();
 
-export const RewardsDistributedSection = inject('posStore')(({ posStore }: IProps) => {
   return (
-    <Section title='Rewards distributed' helpText='Total Orbs tokens rewarded to delegators, guardians and validators for securing the network'>
-      <Typography variant='xx-large' dataTestId='rewards-distributed'>${posStore.rewardsDistributed.toLocaleString()}</Typography>
+    <Section
+      title='Rewards distributed'
+      helpText='Total Orbs tokens rewarded to delegators, guardians and validators for securing the network'
+    >
+      <Typography variant='xx-large' dataTestId='rewards-distributed'>
+        ${posStore.rewardsDistributed.toLocaleString()}
+      </Typography>
     </Section>
   );
 });

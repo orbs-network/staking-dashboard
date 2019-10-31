@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { IPOSStoreState } from '../../shared/IStore';
+import { IGuardianDisplayGist } from '../../shared/IGuardian';
 
 export const defaultPosStoreState: IPOSStoreState = {
   blockHeight: 0,
@@ -8,11 +9,13 @@ export const defaultPosStoreState: IPOSStoreState = {
   topGuardians: [],
 };
 
-export class POSStore {
+export type TPOSStore = IPOSStoreState;
+
+export class POSStore implements TPOSStore {
   @observable public blockHeight: number;
   @observable public rewardsDistributed: number;
   @observable public nextVotingTime: number;
-  @observable public topGuardians: string[];
+  @observable public topGuardians: IGuardianDisplayGist[];
 
   constructor(initialData: IPOSStoreState) {
     this.blockHeight = initialData.blockHeight;
@@ -31,6 +34,6 @@ export class POSStore {
   }
 
   private fakeBlockHeight() {
-    setInterval(this.increaseBlockHeight, 3_000);
+    setInterval(this.increaseBlockHeight.bind(this), 3_000);
   }
 }

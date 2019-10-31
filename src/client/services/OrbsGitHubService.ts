@@ -1,10 +1,11 @@
 import GitHub from 'github-api';
+import { IGitHubCommitGist } from '../../shared/IStoreTypes';
 
 export interface IOrbsGithubService {
   /**
    * Returns the gist of the latest commit for the given owner/repo.
    */
-  getRepoLastCommitGist(): Promise<{ message: string }>;
+  getRepoLastCommitGist(): Promise<IGitHubCommitGist>;
 }
 
 export class OrbsGitHubService implements IOrbsGithubService {
@@ -16,15 +17,17 @@ export class OrbsGitHubService implements IOrbsGithubService {
     this.repoName = repoData.repoName;
   }
 
-  public async getRepoLastCommitGist(): Promise<{ message: string }> {
+  public async getRepoLastCommitGist(): Promise<IGitHubCommitGist> {
     const repoData = await this.gitHubApi.getRepo(this.repoOwner, this.repoName);
 
     const commits = await repoData.listCommits();
 
     const latestCommitMessage = commits.data[0].commit.message;
+    const latestCommitGitHubUrl = commits.data[0].html_url;
 
     return {
-      message: latestCommitMessage,
+      commitText: latestCommitMessage,
+      commitUrl: latestCommitGitHubUrl,
     };
   }
 }

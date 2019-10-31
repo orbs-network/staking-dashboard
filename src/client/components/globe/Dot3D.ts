@@ -13,7 +13,7 @@ export class Dot3D extends Object3D {
   private dotMesh: Object3D;
   private blinkTween: TweenMax;
 
-  constructor(globeRadius: number, dotRadius: number, xRotation: number, yRotation: number) {
+  constructor(globeRadius: number, dotRadius: number, xRotation: number, yRotation: number, public name: string) {
     super();
     this.createDot(globeRadius, dotRadius, xRotation, yRotation);
   }

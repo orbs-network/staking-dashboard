@@ -6,10 +6,10 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-import * as express from 'express';
-import * as path from 'path';
-import * as winston from 'winston';
-import * as config from './config';
+import express from 'express';
+import path from 'path';
+import winston from 'winston';
+import config from './config';
 import { forceHttps } from './middlewares/ForceHttps';
 import { pagesRouter } from './routes/pages-router';
 import { staticsRouter } from './routes/statics-router';
@@ -17,18 +17,27 @@ import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
 import { OrbsPosDataAdapter } from './realtime-data/orbsPosDataAdapter';
 import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
 import { buildOrbsPOSDataService } from './factories';
+import { buildProductionAppServices, IServerServices } from './services/services';
 
-export function initServer(logger: winston.Logger) {
+export async function initServer(logger: winston.Logger) {
   const app = express();
 
   if (config.FORCE_HTTPS) {
     app.use(forceHttps);
   }
 
+  const serverServices: IServerServices = buildProductionAppServices();
+
+  await serverServices.orbsTwitterService.init();
+
   const orbsPOSDataService = buildOrbsPOSDataService();
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
-  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(ethplorerAdapter, orbsPosDataAdapter);
+  const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(
+    ethplorerAdapter,
+    orbsPosDataAdapter,
+    serverServices.orbsTwitterService,
+  );
   orbsPosDataAdapter.init();
   ethplorerAdapter.init();
 
@@ -37,8 +46,21 @@ export function initServer(logger: winston.Logger) {
   app.use(staticsRouter());
   app.use(pagesRouter(realtimeDataProvider));
 
+  startServicesTimers(serverServices);
+
   const server = app.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
   });
   return server;
+}
+
+/**
+ * Initiates all of the required intervals for routinely update of our services.
+ * TODO : FUTURE : O.L : We an make the timers managing into its own service once it will grow more.
+ */
+function startServicesTimers(serverServices: IServerServices) {
+  const oneMinute = 1000 * 60;
+
+  // Starts an interval for updating the twitter service (Every 5 Minutes)
+  setInterval(() => serverServices.orbsTwitterService.fetchAndCacheLatestTweetGist(), oneMinute * 1);
 }

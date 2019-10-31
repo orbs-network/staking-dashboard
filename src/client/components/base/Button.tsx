@@ -11,28 +11,28 @@ import styled from 'styled-components';
 import { theme } from './Theme';
 import { Typography } from './Typography';
 
-const Root = styled.button<ICSSProps>`
-  font-size: ${theme.sizes.SIZE_SMALL_1};
-  border-radius: ${theme.sizes.SIZE_SMALL_6};
-  border-color: ${theme.secondaryColor};
-  background-color: ${theme.buttonColor};
-  color: inherit;
-  width: ${props => (props.fullWidth ? '100%' : 'unset')};
+const Root = styled.button<ICSSProps>(props => ({
+  fontSize: theme.sizes.SIZE_SMALL_1,
+  borderRadius: theme.sizes.SIZE_SMALL_6,
+  borderColor: theme.secondaryColor,
+  backgroundColor: theme.buttonColor,
+  color: 'inherit',
+  width: props.fullWidth ? '100%' : 'unset',
 
-  &:hover {
-    background-color: ${theme.buttonHoverColor};
-    color: black;
-  }
+  '&:hover': {
+    backgroundColor: theme.buttonHoverColor,
+    color: 'black',
+  },
 
-  &:active {
-    background-color: ${theme.buttonDownColor};
-    color: black;
-  }
+  '&:active': {
+    backgroundColor: theme.buttonDownColor,
+    color: 'black',
+  },
 
-  &:focus {
-    outline: none;
-  }
-`;
+  '&:focus': {
+    outline: 'none',
+  },
+}));
 
 export interface ICSSProps {
   fullWidth?: boolean;
@@ -45,7 +45,7 @@ export interface IProps extends ICSSProps {
 export const Button: React.FunctionComponent<IProps> = ({ className, fullWidth, children }) => {
   return (
     <Root className={className} fullWidth={fullWidth}>
-      <Typography variant='small'>{children}</Typography>
+      {children}
     </Root>
   );
 };

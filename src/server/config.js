@@ -12,6 +12,7 @@ const findUp = require('find-up');
 
 if (IS_DEV) {
   require('dotenv').config({ path: findUp.sync('.env') });
+  require('dotenv').config({ path: findUp.sync('.env-secrets') });
 }
 
 const { version } = require(findUp.sync('package.json'));
@@ -33,6 +34,12 @@ const FORCE_HTTPS = process.env.FORCE_HTTPS === 'true'; // default: false
 // analytics
 const ROLLBAR_ACCESS_TOKEN_SERVER = process.env.ROLLBAR_ACCESS_TOKEN_SERVER;
 
+// 3rd Party keys
+const TWITTER_CONSUMER_KEY =  process.env.TWITTER_CONSUMER_KEY;
+const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET;
+const TWITTER_TOKEN_KEY =  process.env.TWITTER_TOKEN_KEY;
+const TWITTER_TOKEN_SECRET = process.env.TWITTER_TOKEN_SECRET;
+
 module.exports = {
   APP_VERSION,
   IS_DEV,
@@ -44,4 +51,12 @@ module.exports = {
   SERVER_PORT,
   FORCE_HTTPS,
   WEBPACK_PORT,
+
+  TWITTER: {
+    orbsTwitterScreenName: 'orbs_network',
+    consumerKey: TWITTER_CONSUMER_KEY,
+    consumerSecret: TWITTER_CONSUMER_SECRET,
+    tokenKey: TWITTER_TOKEN_KEY,
+    tokenSecret: TWITTER_TOKEN_SECRET,
+  }
 };

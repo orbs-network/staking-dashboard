@@ -2,6 +2,7 @@ import { instance, mock, verify, when, anyString } from 'ts-mockito';
 import { IOrbsGithubService } from '../../services/OrbsGitHubService';
 import { SocialStore } from '../../store/SocialStore';
 import { ISocialStoreState } from '../../../shared/IStore';
+import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 
 describe('Social store functionality', () => {
   let mockedGithubService = mock<IOrbsGithubService>();
@@ -16,8 +17,14 @@ describe('Social store functionality', () => {
   it('Constructs properly', () => {
     const hydratingState: ISocialStoreState = {
       recentUpdate: 'recentUpdate',
-      latestCommit: 'latestCommit',
-      latestTweet: 'latestTweet',
+      latestCommitGist: {
+        commitText: 'latestCommit',
+        commitUrl: 'latestCommitUrl',
+      },
+      latestTweetGist: {
+        tweetText: 'latestTweet',
+        tweetUrl: 'latestTweetUrl',
+      },
     };
 
     // Get store instance
@@ -25,13 +32,21 @@ describe('Social store functionality', () => {
 
     // Ensure state is equal to hydrating state
     expect(socialStore.recentUpdate).toBe(hydratingState.recentUpdate);
-    expect(socialStore.latestCommit).toBe(hydratingState.latestCommit);
-    expect(socialStore.latestTweet).toBe(hydratingState.latestTweet);
+    expect(socialStore.latestCommitGist).toStrictEqual(hydratingState.latestCommitGist);
+    expect(socialStore.latestTweetGist).toStrictEqual(hydratingState.latestTweetGist);
   });
 
   it('Init works properly', async () => {
+    const commitText = 'lastCommit';
+    const commitUrl = 'https:github.com';
+
+    const expectedCommitGist: IGitHubCommitGist = {
+      commitText,
+      commitUrl,
+    };
+
     // Mock the service
-    when(mockedGithubService.getRepoLastCommitGist()).thenResolve({ message: 'lastCommit' });
+    when(mockedGithubService.getRepoLastCommitGist()).thenResolve(expectedCommitGist);
 
     // Get store instance
     const socialStore = buildWithMocks(mockedGithubService);
@@ -43,7 +58,7 @@ describe('Social store functionality', () => {
     verify(mockedGithubService.getRepoLastCommitGist()).called();
 
     // We expect returned value to be assigned properly
-    expect(socialStore.latestCommit).toBe('lastCommit');
+    expect(socialStore.latestCommitGist).toStrictEqual(expectedCommitGist);
   });
 });
 

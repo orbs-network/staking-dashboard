@@ -8,101 +8,50 @@
 
 import { Object3D } from 'three';
 import { Dot3D } from './Dot3D';
+import { IPoi } from '../../../shared/IPoi';
 
-const staticDots = [
-  { // Israel
-    xRotation: 5.68,
-    yRotation: 1.75,
-  },
-  { // Japan
-    xRotation: 5.59,
-    yRotation: 3.58,
-  },
-  { // Bulgaria
-    xRotation: 5.47,
-    yRotation: 1.57,
-  },
-  { // Canada
-    xRotation: 5.35,
-    yRotation: 5.84,
-  },
-  { // Hoing Kong
-    xRotation: 5.86,
-    yRotation: 3.26,
-  },
-  { // Thailand
-    xRotation: 6.05,
-    yRotation: 3,
-  },
-  { // USA (CA)
-    xRotation: 5.64,
-    yRotation: 5.39,
-  },
-  { // Cayman Islands
-    xRotation: 5.93,
-    yRotation: 5.99,
-  },
-  { // Korea
-    xRotation: 5.6,
-    yRotation: 3.38,
-  },
-  { // Macau
-    xRotation: 5.88,
-    yRotation: 3.2,
-  },
-  { // UK
-    xRotation: 5.3,
-    yRotation: 1.12,
-  },
-  { // Cyprus
-    xRotation: 5.65,
-    yRotation: 1.71,
-  },
-  { // Singapore
-    xRotation: 6.27,
-    yRotation: 3.06,
-  },
-  { // Russia
-    xRotation: 5.17,
-    yRotation: 2.67,
-  },
-  { // USA (NY)
-    xRotation: 5.55,
-    yRotation: 6.24,
-  },
-  { // Slovak Republic
-    xRotation: 5.39,
-    yRotation: 1.46,
-  },
-  { // New Zealand
-    xRotation: 0.86,
-    yRotation: 4.05,
-  },
-  { // Scotland
-    xRotation: 5.22,
-    yRotation: 1.09,
-  },
-];
 export class DotsContainer3D extends Object3D {
   private activeDotIdx: number = 0;
   private dotsList: Dot3D[] = [];
+  private dotsMap: Map<string, Dot3D> = new Map<string, Dot3D>();
+  private activeDotId: string = null;
 
-  constructor(globeRadius: number) {
+  constructor(pois: IPoi[], globeRadius: number) {
     super();
-    staticDots.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation));
+    pois.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name, dot.id));
   }
 
+  // TODO : O.L : FUTURE : Fix this, use the map for the current one ?
   public get activeDot(): Dot3D {
     return this.dotsList[this.activeDotIdx];
   }
 
+  // TODO : O.L : FUTURE : Remove this when moving to mobx based flow
   public nextActiveDot(): void {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
   }
 
-  private addDot(globeRadius: number, xRotation: number, yRotation: number): void {
-    const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation);
+  public setActiveDotById(poiId: string) {
+    // Ensure dot with given id exists
+    if (this.dotsMap.has(poiId)) {
+      // Deactivates current dot
+      if (this.activeDotId) {
+        this.dotsMap.get(this.activeDotId).unblink();
+      }
+
+      // Activate the requested dot
+      this.dotsMap.get(poiId).blink();
+
+      // Sets the current active dot id
+      this.activeDotId = poiId;
+    }
+  }
+
+  private addDot(globeRadius: number, xRotation: number, yRotation: number, name: string, id: string): void {
+    const dot = new Dot3D(globeRadius, 0.15, xRotation, yRotation, name);
     this.add(dot);
     this.dotsList.push(dot);
-}
+
+    this.dotsMap.set(id, dot);
+  }
 }

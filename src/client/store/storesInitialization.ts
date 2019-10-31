@@ -1,15 +1,17 @@
 import { configure } from 'mobx';
-import { IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState } from '../../shared/IStore';
+import {
+  IPOIStoreState,
+  IPOSStoreState,
+  ISocialStoreState,
+  IStoreInitialData,
+  ITokenStoreState,
+} from '../../shared/IStore';
 import { SocialStore } from './SocialStore';
 import { TokenStore } from './TokenStore';
 import { POSStore } from './POSStore';
 import { IAppServices } from '../services/services';
-
-interface IStores {
-  socialStore: ISocialStoreState;
-  tokenStore: ITokenStoreState;
-  posStore: IPOSStoreState;
-}
+import { POIStore } from './POIStore';
+import { IStores } from './stores';
 
 /**
  * Configures the mobx library. Should get called at App's initialization.
@@ -30,6 +32,7 @@ export function getStores(services: IAppServices, initialStore: IStoreInitialDat
   const socialStore = new SocialStore(orbsGitHubService, initialStore.socialStoreState);
   const tokenStore = new TokenStore(initialStore.tokenStoreState);
   const posStore = new POSStore(initialStore.posStoreState);
+  const poiStore = new POIStore(initialStore.poiStoreState);
 
   // Call the initialize function on each one
   // NOTE : FUTURE : O.L : Should consider the order and relation between Hydrating and 'init'
@@ -37,11 +40,13 @@ export function getStores(services: IAppServices, initialStore: IStoreInitialDat
   socialStore.init();
   tokenStore.init();
   posStore.init();
+  poiStore.init();
 
   const stores = {
     socialStore,
     tokenStore,
     posStore,
+    poiStore,
   };
 
   return stores;
