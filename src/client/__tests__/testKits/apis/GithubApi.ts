@@ -24,12 +24,14 @@ export class GitHubApiTestKit {
     return githubApi;
   }
 
-  public withLastCommitMessage(commitMessage: string) {
+  public withLastCommitMessage(commitMessage: string): this {
     this.lastCommitMessage = commitMessage;
+    return this;
   }
 
-  public withLastCommitUrl(commitUrl: string) {
+  public withLastCommitUrl(commitUrl: string): this {
     this.lastCommitUrl = commitUrl;
+    return this;
   }
 
   /**

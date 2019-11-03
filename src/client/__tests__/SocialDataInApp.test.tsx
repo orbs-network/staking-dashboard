@@ -10,13 +10,16 @@ import '@testing-library/jest-dom/extend-expect';
 import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 import { AppDriver } from './testKits/AppDriver';
 import { AppHydration } from './testKits/AppHydration';
+import { GitHubApiTestKit } from './testKits/apis/GithubApi';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;
   let appDriver: AppDriver;
+  let githubApiTestKit: GitHubApiTestKit;
 
   beforeEach(() => {
-    appDriver = new AppDriver();
+    githubApiTestKit = new GitHubApiTestKit();
+    appDriver = new AppDriver(githubApiTestKit.buildMockedInstance());
     appHydration = new AppHydration();
   });
 
@@ -34,7 +37,7 @@ describe('Social Data in the app', () => {
     appHydration.withLatestCommitGist(hydrationCommitGist);
 
     // Set the commit for the 'real world'
-    appDriver.outerWorldState.setLastGitHubCommitGist(apiCommitGist);
+    githubApiTestKit.withLastCommitMessage(apiCommitGist.commitText).withLastCommitUrl(apiCommitGist.commitUrl);
 
     const { getByTestId } = appDriver.hydrateApp(appHydration).render();
     expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommitGist.commitText);

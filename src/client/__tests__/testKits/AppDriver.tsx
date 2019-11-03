@@ -11,23 +11,18 @@ import GitHub from 'github-api';
 import { Provider } from 'mobx-react';
 import React from 'react';
 import { IStoreInitialData } from '../../../shared/IStore';
-import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 import { Main } from '../../components/Main';
 import { IOrbsGithubService, OrbsGitHubService } from '../../services/OrbsGitHubService';
 import { POSStore } from '../../store/POSStore';
 import { SocialStore } from '../../store/SocialStore';
 import { TokenStore } from '../../store/TokenStore';
-import { GitHubApiTestKit } from './apis/GithubApi';
 
 export class AppDriver {
-  public readonly outerWorldState: OuterWorldState;
-
   private socialStore: SocialStore;
   private tokenStore: TokenStore;
   private posStore: POSStore;
 
-  constructor() {
-    this.outerWorldState = new OuterWorldState(new GitHubApiTestKit());
+  constructor(private gitHubApi: GitHub) {
   }
 
   public async hydrateAndInitializeApp(stateHydration: IStoreInitialData): Promise<this> {
@@ -46,8 +41,7 @@ export class AppDriver {
   }
 
   public hydrateApp(initialStoresState: IStoreInitialData): this {
-    const gitHubApi: GitHub = this.outerWorldState.buildGithub();
-    const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(gitHubApi);
+    const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(this.gitHubApi);
 
     this.socialStore = new SocialStore(orbsGitHubService, initialStoresState.socialStoreState);
     this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
@@ -68,22 +62,5 @@ export class AppDriver {
         <Main disableCanvas={true} />
       </Provider>,
     );
-  }
-}
-
-/**
- * Helps us set the state of the 'Real world' (Anything outside of our application, usually gets read vi api calls)
- */
-// tslint:disable-next-line:max-classes-per-file
-class OuterWorldState {
-  constructor(private gitHubApiTestKit: GitHubApiTestKit) {}
-
-  public buildGithub(): GitHub {
-    return this.gitHubApiTestKit.buildMockedInstance();
-  }
-
-  public setLastGitHubCommitGist(lastCommitGist: IGitHubCommitGist): void {
-    this.gitHubApiTestKit.withLastCommitMessage(lastCommitGist.commitText);
-    this.gitHubApiTestKit.withLastCommitUrl(lastCommitGist.commitUrl);
   }
 }
