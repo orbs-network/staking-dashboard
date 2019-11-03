@@ -6,17 +6,17 @@ import { defaultPosStoreState } from '../../store/POSStore';
 import { defaultSocialStoreState } from '../../store/SocialStore';
 import { defaultTokenStoreState } from '../../store/TokenStore';
 
-export class AppHydration implements IStoreInitialData {
+export class StoreInitialDataTestKit implements IStoreInitialData {
   public readonly socialStoreState: ISocialStoreState;
   public readonly tokenStoreState: ITokenStoreState;
   public readonly posStoreState: IPOSStoreState;
   public readonly poiStoreState: IPOIStoreState;
 
-  constructor(stateHydration?: IStoreInitialData) {
-    this.socialStoreState = stateHydration ? stateHydration.socialStoreState : defaultSocialStoreState;
-    this.tokenStoreState = stateHydration ? stateHydration.tokenStoreState : defaultTokenStoreState;
-    this.posStoreState = stateHydration ? stateHydration.posStoreState : defaultPosStoreState;
-    this.poiStoreState = stateHydration ? stateHydration.poiStoreState : defaultPoiStoreState;
+  constructor() {
+    this.socialStoreState = defaultSocialStoreState;
+    this.tokenStoreState = defaultTokenStoreState;
+    this.posStoreState = defaultPosStoreState;
+    this.poiStoreState = defaultPoiStoreState;
   }
 
   // POS data

@@ -10,7 +10,7 @@ export class GitHubApiTestKit {
     this.lastCommitUrl = 'default last commit url';
   }
 
-  public buildMockedInstance(): GitHub {
+  public build(): GitHub {
     const mockedGitHubApi = mock(GitHub);
 
     // Build the mocked response for 'getRepo

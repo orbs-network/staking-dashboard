@@ -9,18 +9,16 @@
 import '@testing-library/jest-dom/extend-expect';
 import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 import { AppDriver } from './testKits/AppDriver';
-import { AppHydration } from './testKits/AppHydration';
+import { StoreInitialDataTestKit } from './testKits/StoreInitialDataTestKit';
 import { GitHubApiTestKit } from './testKits/apis/GithubApi';
 
 describe('Social Data in the app', () => {
-  let appHydration: AppHydration;
+  let storeInitialData: StoreInitialDataTestKit;
   let appDriver: AppDriver;
-  let githubApiTestKit: GitHubApiTestKit;
 
   beforeEach(() => {
-    githubApiTestKit = new GitHubApiTestKit();
-    appDriver = new AppDriver(githubApiTestKit.buildMockedInstance());
-    appHydration = new AppHydration();
+    appDriver = new AppDriver();
+    storeInitialData = new StoreInitialDataTestKit();
   });
 
   it('should display the "Latest commit" from the hydrated hydrated Social store', async () => {
@@ -33,13 +31,21 @@ describe('Social Data in the app', () => {
       commitUrl: 'http://localhost/apiCommit',
     };
 
+    const githubApiTestKit: GitHubApiTestKit = new GitHubApiTestKit();
+
     // Set the commit for the hydration
-    appHydration.withLatestCommitGist(hydrationCommitGist);
+    storeInitialData.withLatestCommitGist(hydrationCommitGist);
 
     // Set the commit for the 'real world'
-    githubApiTestKit.withLastCommitMessage(apiCommitGist.commitText).withLastCommitUrl(apiCommitGist.commitUrl);
+    const githubApi = githubApiTestKit
+      .withLastCommitMessage(apiCommitGist.commitText)
+      .withLastCommitUrl(apiCommitGist.commitUrl)
+      .build();
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver
+      .withGithubApi(githubApi)
+      .hydrateApp(storeInitialData)
+      .render();
     expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommitGist.commitText);
     expect(getByTestId('latest-commit_link')).toHaveProperty('href', hydrationCommitGist.commitUrl);
 
@@ -54,9 +60,9 @@ describe('Social Data in the app', () => {
       tweetUrl: 'http://localhost/hydrationTweet',
     };
 
-    appHydration.withLatestTweetGist(hydrationTweetGist);
+    storeInitialData.withLatestTweetGist(hydrationTweetGist);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
     expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
     expect(getByTestId('latest-tweet_link')).toHaveProperty('href', hydrationTweetGist.tweetUrl);
 
@@ -67,9 +73,9 @@ describe('Social Data in the app', () => {
   });
 
   it('should display the "Recent Update" from the hydrated hydrated Social store', async () => {
-    appHydration.withRecentUpdate('Recent Update');
+    storeInitialData.withRecentUpdate('Recent Update');
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
     expect(getByTestId('recent-update')).toHaveTextContent('Recent Update');
 
     await appDriver.initApp();

@@ -8,16 +8,16 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
-import { AppHydration } from './testKits/AppHydration';
+import { StoreInitialDataTestKit } from './testKits/StoreInitialDataTestKit';
 import { IGuardianDisplayGist } from '../../shared/IGuardian';
 
 describe('POS Data in the app', () => {
-  let appHydration: AppHydration;
+  let storeInitialData: StoreInitialDataTestKit;
   let appDriver: AppDriver;
 
   beforeEach(() => {
     appDriver = new AppDriver();
-    appHydration = new AppHydration();
+    storeInitialData = new StoreInitialDataTestKit();
   });
 
   it('should display the "Top Guardians" from the Token store', async () => {
@@ -39,9 +39,9 @@ describe('POS Data in the app', () => {
       displayName: 'guardian 3',
     };
 
-    appHydration.withTopGuardians([guardian1, guardian2, guardian3]);
+    storeInitialData.withTopGuardians([guardian1, guardian2, guardian3]);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
 
     expect(getByTestId('guardian-link-0')).toHaveTextContent(guardian1.displayName);
     expect(getByTestId('guardian-link-0')).toHaveAttribute('href', guardian1.homePage);
@@ -61,9 +61,9 @@ describe('POS Data in the app', () => {
   });
 
   it('should display the "Rewards Distributed" from the hydrated Token store', async () => {
-    appHydration.withRewardsDistributed(123_456);
+    storeInitialData.withRewardsDistributed(123_456);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
 
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
 
@@ -72,9 +72,9 @@ describe('POS Data in the app', () => {
   });
 
   it('should display the "BlockHeight" from the hydrated Token store', async () => {
-    appHydration.withBlockHeight(1_234_000);
+    storeInitialData.withBlockHeight(1_234_000);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
 
     expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
 
@@ -93,9 +93,9 @@ describe('POS Data in the app', () => {
     const SECONDS = 17;
     const nextVotingTime = Date.now() + HOURS * 60 * 60 * 1_000 + MINUTES * 60 * 1_000 + SECONDS * 1_000;
 
-    appHydration.withNextVotingTime(nextVotingTime);
+    storeInitialData.withNextVotingTime(nextVotingTime);
 
-    const { getByTestId } = appDriver.hydrateApp(appHydration).render();
+    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
 
     expect(getByTestId('clock-hours')).toHaveTextContent(HOURS.toString());
     expect(getByTestId('clock-minutes')).toHaveTextContent(MINUTES.toString());
