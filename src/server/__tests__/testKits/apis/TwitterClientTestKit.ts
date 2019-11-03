@@ -1,10 +1,8 @@
-import GitHub from 'github-api';
-import { anyString, anything, instance, mock, when } from 'ts-mockito';
+import { anything, instance, mock, when } from 'ts-mockito';
 import Twitter from 'twitter';
-import { IServerApiTestClass } from './IServerApiTestClass';
 import { ITwitGist } from '../../../../shared/IStoreTypes';
 
-export class TwitterClientTestKit implements IServerApiTestClass<Twitter> {
+export class TwitterClientTestKit {
   private latestTweetText: string;
   private latestTweetUrl: string;
 

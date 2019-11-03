@@ -1,8 +1,7 @@
 import GitHub from 'github-api';
 import { anyString, instance, mock, when } from 'ts-mockito';
-import { IApiTestClass } from './IApiTestClass';
 
-export class GitHubApiTestKit implements IApiTestClass<GitHub> {
+export class GitHubApiTestKit {
   private lastCommitMessage: string;
   private lastCommitUrl: string;
 
