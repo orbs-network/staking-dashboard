@@ -8,16 +8,35 @@
 
 import express from 'express';
 import path from 'path';
+import Twitter from 'twitter';
 import winston from 'winston';
 import config from './config';
+import { buildOrbsPOSDataService } from './factories';
 import { forceHttps } from './middlewares/ForceHttps';
-import { pagesRouter } from './routes/pages-router';
-import { staticsRouter } from './routes/statics-router';
 import { EthplorerAdapter } from './realtime-data/ethplorerAdapter';
 import { OrbsPosDataAdapter } from './realtime-data/orbsPosDataAdapter';
 import { RealtimeDataProvider } from './realtime-data/realtimeDataProvider';
-import { buildOrbsPOSDataService } from './factories';
-import { buildProductionAppServices, IServerServices } from './services/services';
+import { pagesRouter } from './routes/pages-router';
+import { staticsRouter } from './routes/statics-router';
+import { IOrbsTwitterService, OrbsTwitterService } from './services/orbsTwitterService';
+
+async function initOrbsTwitterService() {
+  const twitterClient = new Twitter({
+    consumer_key: config.TWITTER.consumerKey,
+    consumer_secret: config.TWITTER.consumerSecret,
+    access_token_key: config.TWITTER.tokenKey,
+    access_token_secret: config.TWITTER.tokenSecret,
+  });
+
+  const orbsTwitterService: IOrbsTwitterService = new OrbsTwitterService(
+    twitterClient,
+    config.TWITTER.orbsTwitterScreenName,
+  );
+
+  await orbsTwitterService.init();
+
+  return orbsTwitterService;
+}
 
 export async function initServer(logger: winston.Logger) {
   const app = express();
@@ -26,17 +45,14 @@ export async function initServer(logger: winston.Logger) {
     app.use(forceHttps);
   }
 
-  const serverServices: IServerServices = buildProductionAppServices();
-
-  await serverServices.orbsTwitterService.init();
-
+  const orbsTwitterService = await initOrbsTwitterService();
   const orbsPOSDataService = buildOrbsPOSDataService();
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
   const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(
     ethplorerAdapter,
     orbsPosDataAdapter,
-    serverServices.orbsTwitterService,
+    orbsTwitterService,
   );
   orbsPosDataAdapter.init();
   ethplorerAdapter.init();
@@ -46,7 +62,7 @@ export async function initServer(logger: winston.Logger) {
   app.use(staticsRouter());
   app.use(pagesRouter(realtimeDataProvider));
 
-  startServicesTimers(serverServices);
+  startServicesTimers(orbsTwitterService);
 
   const server = app.listen(config.SERVER_PORT, () => {
     console.log(`App listening on port ${config.SERVER_PORT}!`);
@@ -58,9 +74,9 @@ export async function initServer(logger: winston.Logger) {
  * Initiates all of the required intervals for routinely update of our services.
  * TODO : FUTURE : O.L : We an make the timers managing into its own service once it will grow more.
  */
-function startServicesTimers(serverServices: IServerServices) {
+function startServicesTimers(orbsTwitterService: IOrbsTwitterService) {
   const oneMinute = 1000 * 60;
 
   // Starts an interval for updating the twitter service (Every 5 Minutes)
-  setInterval(() => serverServices.orbsTwitterService.fetchAndCacheLatestTweetGist(), oneMinute * 1);
+  setInterval(() => orbsTwitterService.fetchAndCacheLatestTweetGist(), oneMinute * 1);
 }
