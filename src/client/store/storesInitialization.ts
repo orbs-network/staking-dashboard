@@ -1,17 +1,11 @@
 import { configure } from 'mobx';
-import {
-  IPOIStoreState,
-  IPOSStoreState,
-  ISocialStoreState,
-  IStoreInitialData,
-  ITokenStoreState,
-} from '../../shared/IStore';
-import { SocialStore } from './SocialStore';
-import { TokenStore } from './TokenStore';
-import { POSStore } from './POSStore';
-import { IAppServices } from '../services/services';
+import { IStoreInitialData } from '../../shared/IStore';
+import { IOrbsGithubService } from '../services/OrbsGitHubService';
 import { POIStore } from './POIStore';
+import { POSStore } from './POSStore';
+import { SocialStore } from './SocialStore';
 import { IStores } from './stores';
+import { TokenStore } from './TokenStore';
 
 /**
  * Configures the mobx library. Should get called at App's initialization.
@@ -25,8 +19,7 @@ export function configureMobx() {
 /**
  * Builds and initializes all of the stores
  */
-export function getStores(services: IAppServices, initialStore: IStoreInitialData): IStores {
-  const { orbsGitHubService } = services;
+export function getStores(orbsGitHubService: IOrbsGithubService, initialStore: IStoreInitialData): IStores {
 
   // Create stores instances + Hydrate the stores
   const socialStore = new SocialStore(orbsGitHubService, initialStore.socialStoreState);

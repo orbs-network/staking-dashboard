@@ -1,5 +1,4 @@
 import { GitHubApiTestKit } from './GithubApi';
-import { IServicesDependencies } from '../../../services/services';
 
 export class ApiDependenciesKit {
   public gitHubApiTestKit: GitHubApiTestKit;
@@ -8,7 +7,7 @@ export class ApiDependenciesKit {
     this.gitHubApiTestKit = new GitHubApiTestKit();
   }
 
-  public buildAppDependencies(): IServicesDependencies {
+  public buildAppDependencies() {
     return {
       gitHubApi: this.gitHubApiTestKit.buildMockedInstance(),
     };

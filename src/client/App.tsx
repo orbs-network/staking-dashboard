@@ -6,22 +6,24 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
+import GitHub from 'github-api';
 import { Provider } from 'mobx-react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { DISABLE_CANVAS } from './config';
-import { Main } from './components/Main';
 import { IStoreInitialData } from '../shared/IStore';
-import { getStores, configureMobx } from './store/storesInitialization';
-import { buildProductionAppServices } from './services/services';
+import { Main } from './components/Main';
+import { DISABLE_CANVAS } from './config';
+import { OrbsGitHubService } from './services/OrbsGitHubService';
+import { configureMobx, getStores } from './store/storesInitialization';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;
 
-const appServices = buildProductionAppServices();
+const gitHubApi: GitHub = new GitHub();
+const orbsGitHubService = new OrbsGitHubService(gitHubApi);
 
 configureMobx();
-const stores = getStores(appServices, initialStore);
+const stores = getStores(orbsGitHubService, initialStore);
 
 export const App = () => (
   <BrowserRouter>

@@ -7,21 +7,19 @@
  */
 
 import { render } from '@testing-library/react';
+import GitHub from 'github-api';
 import { Provider } from 'mobx-react';
 import React from 'react';
+import { IStoreInitialData } from '../../../shared/IStore';
+import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
+import { Main } from '../../components/Main';
+import { IOrbsGithubService, OrbsGitHubService } from '../../services/OrbsGitHubService';
+import { IServicesDependencies } from '../../services/services';
+import { defaultPoiStoreState } from '../../store/POIStore';
 import { defaultPosStoreState, POSStore } from '../../store/POSStore';
 import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
 import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
-import { Main } from '../../components/Main';
-import { IStoreInitialData } from '../../../shared/IStore';
-import { IOrbsGithubService } from '../../services/OrbsGitHubService';
-import { buildAppServices, IServicesDependencies } from '../../services/services';
-
-import GitHub from 'github-api';
-import { anyString, instance, mock, when } from 'ts-mockito';
 import { ApiDependenciesKit } from './apis/ApiDependenciesKit';
-import { defaultPoiStoreState } from '../../store/POIStore';
-import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 
 export class AppDriver {
   public readonly outerWorldState: OuterWorldState;
@@ -49,7 +47,7 @@ export class AppDriver {
     return this;
   }
 
-  public hydrateApp(stateHydration?: IStoreInitialData, appApisDependencies?: IServicesDependencies): this {
+  public hydrateApp(stateHydration?: IStoreInitialData): this {
     const defaultInitialStoresState: IStoreInitialData = {
       socialStoreState: defaultSocialStoreState,
       posStoreState: defaultPosStoreState,
@@ -58,11 +56,11 @@ export class AppDriver {
     };
 
     const initialStoresState = stateHydration || defaultInitialStoresState;
-    const appServicesDependenciesToUse = appApisDependencies || this.outerWorldState.appApisDependencies;
 
-    const services = buildAppServices(appServicesDependenciesToUse);
+    const gitHubApi: GitHub = this.outerWorldState.appApisDependencies.gitHubApi;
+    const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(gitHubApi);
 
-    this.socialStore = new SocialStore(services.orbsGitHubService, initialStoresState.socialStoreState);
+    this.socialStore = new SocialStore(orbsGitHubService, initialStoresState.socialStoreState);
     this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
     this.posStore = new POSStore(initialStoresState.posStoreState);
 
