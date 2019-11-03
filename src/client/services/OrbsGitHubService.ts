@@ -8,17 +8,14 @@ export interface IOrbsGithubService {
   getRepoLastCommitGist(): Promise<IGitHubCommitGist>;
 }
 
-export class OrbsGitHubService implements IOrbsGithubService {
-  private readonly repoOwner: string;
-  private readonly repoName: string;
+const REPO_OWNER = 'orbs-network';
+const REPO_NAME = 'orbs-network-go';
 
-  constructor(private gitHubApi: GitHub, repoData: { repoOwner: string; repoName: string }) {
-    this.repoOwner = repoData.repoOwner;
-    this.repoName = repoData.repoName;
-  }
+export class OrbsGitHubService implements IOrbsGithubService {
+  constructor(private gitHubApi: GitHub) {}
 
   public async getRepoLastCommitGist(): Promise<IGitHubCommitGist> {
-    const repoData = await this.gitHubApi.getRepo(this.repoOwner, this.repoName);
+    const repoData = await this.gitHubApi.getRepo(REPO_OWNER, REPO_NAME);
 
     const commits = await repoData.listCommits();
 

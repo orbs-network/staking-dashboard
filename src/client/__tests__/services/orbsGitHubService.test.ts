@@ -4,11 +4,6 @@ import { OrbsGitHubService, IOrbsGithubService } from '../../services/OrbsGitHub
 import { buildGetRepositoryResponse } from '../testKits/apis/GithubApi';
 import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 
-const TEST_CONSTANTS = {
-  repoOwner: 'orbs-network',
-  repoName: 'orbs-network-go',
-};
-
 describe('Orbs-GitHub service functionality', () => {
   let mockedGitHubApi: GitHub;
 
@@ -44,10 +39,7 @@ describe('Orbs-GitHub service functionality', () => {
 function buildWithMocks(mockedGithubApi: GitHub): IOrbsGithubService {
   const githubApi = instance(mockedGithubApi);
 
-  const githubService: IOrbsGithubService = new OrbsGitHubService(githubApi, {
-    repoOwner: TEST_CONSTANTS.repoOwner,
-    repoName: TEST_CONSTANTS.repoName,
-  });
+  const githubService: IOrbsGithubService = new OrbsGitHubService(githubApi);
 
   return githubService;
 }
