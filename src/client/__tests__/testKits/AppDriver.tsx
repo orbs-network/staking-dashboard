@@ -15,10 +15,9 @@ import { IGitHubCommitGist } from '../../../shared/IStoreTypes';
 import { Main } from '../../components/Main';
 import { IOrbsGithubService, OrbsGitHubService } from '../../services/OrbsGitHubService';
 import { IServicesDependencies } from '../../services/services';
-import { defaultPoiStoreState } from '../../store/POIStore';
-import { defaultPosStoreState, POSStore } from '../../store/POSStore';
-import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
-import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
+import { POSStore } from '../../store/POSStore';
+import { SocialStore } from '../../store/SocialStore';
+import { TokenStore } from '../../store/TokenStore';
 import { ApiDependenciesKit } from './apis/ApiDependenciesKit';
 
 export class AppDriver {
@@ -47,16 +46,7 @@ export class AppDriver {
     return this;
   }
 
-  public hydrateApp(stateHydration?: IStoreInitialData): this {
-    const defaultInitialStoresState: IStoreInitialData = {
-      socialStoreState: defaultSocialStoreState,
-      posStoreState: defaultPosStoreState,
-      tokenStoreState: defaultTokenStoreState,
-      poiStoreState: defaultPoiStoreState,
-    };
-
-    const initialStoresState = stateHydration || defaultInitialStoresState;
-
+  public hydrateApp(initialStoresState: IStoreInitialData): this {
     const gitHubApi: GitHub = this.outerWorldState.appApisDependencies.gitHubApi;
     const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(gitHubApi);
 

@@ -1,16 +1,10 @@
-import { defaultSocialStoreState, SocialStore } from '../../store/SocialStore';
-import { defaultTokenStoreState, TokenStore } from '../../store/TokenStore';
-import { defaultPosStoreState, POSStore } from '../../store/POSStore';
-import { defaultPoiStoreState } from '../../store/POIStore';
-import {
-  IPOIStoreState,
-  IPOSStoreState,
-  ISocialStoreState,
-  IStoreInitialData,
-  ITokenStoreState,
-} from '../../../shared/IStore';
-import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
 import { IGuardianDisplayGist } from '../../../shared/IGuardian';
+import { IPOIStoreState, IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState } from '../../../shared/IStore';
+import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
+import { defaultPoiStoreState } from '../../store/POIStore';
+import { defaultPosStoreState } from '../../store/POSStore';
+import { defaultSocialStoreState } from '../../store/SocialStore';
+import { defaultTokenStoreState } from '../../store/TokenStore';
 
 export class AppHydration implements IStoreInitialData {
   private _socialStoreState: ISocialStoreState;
