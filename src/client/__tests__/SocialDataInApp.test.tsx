@@ -7,10 +7,9 @@
  */
 
 import '@testing-library/jest-dom/extend-expect';
+import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 import { AppDriver } from './testKits/AppDriver';
 import { AppHydration } from './testKits/AppHydration';
-import { ApiDependenciesKit } from './testKits/apis/ApiDependenciesKit';
-import { IGitHubCommitGist, ITwitGist } from '../../shared/IStoreTypes';
 
 describe('Social Data in the app', () => {
   let appHydration: AppHydration;

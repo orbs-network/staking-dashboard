@@ -21,11 +21,6 @@ export class DotsContainer3D extends Object3D {
     pois.forEach(dot => this.addDot(globeRadius, dot.xRotation, dot.yRotation, dot.name, dot.id));
   }
 
-  // TODO : O.L : FUTURE : Fix this, use the map for the current one ?
-  public get activeDot(): Dot3D {
-    return this.dotsList[this.activeDotIdx];
-  }
-
   // TODO : O.L : FUTURE : Remove this when moving to mobx based flow
   public nextActiveDot(): void {
     this.activeDotIdx = (this.activeDotIdx + 1) % this.dotsList.length;
