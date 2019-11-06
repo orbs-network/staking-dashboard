@@ -25,8 +25,6 @@ const icon = (
 export const GithubSection = observer(() => {
   const socialStore = useSocialStore();
 
-  console.log(socialStore.latestCommitGist.commitUrl);
-
   return (
     <SocialSection
       icon={icon}
