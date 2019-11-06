@@ -23,5 +23,5 @@ export class TokenStore implements TTokenStore {
     this.totalHolders = initialData.totalHolders;
   }
 
-  public async init(): Promise<void> {}
+  public async activate(): Promise<void> {}
 }

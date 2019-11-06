@@ -44,12 +44,12 @@ describe('Social Data in the app', () => {
 
     const { getByTestId } = appDriver
       .withGithubApi(githubApi)
-      .hydrateApp(storeInitialData)
+      .initApp(storeInitialData)
       .render();
     expect(getByTestId('latest-commit')).toHaveTextContent(hydrationCommitGist.commitText);
     expect(getByTestId('latest-commit_link')).toHaveProperty('href', hydrationCommitGist.commitUrl);
 
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('latest-commit')).toHaveTextContent(apiCommitGist.commitText);
     expect(getByTestId('latest-commit_link')).toHaveProperty('href', apiCommitGist.commitUrl);
   });
@@ -62,12 +62,12 @@ describe('Social Data in the app', () => {
 
     storeInitialData.withLatestTweetGist(hydrationTweetGist);
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
     expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
     expect(getByTestId('latest-tweet_link')).toHaveProperty('href', hydrationTweetGist.tweetUrl);
 
     // DEV_NOTE : We expect no change after init.
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('latest-tweet')).toHaveTextContent(hydrationTweetGist.tweetText);
     expect(getByTestId('latest-tweet_link')).toHaveProperty('href', hydrationTweetGist.tweetUrl);
   });
@@ -75,10 +75,10 @@ describe('Social Data in the app', () => {
   it('should display the "Recent Update" from the hydrated hydrated Social store', async () => {
     storeInitialData.withRecentUpdate('Recent Update');
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
     expect(getByTestId('recent-update')).toHaveTextContent('Recent Update');
 
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('recent-update')).toHaveTextContent('Recent Update');
   });
 });

@@ -52,7 +52,7 @@ describe('Social store functionality', () => {
     const socialStore = buildWithMocks(mockedGithubService);
 
     // The tested function
-    await socialStore.init();
+    await socialStore.activate();
 
     // We expect the service to be called in order to get the latest commit gist.
     verify(mockedGithubService.getRepoLastCommitGist()).called();

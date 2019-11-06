@@ -41,7 +41,7 @@ describe('POS Data in the app', () => {
 
     storeInitialData.withTopGuardians([guardian1, guardian2, guardian3]);
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
 
     expect(getByTestId('guardian-link-0')).toHaveTextContent(guardian1.displayName);
     expect(getByTestId('guardian-link-0')).toHaveAttribute('href', guardian1.homePage);
@@ -51,7 +51,7 @@ describe('POS Data in the app', () => {
     expect(getByTestId('guardian-link-2')).toHaveAttribute('href', guardian3.homePage);
 
     // The service init should not have no effect for now
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('guardian-link-0')).toHaveTextContent(guardian1.displayName);
     expect(getByTestId('guardian-link-0')).toHaveAttribute('href', guardian1.homePage);
     expect(getByTestId('guardian-link-1')).toHaveTextContent(guardian2.displayName);
@@ -63,27 +63,21 @@ describe('POS Data in the app', () => {
   it('should display the "Rewards Distributed" from the hydrated Token store', async () => {
     storeInitialData.withRewardsDistributed(123_456);
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
 
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
 
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
   });
 
   it('should display the "BlockHeight" from the hydrated Token store', async () => {
-    storeInitialData.withBlockHeight(1_234_000);
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    expect(getByTestId('total-blocks')).toHaveTextContent('--');
 
-    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
-
-    await appDriver.initApp();
-    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
-
-    // TODO : FUTURE : O.L : Move this test to the 'store-to-ui' tests.
-    // appDriver.withBlockHeight(1_234_568);
-    // expect(getByTestId('total-blocks')).toHaveTextContent('1,234,568');
+    // await appDriver.initApp();
+    // expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
   });
 
   it('should display the "Rewards Clock" from the hydrated Token store', async () => {
@@ -95,13 +89,13 @@ describe('POS Data in the app', () => {
 
     storeInitialData.withNextVotingTime(nextVotingTime);
 
-    const { getByTestId } = appDriver.hydrateApp(storeInitialData).render();
+    const { getByTestId } = appDriver.initApp(storeInitialData).render();
 
     expect(getByTestId('clock-hours')).toHaveTextContent(HOURS.toString());
     expect(getByTestId('clock-minutes')).toHaveTextContent(MINUTES.toString());
     expect(getByTestId('clock-seconds')).toHaveTextContent(SECONDS.toString());
 
-    await appDriver.initApp();
+    await appDriver.activateApp();
     expect(getByTestId('clock-hours')).toHaveTextContent(HOURS.toString());
     expect(getByTestId('clock-minutes')).toHaveTextContent(MINUTES.toString());
     expect(getByTestId('clock-seconds')).toHaveTextContent(SECONDS.toString());

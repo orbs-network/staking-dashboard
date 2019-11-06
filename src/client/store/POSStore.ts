@@ -19,13 +19,13 @@ export class POSStore implements TPOSStore, INewBlocksHandler {
   @observable public topGuardians: IGuardianDisplayGist[];
 
   constructor(initialData: IPOSStoreState, private orbsBlocksPolling: IOrbsBlocksPolling) {
-    this.blockHeight = initialData.blockHeight;
+    this.blockHeight = 0;
     this.rewardsDistributed = initialData.rewardsDistributed;
     this.nextVotingTime = initialData.nextVotingTime;
     this.topGuardians = initialData.topGuardians;
   }
 
-  public async init(): Promise<void> {
+  public async activate(): Promise<void> {
     await this.orbsBlocksPolling.init();
     await this.orbsBlocksPolling.initPooling(5_000);
     this.orbsBlocksPolling.RegisterToNewBlocks(this);

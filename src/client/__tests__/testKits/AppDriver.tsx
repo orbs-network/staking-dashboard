@@ -32,10 +32,10 @@ export class AppDriver {
     this.orbsBlocksPolling = new OrbsBlocksPollingMock();
   }
 
-  public async initApp(): Promise<this> {
-    await this.socialStore.init();
-    await this.tokenStore.init();
-    await this.posStore.init();
+  public async activateApp(): Promise<this> {
+    await this.socialStore.activate();
+    await this.tokenStore.activate();
+    await this.posStore.activate();
 
     return this;
   }
@@ -45,7 +45,7 @@ export class AppDriver {
     return this;
   }
 
-  public hydrateApp(initialStoresState: IStoreInitialData): this {
+  public initApp(initialStoresState: IStoreInitialData): this {
     const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(this.githubApi);
 
     this.socialStore = new SocialStore(orbsGitHubService, initialStoresState.socialStoreState);

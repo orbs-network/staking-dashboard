@@ -35,7 +35,7 @@ export class SocialStore implements TSocialStore {
     }
   }
 
-  public async init(): Promise<void> {
+  public async activate(): Promise<void> {
     await this.initLatestCommit();
   }
 
