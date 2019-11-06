@@ -9,6 +9,8 @@
 import { render } from '@testing-library/react';
 import GitHub from 'github-api';
 import { Provider } from 'mobx-react';
+import { GetBlockResponseMock, OrbsBlocksPollingMock } from 'orbs-blocks-polling-js/dist/testkit';
+import { GetBlockResponse } from 'orbs-client-sdk/dist/codec/OpGetBlock';
 import React from 'react';
 import { IStoreInitialData } from '../../../shared/IStore';
 import { Main } from '../../components/Main';
@@ -20,19 +22,20 @@ import { GitHubApiTestKit } from './apis/GithubApi';
 
 export class AppDriver {
   private githubApi: GitHub;
-
+  private orbsBlocksPolling: OrbsBlocksPollingMock;
   private socialStore: SocialStore;
   private tokenStore: TokenStore;
   private posStore: POSStore;
 
   constructor() {
     this.githubApi = new GitHubApiTestKit().build();
+    this.orbsBlocksPolling = new OrbsBlocksPollingMock();
   }
 
-  public async initApp(): Promise<this> {
-    await this.socialStore.init();
-    await this.tokenStore.init();
-    await this.posStore.init();
+  public async activateApp(): Promise<this> {
+    await this.socialStore.activate();
+    await this.tokenStore.activate();
+    await this.posStore.activate();
 
     return this;
   }
@@ -42,14 +45,24 @@ export class AppDriver {
     return this;
   }
 
-  public hydrateApp(initialStoresState: IStoreInitialData): this {
+  public initApp(initialStoresState: IStoreInitialData): this {
     const orbsGitHubService: IOrbsGithubService = new OrbsGitHubService(this.githubApi);
 
     this.socialStore = new SocialStore(orbsGitHubService, initialStoresState.socialStoreState);
     this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
-    this.posStore = new POSStore(initialStoresState.posStoreState);
+    this.posStore = new POSStore(initialStoresState.posStoreState, this.orbsBlocksPolling);
 
     return this;
+  }
+
+  public setTotalBlocks(totalBlocks: bigint) {
+    const block: GetBlockResponse = new GetBlockResponseMock(totalBlocks);
+    this.orbsBlocksPolling.setBlockChain([block]);
+  }
+
+  public emitNewBlockEvent(blockHeight: bigint) {
+    const block: GetBlockResponse = new GetBlockResponseMock(blockHeight);
+    this.orbsBlocksPolling.emitNewBlock(block);
   }
 
   public render() {
@@ -65,4 +78,5 @@ export class AppDriver {
       </Provider>,
     );
   }
+
 }

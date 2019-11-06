@@ -6,6 +6,7 @@ import { POSStore } from './POSStore';
 import { SocialStore } from './SocialStore';
 import { IStores } from './stores';
 import { TokenStore } from './TokenStore';
+import { IOrbsBlocksPolling } from 'orbs-blocks-polling-js';
 
 /**
  * Configures the mobx library. Should get called at App's initialization.
@@ -19,21 +20,19 @@ export function configureMobx() {
 /**
  * Builds and initializes all of the stores
  */
-export function getStores(orbsGitHubService: IOrbsGithubService, initialStore: IStoreInitialData): IStores {
+export function getStores(orbsGitHubService: IOrbsGithubService, orbsBlocksPolling: IOrbsBlocksPolling, initialStore: IStoreInitialData): IStores {
 
   // Create stores instances + Hydrate the stores
   const socialStore = new SocialStore(orbsGitHubService, initialStore.socialStoreState);
   const tokenStore = new TokenStore(initialStore.tokenStoreState);
-  const posStore = new POSStore(initialStore.posStoreState);
+  const posStore = new POSStore(initialStore.posStoreState, orbsBlocksPolling);
   const poiStore = new POIStore(initialStore.poiStoreState);
 
   // Call the initialize function on each one
-  // NOTE : FUTURE : O.L : Should consider the order and relation between Hydrating and 'init'
-  // NOTE : FUTURE : O.L : Should handle the async calls properly
-  socialStore.init();
-  tokenStore.init();
-  posStore.init();
-  poiStore.init();
+  socialStore.activate();
+  tokenStore.activate();
+  posStore.activate();
+  poiStore.activate();
 
   const stores = {
     socialStore,

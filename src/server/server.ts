@@ -39,6 +39,10 @@ async function initOrbsTwitterService() {
 }
 
 export async function initServer(logger: winston.Logger) {
+  // process.on('unhandledRejection', (reason, p) => {
+  //   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // });
+
   const app = express();
 
   if (config.FORCE_HTTPS) {

@@ -15,15 +15,20 @@ import { Main } from './components/Main';
 import { DISABLE_CANVAS } from './config';
 import { OrbsGitHubService } from './services/OrbsGitHubService';
 import { configureMobx, getStores } from './store/storesInitialization';
+import { OrbsBlocksPolling } from 'orbs-blocks-polling-js';
+import { GenerateOrbsClient } from '../shared/OrbsClientFactory';
 
 const appVersion = (window as any).appVersion;
 const initialStore: IStoreInitialData = (window as any).initialStore;
 
 const gitHubApi: GitHub = new GitHub();
 const orbsGitHubService = new OrbsGitHubService(gitHubApi);
+const orbsClient = GenerateOrbsClient();
+const orbsBlocksPolling = new OrbsBlocksPolling(orbsClient);
+orbsBlocksPolling.init().then(() => orbsBlocksPolling.initPooling(5_000));
 
 configureMobx();
-const stores = getStores(orbsGitHubService, initialStore);
+const stores = getStores(orbsGitHubService, orbsBlocksPolling, initialStore);
 
 export const App = () => (
   <BrowserRouter>

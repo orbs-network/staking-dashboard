@@ -18,7 +18,7 @@ export const BlockchainGraphSection = observer(() => {
   const title = (
     <>
       {'Total blocks created: '}
-      <strong data-testid='total-blocks'>{posStore.blockHeight.toLocaleString()}</strong>
+      <strong data-testid='total-blocks'>{posStore.blockHeight ? posStore.blockHeight.toLocaleString() : '--'}</strong>
     </>
   );
   return (

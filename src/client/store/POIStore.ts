@@ -18,11 +18,11 @@ export class POIStore implements IPOIStore {
 
   @observable private currentPoiIndex: number = 0;
 
-  constructor(initialData?: IPOIStoreState) {
-    if (initialData) {
-      this.pointsOfInterest = initialData.pointsOfInterest;
-    }
+  constructor(initialData: IPOIStoreState) {
+    this.pointsOfInterest = initialData.pointsOfInterest;
   }
+
+  public async activate(): Promise<void> {}
 
   @computed
   public get currentPoi(): IPoi {
@@ -40,8 +40,6 @@ export class POIStore implements IPOIStore {
   @action public nextCurrentPoi(): void {
     this.currentPoiIndex = this.calculateNextPOIIndex();
   }
-
-  public async init(): Promise<void> {}
 
   /**
    * Returns the next poi index in a cyclic manner.
