@@ -39,14 +39,20 @@ async function initOrbsTwitterService() {
 }
 
 export async function initServer(logger: winston.Logger) {
+  process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  });
   const app = express();
 
   if (config.FORCE_HTTPS) {
     app.use(forceHttps);
   }
 
+  console.log(`-------------------------- 1`);
   const orbsTwitterService = await initOrbsTwitterService();
+  console.log(`-------------------------- 2`);
   const orbsPOSDataService = buildOrbsPOSDataService();
+  console.log(`-------------------------- 3`);
   const orbsPosDataAdapter: OrbsPosDataAdapter = new OrbsPosDataAdapter(orbsPOSDataService);
   const ethplorerAdapter: EthplorerAdapter = new EthplorerAdapter();
   const realtimeDataProvider: RealtimeDataProvider = new RealtimeDataProvider(

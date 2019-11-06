@@ -17,16 +17,19 @@ import { POSStore } from '../../store/POSStore';
 import { SocialStore } from '../../store/SocialStore';
 import { TokenStore } from '../../store/TokenStore';
 import { GitHubApiTestKit } from './apis/GithubApi';
+import { OrbsBlocksPollingMock } from 'orbs-blocks-polling-js/dist/testkit';
+import { IOrbsBlocksPolling } from 'orbs-blocks-polling-js';
 
 export class AppDriver {
   private githubApi: GitHub;
-
+  private orbsBlocksPolling: OrbsBlocksPollingMock;
   private socialStore: SocialStore;
   private tokenStore: TokenStore;
   private posStore: POSStore;
 
   constructor() {
     this.githubApi = new GitHubApiTestKit().build();
+    this.orbsBlocksPolling = new OrbsBlocksPollingMock();
   }
 
   public async initApp(): Promise<this> {
@@ -47,7 +50,7 @@ export class AppDriver {
 
     this.socialStore = new SocialStore(orbsGitHubService, initialStoresState.socialStoreState);
     this.tokenStore = new TokenStore(initialStoresState.tokenStoreState);
-    this.posStore = new POSStore(initialStoresState.posStoreState);
+    this.posStore = new POSStore(initialStoresState.posStoreState, this.orbsBlocksPolling);
 
     return this;
   }
