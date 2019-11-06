@@ -9,6 +9,8 @@
 import { render } from '@testing-library/react';
 import GitHub from 'github-api';
 import { Provider } from 'mobx-react';
+import { GetBlockResponseMock, OrbsBlocksPollingMock } from 'orbs-blocks-polling-js/dist/testkit';
+import { GetBlockResponse } from 'orbs-client-sdk/dist/codec/OpGetBlock';
 import React from 'react';
 import { IStoreInitialData } from '../../../shared/IStore';
 import { Main } from '../../components/Main';
@@ -17,8 +19,6 @@ import { POSStore } from '../../store/POSStore';
 import { SocialStore } from '../../store/SocialStore';
 import { TokenStore } from '../../store/TokenStore';
 import { GitHubApiTestKit } from './apis/GithubApi';
-import { OrbsBlocksPollingMock } from 'orbs-blocks-polling-js/dist/testkit';
-import { IOrbsBlocksPolling } from 'orbs-blocks-polling-js';
 
 export class AppDriver {
   private githubApi: GitHub;
@@ -55,6 +55,16 @@ export class AppDriver {
     return this;
   }
 
+  public setTotalBlocks(totalBlocks: bigint) {
+    const block: GetBlockResponse = new GetBlockResponseMock(totalBlocks);
+    this.orbsBlocksPolling.setBlockChain([block]);
+  }
+
+  public emitNewBlockEvent(blockHeight: bigint) {
+    const block: GetBlockResponse = new GetBlockResponseMock(blockHeight);
+    this.orbsBlocksPolling.emitNewBlock(block);
+  }
+
   public render() {
     const stores = {
       socialStore: this.socialStore,
@@ -68,4 +78,5 @@ export class AppDriver {
       </Provider>,
     );
   }
+
 }

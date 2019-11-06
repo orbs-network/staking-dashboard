@@ -26,8 +26,6 @@ export class POSStore implements TPOSStore, INewBlocksHandler {
   }
 
   public async activate(): Promise<void> {
-    await this.orbsBlocksPolling.init();
-    await this.orbsBlocksPolling.initPooling(5_000);
     this.orbsBlocksPolling.RegisterToNewBlocks(this);
     const latestBlockHeight = await this.orbsBlocksPolling.getLatestKnownHeight();
     this.setBlockHeight(Number(latestBlockHeight));

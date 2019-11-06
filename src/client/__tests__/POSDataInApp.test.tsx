@@ -10,6 +10,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { AppDriver } from './testKits/AppDriver';
 import { StoreInitialDataTestKit } from './testKits/StoreInitialDataTestKit';
 import { IGuardianDisplayGist } from '../../shared/IGuardian';
+import { wait } from '@testing-library/dom';
 
 describe('POS Data in the app', () => {
   let storeInitialData: StoreInitialDataTestKit;
@@ -71,13 +72,19 @@ describe('POS Data in the app', () => {
     expect(getByTestId('rewards-distributed')).toHaveTextContent('$123,456');
   });
 
-  it('should display the "BlockHeight" from the hydrated Token store', async () => {
+  it.only('should display the "BlockHeight" and update according to the data from orbs', async () => {
     const { getByTestId } = appDriver.initApp(storeInitialData).render();
 
     expect(getByTestId('total-blocks')).toHaveTextContent('--');
 
-    // await appDriver.initApp();
-    // expect(getByTestId('total-blocks')).toHaveTextContent('1,234,000');
+    // see that after hydration data is populated
+    appDriver.setTotalBlocks(BigInt(1_234_567));
+    await appDriver.activateApp();
+    expect(getByTestId('total-blocks')).toHaveTextContent('1,234,567');
+
+    // see that data is populated on new block
+    appDriver.emitNewBlockEvent(BigInt(2_345_678));
+    await wait(() => getByTestId('total-blocks').nodeValue === '2,345,678');
   });
 
   it('should display the "Rewards Clock" from the hydrated Token store', async () => {

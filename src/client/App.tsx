@@ -25,6 +25,7 @@ const gitHubApi: GitHub = new GitHub();
 const orbsGitHubService = new OrbsGitHubService(gitHubApi);
 const orbsClient = GenerateOrbsClient();
 const orbsBlocksPolling = new OrbsBlocksPolling(orbsClient);
+orbsBlocksPolling.init().then(() => orbsBlocksPolling.initPooling(5_000));
 
 configureMobx();
 const stores = getStores(orbsGitHubService, orbsBlocksPolling, initialStore);
