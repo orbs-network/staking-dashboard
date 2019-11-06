@@ -29,12 +29,10 @@ export function getStores(orbsGitHubService: IOrbsGithubService, orbsBlocksPolli
   const poiStore = new POIStore(initialStore.poiStoreState);
 
   // Call the initialize function on each one
-  // NOTE : FUTURE : O.L : Should consider the order and relation between Hydrating and 'init'
-  // NOTE : FUTURE : O.L : Should handle the async calls properly
   socialStore.activate();
   tokenStore.activate();
   posStore.activate();
-  poiStore.init();
+  poiStore.activate();
 
   const stores = {
     socialStore,
