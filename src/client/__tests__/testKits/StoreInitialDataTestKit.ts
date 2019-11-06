@@ -20,11 +20,6 @@ export class StoreInitialDataTestKit implements IStoreInitialData {
   }
 
   // POS data
-  public withBlockHeight(value: number): this {
-    this.posStoreState.blockHeight = value;
-    return this;
-  }
-
   public withNextVotingTime(value: number): this {
     this.posStoreState.nextVotingTime = value;
     return this;
