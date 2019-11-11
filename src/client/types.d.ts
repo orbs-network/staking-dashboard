@@ -6,4 +6,4 @@
  * The above notice should be included in all copies or substantial portions of the software.
  */
 
-declare var require: (path: string) => any;
+declare const require: (path: string) => any;

@@ -1,8 +1,8 @@
-import { anyString, instance, mock, when } from 'ts-mockito';
-import { IOrbsTwitterService, OrbsTwitterService } from '../../services/orbsTwitterService';
+import { mock } from 'ts-mockito';
 import Twitter from 'twitter';
-import { TwitterClientTestKit } from '../testKits/apis/TwitterClientTestKit';
 import { ITwitGist } from '../../../shared/IStoreTypes';
+import { IOrbsTwitterService, OrbsTwitterService } from '../../services/orbsTwitterService';
+import { TwitterClientTestKit } from '../testKits/apis/TwitterClientTestKit';
 
 describe('Orbs-Twitter service (server) functionality', () => {
   let mockedTweeterClient: Twitter;
@@ -16,16 +16,14 @@ describe('Orbs-Twitter service (server) functionality', () => {
 
   it('Should extract the latest tweet gist properly on init and on re-fetch', async () => {
     const tweetGistForInit: ITwitGist = {
-      tweetText: 'This is the latest tweet foor init',
-      tweetUrl: 'https://twitter.com/tweetForInit',
+      tweetText: 'This is the latest tweet foor init https://t.co/tweetForInit',
+      tweetUrl: 'https://t.co/tweetForInit',
     };
-    const expectedTweetGistAfterInit: ITwitGist = Object.assign({}, tweetGistForInit);
 
     const tweetGistForAfterChange: ITwitGist = {
-      tweetText: 'This is the latest tweet after some time',
-      tweetUrl: 'https://twitter.com/tweetAfterChange',
+      tweetText: 'This is the latest tweet after some time https://t.co/tweetAfterChange',
+      tweetUrl: 'https://t.co/tweetAfterChange',
     };
-    const expectedTweetGistAfterChange: ITwitGist = Object.assign({}, tweetGistForAfterChange);
 
     // 1) Assign the values for the 'real world' mocking
     twitterClientTestKit.withLatestTweetGist(tweetGistForInit);
@@ -35,6 +33,10 @@ describe('Orbs-Twitter service (server) functionality', () => {
     await tweeterService.init();
 
     // We expect the returned value to have the proper form and values
+    const expectedTweetGistAfterInit: ITwitGist = {
+      tweetText: 'This is the latest tweet foor init',
+      tweetUrl: 'https://t.co/tweetForInit',
+    };
     const lastCommitGist = tweeterService.getCachedLatestTweetGist();
     expect(lastCommitGist).toStrictEqual(expectedTweetGistAfterInit);
 
@@ -45,6 +47,10 @@ describe('Orbs-Twitter service (server) functionality', () => {
     await tweeterService.fetchAndCacheLatestTweetGist();
 
     // We expect the returned value to have the proper form and values
+    const expectedTweetGistAfterChange: ITwitGist = {
+      tweetText: 'This is the latest tweet after some time',
+      tweetUrl: 'https://t.co/tweetAfterChange',
+    };
     const lastCommitGistAfterChange = tweeterService.getCachedLatestTweetGist();
     expect(lastCommitGistAfterChange).toStrictEqual(expectedTweetGistAfterChange);
   });

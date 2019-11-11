@@ -9,7 +9,6 @@
 import { BoxGeometry, Mesh, MeshLambertMaterial, Object3D } from 'three';
 
 export class Axis3D extends Object3D {
-
   constructor(size: number) {
     super();
     this.createAxis(size);

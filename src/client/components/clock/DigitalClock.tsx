@@ -46,7 +46,9 @@ export const DigitalClock: React.FunctionComponent<IProps> = ({ hours, minutes, 
   return (
     <Root>
       <DigitBox>
-        <Typography variant='x-large' dataTestId='clock-hours'>{toTwoDigits(hours)}</Typography>
+        <Typography variant='x-large' dataTestId='clock-hours'>
+          {toTwoDigits(hours)}
+        </Typography>
         <SmallDigit variant='xxx-small'>Hours</SmallDigit>
       </DigitBox>
       <SeperatorBox>
@@ -54,7 +56,9 @@ export const DigitalClock: React.FunctionComponent<IProps> = ({ hours, minutes, 
         <SmallDigit variant='xxx-small'>&nbsp;</SmallDigit>
       </SeperatorBox>
       <DigitBox>
-        <Typography variant='x-large' dataTestId='clock-minutes'>{toTwoDigits(minutes)}</Typography>
+        <Typography variant='x-large' dataTestId='clock-minutes'>
+          {toTwoDigits(minutes)}
+        </Typography>
         <SmallDigit variant='xxx-small'>Minutes</SmallDigit>
       </DigitBox>
       <SeperatorBox>
@@ -62,7 +66,9 @@ export const DigitalClock: React.FunctionComponent<IProps> = ({ hours, minutes, 
         <SmallDigit variant='xxx-small'>&nbsp;</SmallDigit>
       </SeperatorBox>
       <DigitBox>
-        <Typography variant='x-large' dataTestId='clock-seconds'>{toTwoDigits(seconds)}</Typography>
+        <Typography variant='x-large' dataTestId='clock-seconds'>
+          {toTwoDigits(seconds)}
+        </Typography>
         <SmallDigit variant='xxx-small'>Seconds</SmallDigit>
       </DigitBox>
     </Root>

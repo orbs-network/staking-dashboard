@@ -8,15 +8,15 @@ export const API_KEY = 'freekey';
 export const ORBS_TOKEN_ADDRESS = '0xff56cc6b1e6ded347aa0b7676c85ab0b3d08b0fa';
 
 export class EthplorerAdapter extends EventEmitter {
-  public totalHolders: number = 0;
-  public orbsInCirculation: number = 0;
-  public token24HVolume: number = 0;
-  public tokenPrice: number = 0;
+  public totalHolders = 0;
+  public orbsInCirculation = 0;
+  public token24HVolume = 0;
+  public tokenPrice = 0;
 
   private isDisposed = false;
   private samplingInterval: number;
 
-  constructor(samplingInterval: number = 3_000) {
+  constructor(samplingInterval = 3_000) {
     super();
     this.samplingInterval = samplingInterval;
   }

@@ -22,9 +22,13 @@ import { IOrbsTwitterService, OrbsTwitterService } from './services/orbsTwitterS
 
 async function initOrbsTwitterService() {
   const twitterClient = new Twitter({
+    // eslint-disable-next-line @typescript-eslint/camelcase
     consumer_key: config.TWITTER.consumerKey,
+    // eslint-disable-next-line @typescript-eslint/camelcase
     consumer_secret: config.TWITTER.consumerSecret,
+    // eslint-disable-next-line @typescript-eslint/camelcase
     access_token_key: config.TWITTER.tokenKey,
+    // eslint-disable-next-line @typescript-eslint/camelcase
     access_token_secret: config.TWITTER.tokenSecret,
   });
 

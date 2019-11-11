@@ -69,12 +69,12 @@ const FresnelShader = {
 
 export function createFresnelShaderMaterial() {
   // initialize uniform variables for fresnel shader
-//   FresnelShader.uniforms.lightColor.value = light1.color;
+  //   FresnelShader.uniforms.lightColor.value = light1.color;
   FresnelShader.uniforms.ambientColor.value = new Color(0.1, 0.5, 0.5);
   FresnelShader.uniforms.diffuseColor.value = new Color(0.3, 0.1, 0.1);
   FresnelShader.uniforms.specularColor.value = new Color(0.8, 0.8, 0.8);
   FresnelShader.uniforms.camPos.value = new Vector3(0.0, 0.0, 4.0);
-//   FresnelShader.uniforms.lightPos.value = light1.position;
+  //   FresnelShader.uniforms.lightPos.value = light1.position;
   FresnelShader.uniforms.shininess.value = 5.0;
   // see more values to use to calculate F0 here:
   // https://www.terathon.com/wiki/index.php/Building_a_Fresnel_shader

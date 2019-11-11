@@ -131,7 +131,7 @@ export const GlobeFc = observer(() => {
    * Fits the renderer and the camera to the actual display size + recalculates the center offsets.
    */
   const resizeRendererToDisplaySize = useCallback(
-    (forceResize: boolean = false) => {
+    (forceResize = false) => {
       const canvas = renderer.domElement;
       const width = canvas.clientWidth;
 

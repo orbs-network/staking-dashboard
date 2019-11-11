@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { theme } from '../base/Theme';
 
 const Root = styled.div`
-  border-left: 1px solid ${theme.darkTextColor}
+  border-left: 1px solid ${theme.darkTextColor};
 `;
 
 export const VSeparator: React.FunctionComponent = () => {

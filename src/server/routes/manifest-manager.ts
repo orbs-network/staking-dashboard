@@ -4,6 +4,7 @@ import * as path from 'path';
 
 function getManifestFromWebpack(): Promise<any> {
   return new Promise((resolve, reject) => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const request = require('request');
     request.get(`http://localhost:${WEBPACK_PORT}/statics/manifest.json`, {}, (err, data) =>
       err ? reject(err) : resolve(data.body),

@@ -16,7 +16,7 @@ export interface IPOIStore extends IPOIStoreState {
 export class POIStore implements IPOIStore {
   @observable public pointsOfInterest = defaultPoiStoreState.pointsOfInterest;
 
-  @observable private currentPoiIndex: number = 0;
+  @observable private currentPoiIndex = 0;
 
   constructor(initialData: IPOIStoreState) {
     this.pointsOfInterest = initialData.pointsOfInterest;

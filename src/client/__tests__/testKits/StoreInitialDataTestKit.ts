@@ -1,5 +1,11 @@
 import { IGuardianDisplayGist } from '../../../shared/IGuardian';
-import { IPOIStoreState, IPOSStoreState, ISocialStoreState, IStoreInitialData, ITokenStoreState } from '../../../shared/IStore';
+import {
+  IPOIStoreState,
+  IPOSStoreState,
+  ISocialStoreState,
+  IStoreInitialData,
+  ITokenStoreState,
+} from '../../../shared/IStore';
 import { IGitHubCommitGist, ITwitGist } from '../../../shared/IStoreTypes';
 import { defaultPoiStoreState } from '../../store/POIStore';
 import { defaultPosStoreState } from '../../store/POSStore';

@@ -10,6 +10,34 @@ export interface IOrbsTwitterService extends IServerService {
   fetchAndCacheLatestTweetGist(): void;
 }
 
+const LAST_LINK_REGEX = /https:\/\/t\.co\/.*$/g;
+
+/**
+ * Handles cases of 'truncated' tweet text to ensure proper displayable values.
+ */
+function parseTweetForDisplay(rawTweetText: string, isTruncated: boolean) {
+  let tweetText = rawTweetText;
+
+  // extract the tweetUrl
+  const tweetUrlMatch = tweetText.match(LAST_LINK_REGEX);
+  const tweetUrl = tweetUrlMatch ? tweetUrlMatch[0] : '';
+
+  // Removes the link from the end of the text
+  tweetText = tweetText.replace(LAST_LINK_REGEX, '');
+
+  // Twitter adds a '…' with a shortend link for truncated tweets. we will remove this special char and the
+  // link to deliver only text.
+  if (isTruncated) {
+    const HORIZONTAL_ELIPSIS = '…';
+
+    // Take just the relevant text part
+    tweetText = tweetText.replace(HORIZONTAL_ELIPSIS, '...');
+  }
+
+  tweetText = tweetText.trim();
+  return { tweetUrl, tweetText };
+}
+
 export class OrbsTwitterService implements IOrbsTwitterService {
   private latestTweetGist: ITwitGist = null;
 
@@ -32,8 +60,11 @@ export class OrbsTwitterService implements IOrbsTwitterService {
 
   private async fetchFreshLatestTweet(): Promise<ITwitGist> {
     const params: Twitter.RequestParams = {
+      // eslint-disable-next-line @typescript-eslint/camelcase
       screen_name: this.screenName,
+      // eslint-disable-next-line @typescript-eslint/camelcase
       exclude_replies: true, // No need for replies
+      // eslint-disable-next-line @typescript-eslint/camelcase
       include_rts: false, // No need for re-tweets
     };
 
@@ -41,43 +72,11 @@ export class OrbsTwitterService implements IOrbsTwitterService {
 
     // The first tweet is the latest
     const latestTweet = res[0];
-
     // Get the tweet URL (Using the expanded_url allows the user to get to the twitter page directly without getting redirected)
-    const { entities } = latestTweet;
-    const { urls } = entities;
-    const tweetInTextUrl = urls[0].url; // This minified url is added to the end of each tweet message. we would like to remove it.
-    const tweetUrl = urls[0].expanded_url;
+    const { text, truncated } = latestTweet;
 
-    const tweetText = prepareTweetTextForDisplay(latestTweet.text, latestTweet.truncated, [tweetInTextUrl]);
+    const result = parseTweetForDisplay(text, truncated);
 
-    return {
-      tweetText,
-      tweetUrl,
-    };
+    return result;
   }
-}
-
-/**
- * Handles cases of 'truncated' tweet text to ensure proper displayable values.
- */
-function prepareTweetTextForDisplay(rawTweetText: string, isTruncated: boolean, stringsToRemove?: string[]) {
-  let textForDisplay = rawTweetText;
-
-  // Removes all given strings from the text for display
-  if (stringsToRemove) {
-    stringsToRemove.forEach(textToRemove => {
-      textForDisplay = textForDisplay.replace(textToRemove, '');
-    });
-  }
-
-  // Twitter adds a '…' with a shortend link for truncated tweets. we will remove this special char and the
-  // link to deliver only text.
-  if (isTruncated) {
-    const HORIZONTAL_ELIPSIS = '…';
-
-    // Take just the relevant text part
-    textForDisplay = textForDisplay.replace(HORIZONTAL_ELIPSIS, '...');
-  }
-
-  return textForDisplay;
 }

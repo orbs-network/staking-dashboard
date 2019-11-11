@@ -20,8 +20,11 @@ export function configureMobx() {
 /**
  * Builds and initializes all of the stores
  */
-export function getStores(orbsGitHubService: IOrbsGithubService, orbsBlocksPolling: IOrbsBlocksPolling, initialStore: IStoreInitialData): IStores {
-
+export function getStores(
+  orbsGitHubService: IOrbsGithubService,
+  orbsBlocksPolling: IOrbsBlocksPolling,
+  initialStore: IStoreInitialData,
+): IStores {
   // Create stores instances + Hydrate the stores
   const socialStore = new SocialStore(orbsGitHubService, initialStore.socialStoreState);
   const tokenStore = new TokenStore(initialStore.tokenStoreState);

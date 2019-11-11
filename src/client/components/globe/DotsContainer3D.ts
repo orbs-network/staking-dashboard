@@ -11,7 +11,7 @@ import { Dot3D } from './Dot3D';
 import { IPoi } from '../../../shared/IPoi';
 
 export class DotsContainer3D extends Object3D {
-  private activeDotIdx: number = 0;
+  private activeDotIdx = 0;
   private dotsList: Dot3D[] = [];
   private dotsMap: Map<string, Dot3D> = new Map<string, Dot3D>();
   private activeDotId: string = null;

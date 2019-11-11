@@ -14,7 +14,6 @@ export class TwitterClientTestKit {
   public buildMockedInstance(): Twitter {
     const mockedTwitterClient = mock(Twitter);
 
-    // @ts-ignore (no types for library)
     when(mockedTwitterClient.get('statuses/user_timeline', anything())).thenCall(
       this.buildGetStatusesUserTimelineResponse.bind(this), // Always returning a freshly built response
     );
@@ -54,19 +53,12 @@ export class TwitterClientTestKit {
 export function buildGetStatusesUserTimelineResponse(
   latestTweetText: string,
   latestTweetUrl: string,
-  isTruncated: boolean = false,
+  isTruncated = false,
 ) {
   const mockedUserTimelineResponse = [
     {
       text: latestTweetText,
       truncated: isTruncated,
-      entities: {
-        urls: [
-          {
-            expanded_url: latestTweetUrl,
-          },
-        ],
-      },
     },
   ];
 

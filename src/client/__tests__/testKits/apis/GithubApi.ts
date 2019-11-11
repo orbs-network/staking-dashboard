@@ -16,7 +16,6 @@ export class GitHubApiTestKit {
     // Build the mocked response for 'getRepo
     const mockedRepositoryResponse = this.buildGetRepositoryResponse();
 
-    // @ts-ignore (no types for library)
     when(mockedGitHubApi.getRepo(anyString(), anyString())).thenReturn(mockedRepositoryResponse);
 
     const githubApi = instance(mockedGitHubApi);
@@ -54,6 +53,7 @@ export function buildGetRepositoryResponse(lastCommitMessage: string, lastCommit
             commit: {
               message: lastCommitMessage,
             },
+            // eslint-disable-next-line @typescript-eslint/camelcase
             html_url: lastCommitUrl,
           },
         ],
