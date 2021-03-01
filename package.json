@@ -67,7 +67,7 @@
     "react-popper-tooltip": "^2.8.3",
     "rollbar": "^2.5.4",
     "styled-components": "^4.3.2",
-    "three": "^0.107.0",
+    "three": "^0.125.0",
     "tslib": "^1.9.3",
     "twitter": "^1.7.1",
     "web3": "^1.2.1",
